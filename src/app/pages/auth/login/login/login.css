@@ -1,0 +1,66 @@
+.body {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(122.01deg, #FFFFFFFF 0%, #FAFAFBFF 50%, #F4F7FBFF 100%);
+}
+
+form {
+    display: grid;
+    grid-template-columns: minmax(200px, 380px);
+    border-radius: 6px;
+    text-align: center;
+    width: fit-content;
+    padding: 1rem;
+    background-color: white;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.icon {
+    margin-bottom: 1.5rem;
+}
+
+.text {
+    margin-bottom: 1.5rem;
+}
+
+h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.content {
+    margin-bottom: 1.5rem;
+}
+
+.feild {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+label {
+    font-size: 0.7rem;
+    margin-bottom: 0.4rem;
+}
+
+.feild input {
+    text-align: start;
+    width: 100%;
+    padding: 0.5rem 0.5rem;
+    border-radius: 5px;
+    border: 1px solid var(--txt);
+    font-size: 0.8rem;
+}
+
+input[type="submit"] {
+    padding: 0.6rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: var(--primary);
+    color: white;
+    font-size: 0.9rem;
+}
