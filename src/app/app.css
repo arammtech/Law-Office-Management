@@ -1,0 +1,70 @@
+.body {
+    display: grid;
+    grid-template-columns: minmax(50px, 250px) 1fr;
+    height: 100vh;
+}
+
+nav {
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid var(--txt);
+    padding: 1rem 0.4rem;
+    background-color: var(--secondary);
+}
+
+.logo {
+    padding: 1rem;
+    border-bottom: 1px solid var(--txt);
+    margin-bottom: 1.5rem;
+
+}
+
+p {
+    font-size: 0.7rem;
+    margin-bottom: 0.5rem;
+}
+
+ul {
+    flex: 1;
+}
+
+li {
+    margin-bottom: 0.2rem;
+    padding: 0.3rem;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    transition: 0.2s;
+}
+
+a:hover li {
+    background-color: var(--primary);
+    color: white;
+}
+
+.logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-top: 1px solid var(--txt);
+}
+
+.logout a {
+    display: block;
+    background-color: white;
+    margin: 1rem 0.5rem 0;
+    padding: 0.5rem;
+    width: 100%;
+    text-align: center;
+    font-size: 0.9rem;
+    transition: 0.2s;
+    border-radius: 5px;
+}
+
+.logout a:hover {
+    background-color: var(--accent);
+    color: white;
+}
+
+main {
+    padding: 1rem 2rem;
+}
