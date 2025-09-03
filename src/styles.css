@@ -29,3 +29,73 @@
 input {
     outline-color: var(--primary);
 }
+
+a {
+    text-decoration: none;
+    color: black;
+}
+
+/* classes */
+
+
+/*library*/
+.fields {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.field-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex {
+    flex: 1;
+}
+
+.myrow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.field label {
+    font-size: 0.7rem;
+    margin-bottom: 0.3rem;
+}
+
+
+.field input, .field select, .field textarea {
+    font-size: 0.9rem;
+    border-radius: 5px;
+    padding: 0.3rem 0.5rem;
+    border: 1px solid var(--txt);
+    margin-left: 1rem;
+}
+
+
+.mybtn {
+    padding: 0.5rem;
+    border-radius: 6px;
+    color: white;
+    
+}
+
+.bg-main {
+    background-color: var(--primary);
+}
+
+
+.bg-accent {
+    background-color: var(--accent);
+}
+
+.txt {
+    color: var(--txt);
+}

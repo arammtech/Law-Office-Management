@@ -1,1 +1,105 @@
-<app-page-header-component title="إضافة قضية جديدة" description="أدخل بيانات القضية والعميل"></app-page-header-component>
+<app-page-header-component title="إضافة قضية جديدة"
+    description="أدخل بيانات القضية والعميل"></app-page-header-component>
+<main>
+    <form>
+        <h3>البحث عن العميل</h3>
+        <div class="search-box">
+            <form class="field-row" (ngSubmit)="search(natIdd.value)">
+                <div class="field flex">
+                    <label for="natId">رقم الهوية</label>
+                    <input #natIdd type="text" placeholder="أدخل رقم الهوية للبحث" required pattern="^\d{10}$" name="natid">
+                </div>
+                <input class="mybtn bg-main searchbtn" type="submit" value="بحث">
+            </form>
+            <div class="parties-container" *ngIf="clients.length > 0">
+                <p>أطراف القضية المختارة:</p>
+                <div>
+                    @for(client of clients; track client.NatId) {
+                        <div class="parties mybtn client-id  myrow">
+                            <p class="flex">رقم الهوية: {{client.NatId}}</p>
+                            <a (click)="deleteClient(client.NatId)"><i class="fa-solid fa-xmark"></i></a>
+                        </div>
+                    }
+                </div>
+            </div>
+            <p class="txt">💡 إذا لم يتم العثور على العميل، ستفتح نافذة لإضافة عميل جديد</p>
+        </div>
+    </form>
+    <section>
+        <h3>بيانات القضية</h3>
+        <div class="fields">
+            <div class="field">
+                <label for="subject">موضوع القضية</label>
+                <input type="text" name="subject" placeholder="أدخل موضوع القضية">
+            </div>
+            <div class="field">
+                <label for="PartiesToTheCase">اطراف الدعوى</label>
+                <select name="PartiesToTheCase">
+                    <option value="1">مدعي</option>
+                    <option value="1">مدعي عليه</option>
+                </select>
+            </div>
+            <div class="field">
+                <label for="estimatedtime">الوقت المتوقع للدراسة</label>
+                <input type="date" name="estimatedtime">
+            </div>
+            <div class="field">
+                <label for="courttype">نوع المحكمة</label>
+                <select name="courttype">
+                    <option value="1">عامة</option>
+                    <option value="1">جنائية</option>
+                </select>
+            </div>
+            <div class="field">
+                <label for="AssignedOfficer">الموظف الموكل على القضية</label>
+                <select name="AssignedOfficer">
+                    <option value="1">عبدالعزيز</option>
+                    <option value="1">حسن</option>
+                </select>
+            </div>
+            <div class="field">
+                <label for="caseNumber">رقم القضية</label>
+                <input type="text" name="caseNumber" placeholder="أدخل رقم القضية">
+            </div>
+            <div class="field">
+                <label for="lawyerOpinion">رأي المحامي</label>
+                <textarea name="lawyerOpinion" placeholder="رأي المحامي"></textarea>
+            </div>
+        </div>
+    </section>
+    <section>
+        <h3><input #show type="checkbox" [(ngModel)]="showcontract"> إظهار قسم العقد ؟ </h3>
+        <div [hidden]="!showcontract" class="fields">
+            <div class="field">
+                <label for="contractType">نوع العقد</label>
+                <select name="contractType" [(ngModel)]="selectedContract">
+                    <option value="1">محدد بمدة</option>
+                    <option value="2">غير محدد بمدة</option>
+                </select>
+            </div>
+            <div class="field">
+                <label for="totalPrice">السعر الاجمالي</label>
+                <input type="number" name="totalPrice" placeholder="ادخل السعر">
+            </div>
+            <div class="field" *ngIf="selectedContract == 1">
+                <label for="issueDate">تاريخ البداية</label>
+                <input type="date" name="issueDate">
+            </div>
+            <div class="field" *ngIf="selectedContract == 1">
+                <label for="expirationDate">تاريخ النهاية</label>
+                <input type="date" name="expirationDate">
+            </div>
+            <div class="field">
+                <label for="downAmount">العربون</label>
+                <input type="number" name="downAmount" placeholder="ادخل مقدم العقد">
+            </div>
+            <div class="field">
+                <label for="contractAttachment">مرفق العقد</label>
+                <input type="file" name="contractAttachment">
+            </div>
+            <div class="field">
+                <p><input type="checkbox" name="assigned">تم توقيع العقد ؟</p>
+            </div>
+        </div>
+    </section>
+</main>

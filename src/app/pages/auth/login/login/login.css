@@ -34,27 +34,16 @@ h3 {
 .content {
     margin-bottom: 1.5rem;
 }
-
-.feild {
+.field {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     margin-bottom: 1rem;
 }
 
-label {
-    font-size: 0.7rem;
-    margin-bottom: 0.4rem;
-}
-
-.feild input {
-    text-align: start;
+.field input {
     width: 100%;
-    padding: 0.5rem 0.5rem;
-    border-radius: 5px;
-    border: 1px solid var(--txt);
-    font-size: 0.8rem;
-}
+} 
 
 input[type="submit"] {
     padding: 0.6rem 1rem;

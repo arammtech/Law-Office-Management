@@ -1,0 +1,65 @@
+<form [formGroup]="clientForm" (submit)="submit()">
+    <a mat-dialog-close><i class="fa-solid fa-xmark"></i></a>
+    <h3>إضافة عميل جديد</h3>
+    <div class="fields">
+        <div class="field">
+            <label for="fullname">الاسم الرباعي*</label>
+            <input type="text" placeholder="أدخل الاسم الرباعي" name="fullname" formControlName="fullname">
+            @if(name?.touched) {
+            <div class="text-danger">
+                @if (name?.errors?.['required']) {
+                <p>يجب إدخال إسم العميل</p>
+                }
+                @if (name?.errors?.['minlength']) {
+                <p>يجب ان يحتوي الاسم على 3 حروف او اكثر</p>
+                }
+            </div>
+            }
+        </div>
+        <div class="field">
+            <label for="natid">رقم الهوية*</label>
+            <input type="text" placeholder="أدخل رقم الهوية" name="natid" readonly formControlName="natId">
+        </div>
+        <div class="field">
+            <label for="countryId">الجنسية*</label>
+            <select name="countryId" formControlName="countryId">
+                <option value="1">السعودية</option>
+                <option value="2">مصر</option>
+                <option value="3">سوريا</option>
+            </select>
+        </div>
+        <div class="field">
+            <label for="birthdate">تاريخ الميلاد*</label>
+            <input type="date" name="birthdate" formControlName="birthdate">
+            @if(birthdate?.touched) {
+            <div class="text-danger">
+                @if (birthdate?.errors?.['required']) {
+                <p>يجب إدخال تاريخ الميلاد</p>
+                }
+            </div>
+            }
+        </div>
+        <div class="field">
+            <label for="phone">رقم الجوال*</label>
+            <input type="text" name="phone" formControlName="phone">
+            @if(phone?.touched) {
+            <div class="text-danger">
+                @if (phone?.errors?.['required']) {
+                <p>يجب إدخال رقم الهاتف</p>
+                }
+                @if (phone?.errors?.['pattern']) {
+                <p>رقم الهاتف يتكون من 10 خانات ويبدا 05</p>
+                }
+            </div>
+            }
+        </div>
+        <div class="field">
+            <label for="address">العنوان</label>
+            <input type="text" name="address" formControlName="address">
+        </div>
+        <div class="btns">
+            <button class="mybtn bg-main" type="submit">حفظ العميل</button>
+            <button class="mybtn bg-accent" type="button" mat-dialog-close>إلغاء</button>
+        </div>
+    </div>
+</form>
