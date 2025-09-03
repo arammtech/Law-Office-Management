@@ -4,7 +4,7 @@
     <div class="fields">
         <div class="field">
             <label for="fullname">الاسم الرباعي*</label>
-            <input type="text" placeholder="أدخل الاسم الرباعي" name="fullname" formControlName="fullname">
+            <input type="text" placeholder="أدخل الاسم الرباعي" name="fullname" formControlName="name">
             @if(name?.touched) {
             <div class="text-danger">
                 @if (name?.errors?.['required']) {
@@ -30,7 +30,7 @@
         </div>
         <div class="field">
             <label for="birthdate">تاريخ الميلاد*</label>
-            <input type="date" name="birthdate" formControlName="birthdate">
+            <input type="date" name="birthdate" formControlName="birth">
             @if(birthdate?.touched) {
             <div class="text-danger">
                 @if (birthdate?.errors?.['required']) {

@@ -1,9 +1,8 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
 import {
   MAT_DIALOG_DATA,
-  MatDialogClose,
   MatDialogRef,
-  MatDialogModule
+  MatDialogModule,
 } from '@angular/material/dialog';
 import { IClient } from '../../../models/icase';
 import {
@@ -26,11 +25,11 @@ export class AddClientComponent implements OnInit {
   clientForm!: FormGroup;
 
   get name() {
-    return this.clientForm.get('fullname');
+    return this.clientForm.get('Name');
   }
 
   get birthdate() {
-    return this.clientForm.get('birthdate');
+    return this.clientForm.get('birth');
   }
 
   get phone() {
@@ -42,36 +41,30 @@ export class AddClientComponent implements OnInit {
     private dialogRef: MatDialogRef<AddClientComponent>
   ) {
     this.initClient();
-    console.log(data.NatId);
   }
 
   ngOnInit(): void {}
 
   submit() {
-    if (this.clientForm.invalid)
+    if (this.clientForm.invalid) {
+      console.log(this.clientForm.errors);
       Swal.fire({
         title: 'خطأ',
         text: 'تجقق من الحقول الحمراء',
         icon: 'error',
       });
-    else {
+    } else {
       this.dialogRef.close(this.clientForm.value as IClient);
     }
   }
 
   private initClient() {
     this.clientForm = new FormGroup({
-      fullname: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-      ]),
+      name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       natId: new FormControl(this.data?.NatId || ''),
-      countryId: new FormControl(1, [Validators.required]),
-      birthdate: new FormControl(null, [Validators.required]),
-      phone: new FormControl('', [
-        Validators.required,
-        // Validators.pattern('^05\d{8}$'),
-      ]),
+      countryId: new FormControl(1, Validators.required),
+      birth: new FormControl(new Date(), Validators.required),
+      phone: new FormControl('', Validators.required),
       address: new FormControl(''),
     });
   }

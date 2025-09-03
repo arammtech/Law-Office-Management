@@ -4,21 +4,28 @@
     <form>
         <h3>البحث عن العميل</h3>
         <div class="search-box">
-            <form class="field-row" (ngSubmit)="search(natIdd.value)">
-                <div class="field flex">
-                    <label for="natId">رقم الهوية</label>
-                    <input #natIdd type="text" placeholder="أدخل رقم الهوية للبحث" required pattern="^\d{10}$" name="natid">
+            <form #searchForm="ngForm" (ngSubmit)="search(natId)">
+                <div class="field-row">
+                    <div class="field flex">
+                        <label for="natId">رقم الهوية</label>
+                        <input type="text" name="natid" [(ngModel)]="natId" #natIdModel="ngModel" required
+                            pattern="^\d{10}$" placeholder="أدخل رقم الهوية للبحث"/>
+                    </div>
+                    <input type="submit" value="بحث" class="mybtn bg-main searchbtn" [disabled]="searchForm.invalid" />
                 </div>
-                <input class="mybtn bg-main searchbtn" type="submit" value="بحث">
+                <div class="text-danger" *ngIf="natIdModel.invalid && (natIdModel.dirty || natIdModel.touched)">
+                    <p *ngIf="natIdModel.errors?.['required']">يجب إدخال رقم الهوية</p>
+                    <p *ngIf="natIdModel.errors?.['pattern']">رقم الهوية يجب أن يتكون من 10 خانات</p>
+                </div>
             </form>
             <div class="parties-container" *ngIf="clients.length > 0">
                 <p>أطراف القضية المختارة:</p>
                 <div>
-                    @for(client of clients; track client.NatId) {
-                        <div class="parties mybtn client-id  myrow">
-                            <p class="flex">رقم الهوية: {{client.NatId}}</p>
-                            <a (click)="deleteClient(client.NatId)"><i class="fa-solid fa-xmark"></i></a>
-                        </div>
+                    @for(client of clients; track client.natId) {
+                    <div class="parties mybtn client-id  myrow">
+                        <p class="flex">رقم الهوية: {{client.natId}}</p>
+                        <a (click)="deleteClient(client.natId)"><i class="fa-solid fa-xmark"></i></a>
+                    </div>
                     }
                 </div>
             </div>
