@@ -8,10 +8,14 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { CommonModule, JsonPipe } from '@angular/common';
-import { IClient } from '../models/icase';
+import { ICase, IClient } from '../models/icase';
 import { MatDialog } from '@angular/material/dialog';
 import { AddClientComponent } from '../components/add-client/add-client-component/add-client-component';
 import Swal from 'sweetalert2';
+import { min } from 'rxjs';
+import { IPOA } from '../models/ipoa';
+import { IContract } from '../models/icontract';
+import { IAddCaseForm } from '../models/iadd-case-form';
 
 @Component({
   selector: 'app-add-case-component',
@@ -28,11 +32,11 @@ import Swal from 'sweetalert2';
 })
 export class AddCaseComponent implements OnInit {
   addcaseForm!: FormGroup;
+  showErrors:boolean = false;
   constructor(private dialogof: MatDialog) {
     this.natId = '';
-
-    // case form
   }
+
   get caseForm() {
     return this.addcaseForm?.get('caseForm') as FormGroup;
   }
@@ -45,12 +49,12 @@ export class AddCaseComponent implements OnInit {
     return this.caseForm?.get('PartiesToTheCase');
   }
 
-  get estimatedtime() {
-    return this.caseForm?.get('estimatedtime');
+  get estimatedTime() {
+    return this.caseForm?.get('estimatedTime');
   }
 
-  get courttype() {
-    return this.caseForm?.get('courttype');
+  get courtType() {
+    return this.caseForm?.get('courtType');
   }
 
   get AssignedOfficer() {
@@ -67,10 +71,10 @@ export class AddCaseComponent implements OnInit {
 
   // Getters for template access
   get contract() {
-    return this.caseForm?.get('contract') as FormGroup;
+    return this.addcaseForm?.get('contract') as FormGroup;
   }
-  get showcontract() {
-    return this.contract?.get('showcontract');
+  get showContract() {
+    return this.contract?.get('showContract');
   }
   get contractType() {
     return this.contract?.get('contractType');
@@ -96,11 +100,14 @@ export class AddCaseComponent implements OnInit {
   get poa() {
     return this.addcaseForm?.get('poa') as FormGroup;
   }
+  get showPOA() {
+    return this.poa?.get('showPOA');
+  }
   get poaNumber() {
     return this.poa?.get('poaNumber');
   }
-  get poaissueDate() {
-    return this.poa?.get('poaissueDate');
+  get poaIssueDate() {
+    return this.poa?.get('poaIssueDate');
   }
   get poaAuthrizedBy() {
     return this.poa?.get('poaAuthrizedBy');
@@ -108,55 +115,94 @@ export class AddCaseComponent implements OnInit {
   get poaAttachment() {
     return this.poa?.get('poaAttachment');
   }
-  ngOnInit(): void {
-    this.addcaseForm = new FormGroup({
-      caseForm: new FormGroup({
-        subject: new FormControl('', [
-          Validators.required,
-          Validators.minLength(3),
-        ]),
-        PartiesToTheCase: new FormControl(1, Validators.required),
-        estimatedtime: new FormControl(Date, Validators.required),
-        courttype: new FormControl(1, Validators.required),
-        AssignedOfficer: new FormControl(1, Validators.required),
-        caseNumber: new FormControl(''),
-        lawyerOpinion: new FormControl('', [
-          Validators.required,
-          Validators.minLength(10),
-        ]),
+
+  get case(): FormGroup<ICase> {
+    return new FormGroup<ICase>({
+      subject: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.minLength(3)],
       }),
-      contract: new FormGroup({
-        showcontract: new FormControl(true),
-        contractType: new FormControl('', Validators.required),
-        totalPrice: new FormControl(0, [
-          Validators.required,
-          Validators.min(1),
-        ]),
-        issueDate: new FormControl(''),
-        expirationDate: new FormControl(Date, Validators.maxLength(Date.now())),
-        downAmount: new FormControl('', [Validators.min(0)]),
-        assigned: new FormControl(false),
-        contractAttachment: new FormControl(''),
+      PartiesToTheCase: new FormControl(1, {
+        nonNullable: true,
+        validators: [Validators.required],
       }),
-      poa: new FormGroup({
-        poaNumber: new FormControl('', [
-          Validators.required,
-          Validators.minLength(3),
-        ]),
-        poaissueDate: new FormControl(Date, [Validators.required]),
-        poaAuthrizedBy: new FormControl('', [
-          Validators.required,
-          Validators.minLength(3),
-        ]),
-        poaAttachment: new FormControl(null),
+      estimatedTime: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      courtType: new FormControl(1, {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      AssignedOfficer: new FormControl(1, {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      caseNumber: new FormControl('', { nonNullable: true }),
+      lawyerOpinion: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.minLength(10)],
       }),
     });
   }
 
-  showPOA: boolean = false;
+  // get poa(): FormGroup<IPOA> {
+  //   return new FormGroup<IPOA>({
+  //     showPOA: new FormControl(false, { nonNullable: true }),
+  //     poaNumber: new FormControl('', {
+  //       nonNullable: true,
+  //       validators: [Validators.required, Validators.minLength(3)],
+  //     }),
+  //     poaIssueDate: new FormControl('', {
+  //       nonNullable: true,
+  //       validators: [Validators.required],
+  //     }),
+  //     poaAuthrizedBy: new FormControl('', {
+  //       nonNullable: true,
+  //       validators: [Validators.required, Validators.minLength(3)],
+  //     }),
+  //     poaAttachment: new FormControl('', { nonNullable: true }),
+  //   });
+  // }
+
+  // get contract(): FormGroup<IContract> {
+  //   return new FormGroup<IContract>({
+  //     showContract: new FormControl(false, { nonNullable: true }),
+  //     contractType: new FormControl(2, {
+  //       nonNullable: true,
+  //       validators: Validators.required,
+  //     }),
+  //     totalPrice: new FormControl(0, {
+  //       nonNullable: true,
+  //       validators: [Validators.required, Validators.min(0)],
+  //     }),
+  //     issueDate: new FormControl('', {
+  //       nonNullable: true,
+  //       validators: Validators.required,
+  //     }),
+  //     expirationDate: new FormControl('', {
+  //       nonNullable: true,
+  //       validators: Validators.required,
+  //     }),
+  //     downAmount: new FormControl(0, {
+  //       nonNullable: true,
+  //       validators: [Validators.max(0)],
+  //     }),
+  //     assigned: new FormControl(false, { nonNullable: true }),
+  //     contractAttachment: new FormControl<File | null>(null),
+  //   });
+  // }
+
+  ngOnInit(): void {
+    this.addcaseForm = new FormGroup({
+      caseForm: this.buildCaseForm(),
+      contract: this.buildContractForm(),
+      poa: this.buildPOAForm(),
+    });
+  }
+
   selectedContract: number = 1;
   natId: string;
-
   clients: IClient[] = [];
 
   onFileSelected(event: Event) {
@@ -201,5 +247,77 @@ export class AddCaseComponent implements OnInit {
 
   deleteClient(natid: string) {
     this.clients = this.clients.filter((x) => x.natId != natid);
+  }
+
+  submit() {
+    if (this.addcaseForm.invalid) {
+      this.showErrors = true;
+      this.errorToast('خطأ', 'تأكد من ملء جميع الحقول')
+    }
+  }
+
+  private buildCaseForm(): FormGroup {
+    return new FormGroup({
+      subject: new FormControl('', [
+        Validators.required,
+        Validators.minLength(3),
+      ]),
+      PartiesToTheCase: new FormControl(1, Validators.required),
+      estimatedTime: new FormControl('', Validators.required),
+      courtType: new FormControl(1, Validators.required),
+      AssignedOfficer: new FormControl(1, Validators.required),
+      caseNumber: new FormControl(''),
+      lawyerOpinion: new FormControl('', [
+        Validators.required,
+        Validators.minLength(10),
+      ]),
+    });
+  }
+
+  private buildPOAForm(): FormGroup<IPOA> {
+    return new FormGroup<IPOA>({
+      showPOA: new FormControl(false, { nonNullable: true }),
+      poaNumber: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.minLength(3)],
+      }),
+      poaIssueDate: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      poaAuthrizedBy: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required, Validators.minLength(3)],
+      }),
+      poaAttachment: new FormControl('', { nonNullable: true }),
+    });
+  }
+
+  private buildContractForm(): FormGroup<IContract> {
+    return new FormGroup<IContract>({
+      showContract: new FormControl(false, { nonNullable: true }),
+      contractType: new FormControl(2, {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      totalPrice: new FormControl(0, {
+        nonNullable: true,
+        validators: [Validators.required, Validators.min(0)],
+      }),
+      issueDate: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      expirationDate: new FormControl('', {
+        nonNullable: true,
+        validators: [Validators.required],
+      }),
+      downAmount: new FormControl(0, {
+        nonNullable: true,
+        validators: [Validators.max(0)],
+      }),
+      assigned: new FormControl(false, { nonNullable: true }),
+      contractAttachment: new FormControl<File | null>(null),
+    });
   }
 }

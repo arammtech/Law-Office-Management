@@ -56,56 +56,41 @@ h3 {
     gap: 1rem;
 }
 
-/* From Uiverse.io by gharsh11032000 */
-/* The switch - the box around the slider */
-.switch {
-    font-size: 17px;
-    position: relative;
-    display: inline-block;
-    width: 2.5em;
-    height: 1em;
-}
-
-/* Hide default HTML checkbox */
-.switch input {
-    opacity: 0;
-    width: 0;
-    height: 0;
-}
-
-/* The slider */
-.slider {
-    position: absolute;
-    cursor: pointer;
-    inset: 0;
-    background: #9fccfa;
-    border-radius: 50px;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.slider:before {
-    position: absolute;
-    content: "";
+.section-chk {
     display: flex;
     align-items: center;
-    justify-content: center;
-    height: 1em;
-    width: 1em;
-    inset: 0;
-    background-color: white;
-    border-radius: 50px;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    justify-content: space-between;
+}
+/* From Uiverse.io by SelfMadeSystem */
+.container {
+    cursor: pointer;
+    width: fit-content;
 }
 
-.switch input:checked+.slider {
-    background: #0974f1;
+.container input {
+    display: none;
 }
 
-.switch input:focus+.slider {
-    box-shadow: 0 0 1px var(--primary);
+.container svg {
+    overflow: visible;
+    width: 20px;
+    height: 20px;
 }
 
-.switch input:checked+.slider:before {
-    transform: translateX(-1.6em);
+.path {
+    fill: none;
+    stroke: hsl(210 54% 25%);
+    stroke-width: 8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    transition: stroke-dasharray 0.5s ease, stroke-dashoffset 0.5s ease;
+    stroke-dasharray: 241 9999999;
+    stroke-dashoffset: 0;
+
+
+}
+
+.container input:checked~svg .path {
+    stroke-dasharray: 70.5096664428711 9999999;
+    stroke-dashoffset: -262.2723388671875;
 }

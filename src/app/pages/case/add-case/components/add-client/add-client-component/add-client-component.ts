@@ -13,11 +13,11 @@ import {
   Validators,
 } from '@angular/forms';
 import Swal from 'sweetalert2';
-import { JsonPipe } from '@angular/common';
+import { JsonPipe, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-add-client-component',
-  imports: [FormsModule, ReactiveFormsModule, MatDialogModule],
+  imports: [FormsModule, ReactiveFormsModule, MatDialogModule, NgIf],
   templateUrl: './add-client-component.html',
   styleUrl: './add-client-component.css',
 })
@@ -25,7 +25,7 @@ export class AddClientComponent implements OnInit {
   clientForm!: FormGroup;
 
   get name() {
-    return this.clientForm.get('Name');
+    return this.clientForm.get('name');
   }
 
   get birthdate() {
@@ -64,7 +64,7 @@ export class AddClientComponent implements OnInit {
       natId: new FormControl(this.data?.NatId || ''),
       countryId: new FormControl(1, Validators.required),
       birth: new FormControl('', Validators.required),
-      phone: new FormControl('', Validators.required),
+      phone: new FormControl('', [Validators.required, Validators.pattern('^05\\d{8}$')]),
       address: new FormControl(''),
     });
   }
