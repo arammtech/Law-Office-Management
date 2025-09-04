@@ -63,7 +63,7 @@ export class AddClientComponent implements OnInit {
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       natId: new FormControl(this.data?.NatId || ''),
       countryId: new FormControl(1, Validators.required),
-      birth: new FormControl(new Date(), Validators.required),
+      birth: new FormControl('', Validators.required),
       phone: new FormControl('', Validators.required),
       address: new FormControl(''),
     });

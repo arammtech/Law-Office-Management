@@ -11,6 +11,7 @@ import { CommonModule, JsonPipe } from '@angular/common';
 import { IClient } from '../models/icase';
 import { MatDialog } from '@angular/material/dialog';
 import { AddClientComponent } from '../components/add-client/add-client-component/add-client-component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-add-case-component',
@@ -147,7 +148,7 @@ export class AddCaseComponent implements OnInit {
           Validators.required,
           Validators.minLength(3),
         ]),
-        poaAttachment: new FormControl(null)
+        poaAttachment: new FormControl(null),
       }),
     });
   }
@@ -156,32 +157,7 @@ export class AddCaseComponent implements OnInit {
   selectedContract: number = 1;
   natId: string;
 
-  clients: IClient[] = [
-    {
-      natId: '1',
-      name: 'Abdulaziz',
-      address: 'Address',
-      phone: '0123456789',
-      birth: new Date(),
-      countryId: 1,
-    },
-    {
-      natId: '2',
-      name: 'Abdulaziz',
-      address: 'Address',
-      phone: '0123456789',
-      birth: new Date(),
-      countryId: 1,
-    },
-    {
-      natId: '3',
-      name: 'Abdulaziz',
-      address: 'Address',
-      phone: '0123456789',
-      birth: new Date(),
-      countryId: 1,
-    },
-  ];
+  clients: IClient[] = [];
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -190,7 +166,20 @@ export class AddCaseComponent implements OnInit {
     }
   }
 
+  errorToast(title: string, msg: string) {
+    Swal.fire({
+      title: title,
+      text: msg,
+      icon: 'error',
+    });
+  }
+
   search(natId: string) {
+    const isExsit: boolean = this.isClientExsit(natId);
+    if (isExsit) {
+      this.errorToast('خطأ', 'العميل بالفعل مضاف في القضية');
+      return;
+    }
     this.dialogof
       .open(AddClientComponent, {
         height: '325x',
@@ -204,6 +193,10 @@ export class AddCaseComponent implements OnInit {
         }
       });
     return;
+  }
+
+  private isClientExsit(natId: string) {
+    return this.clients.find((c) => c.natId == natId) != undefined;
   }
 
   deleteClient(natid: string) {
