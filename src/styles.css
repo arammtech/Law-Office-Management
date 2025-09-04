@@ -31,8 +31,13 @@ input {
 }
 
 a {
+    cursor: pointer;
     text-decoration: none;
     color: black;
+}
+
+textarea {
+    min-height: 100px;
 }
 
 /* classes */
@@ -83,17 +88,17 @@ a {
 .mybtn {
     padding: 0.5rem;
     border-radius: 6px;
-    color: white;
-    
 }
 
 .bg-main {
     background-color: var(--primary);
+    color: white;
 }
 
 
 .bg-accent {
     background-color: var(--accent);
+    color: white;
 }
 
 .txt {

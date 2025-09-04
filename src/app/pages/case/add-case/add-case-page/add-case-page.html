@@ -1,0 +1,200 @@
+<app-page-header-component title="إضافة قضية جديدة"
+    description="أدخل بيانات القضية والعميل"></app-page-header-component>
+<h1>{{addcaseForm.value| json}}</h1>
+
+<section class="section">
+    <h3>البحث عن العميل</h3>
+    <div class="search-box">
+        <form #searchForm="ngForm" (ngSubmit)="search(natId)">
+            <div class="field-row">
+                <div class="field flex">
+                    <label for="natId">رقم الهوية</label>
+                    <input type="text" name="natid" [(ngModel)]="natId" #natIdModel="ngModel" required
+                        pattern="^\d{10}$" placeholder="أدخل رقم الهوية للبحث" />
+                </div>
+                <input type="submit" value="بحث" class="mybtn bg-main searchbtn" [disabled]="searchForm.invalid" />
+            </div>
+            <p class="text-danger" *ngIf="natIdModel.touched && natIdModel.errors?.['required']">يجب إدخال رقم الهوية
+            </p>
+            <p *ngIf="natIdModel.touched && natIdModel.errors?.['pattern']" class="text-danger">رقم الهوية يجب أن يتكون
+                من 10 خانات</p>
+
+        </form>
+        @if (clients.length > 0) {
+        <div class="parties-container" *ngIf="clients.length > 0">
+            <p>أطراف القضية المختارة:</p>
+            <div>
+                @for(client of clients; track client.natId) {
+                <div class="parties mybtn client-id  myrow">
+                    <p class="flex">رقم الهوية: {{client.natId}}</p>
+                    <a (click)="deleteClient(client.natId)"><i class="fa-solid fa-xmark"></i></a>
+                </div>
+                }
+            </div>
+        </div>
+        }
+        <p class="txt">💡 إذا لم يتم العثور على العميل، ستفتح نافذة لإضافة عميل جديد</p>
+    </div>
+</section>
+<form [formGroup]="addcaseForm">
+    <section formGroupName="caseForm" class="section">
+        <h3>بيانات القضية</h3>
+        <div class="fields">
+            <div class="field">
+                <label for="subject">موضوع القضية</label>
+                <input type="text" formControlName="subject" placeholder="أدخل موضوع القضية" />
+                <div class="text-danger" *ngIf="subject?.touched">
+                    <p *ngIf="subject?.errors?.['required']">هذا الحقل مطلوب</p>
+                    <p *ngIf="subject?.errors?.['minlength']">يجب أن يكون على الأقل 3 أحرف</p>
+                </div>
+            </div>
+            <div class="field">
+                <label for="PartiesToTheCase">اطراف الدعوى</label>
+                <select formControlName="PartiesToTheCase">
+                    <option value="">اختر</option>
+                    <option value="مدعي">مدعي</option>
+                    <option value="مدعي عليه">مدعي عليه</option>
+                </select>
+                <div class="text-danger" *ngIf="PartiesToTheCase?.invalid && PartiesToTheCase?.touched">
+                    <p>يرجى اختيار طرف الدعوى</p>
+                </div>
+            </div>
+            <div class="field">
+                <label for="estimatedtime">الوقت المتوقع للدراسة</label>
+                <input type="date" formControlName="estimatedtime" />
+                <div class="text-danger" *ngIf="estimatedtime?.invalid && estimatedtime?.touched">
+                    <p>يرجى تحديد التاريخ</p>
+                </div>
+            </div>
+            <div class="field">
+                <label for="courttype">نوع المحكمة</label>
+                <select formControlName="courttype">
+                    <option value="">اختر</option>
+                    <option value="عامة">عامة</option>
+                    <option value="جنائية">جنائية</option>
+                </select>
+                <div class="text-danger" *ngIf="courttype?.invalid && courttype?.touched">
+                    <p>يرجى اختيار نوع المحكمة</p>
+                </div>
+            </div>
+            <div class="field">
+                <label for="AssignedOfficer">الموظف الموكل على القضية</label>
+                <select formControlName="AssignedOfficer">
+                    <option value="">اختر</option>
+                    <option value="عبدالعزيز">عبدالعزيز</option>
+                    <option value="حسن">حسن</option>
+                </select>
+                <div class="text-danger" *ngIf="AssignedOfficer?.invalid && AssignedOfficer?.touched">
+                    <p>يرجى اختيار الموظف</p>
+                </div>
+            </div>
+            <div class="field">
+                <label for="caseNumber">رقم القضية</label>
+                <input type="text" formControlName="caseNumber" placeholder="أدخل رقم القضية" />
+            </div>
+            <div class="field lawyer-opnion">
+                <label for="lawyerOpinion">رأي المحامي</label>
+                <textarea formControlName="lawyerOpinion" placeholder="رأي المحامي"></textarea>
+                <div class="text-danger" *ngIf="lawyerOpinion?.invalid && lawyerOpinion?.touched">
+                    <p *ngIf="lawyerOpinion?.errors?.['required']">هذا الحقل مطلوب</p>
+                    <p *ngIf="lawyerOpinion?.errors?.['minlength']">يجب أن يحتوي على 10 أحرف على الأقل</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section formGroupName="contract" class="section">
+        
+        <label class="switch">
+            <input type="checkbox">
+            <span class="slider"></span>
+        </label>
+        <h3>
+            إظهار قسم العقد ؟
+        </h3>
+        <div class="fields">
+            <div class="field">
+                <label for="contractType">نوع العقد</label>
+                <select formControlName="contractType">
+                    <option value="">اختر</option>
+                    <option value="1">محدد بمدة</option>
+                    <option value="2">غير محدد بمدة</option>
+                </select>
+
+                <p class="text-danger" *ngIf="contractType?.invalid && contractType?.touched">يرجى اختيار نوع العقد</p>
+
+            </div>
+            <div class="field">
+                <label for="totalPrice">السعر الاجمالي</label>
+                <input type="number" min="0" formControlName="totalPrice" placeholder="ادخل السعر" />
+                <p *ngIf="totalPrice?.touched && totalPrice?.errors?.['required']">هذا الحقل مطلوب</p>
+                <p *ngIf="totalPrice?.errors?.['min']">يجب أن يكون السعر أكبر من أو يساوي صفر</p>
+            </div>
+            <div class="field" *ngIf="contractType?.value === '1'">
+                <label for="issueDate">تاريخ البداية</label>
+                <input type="date" formControlName="issueDate" />
+            </div>
+            <div class="field" *ngIf="contractType?.value === '1'">
+                <label for="expirationDate">تاريخ النهاية</label>
+                <input type="date" formControlName="expirationDate" />
+            </div>
+
+            <div class="field">
+                <label for="downAmount">العربون</label>
+                <input type="number" formControlName="downAmount" placeholder="ادخل مقدم العقد" />
+            </div>
+            <div class="field">
+                <label for="contractAttachment">مرفق العقد</label>
+                <input type="file" formControlName="contractAttachment" (change)="onFileSelected($event)" />
+            </div>
+            <div class="field">
+                <p>
+                    <input type="checkbox" formControlName="assigned" />
+                    تم توقيع العقد ؟
+                </p>
+            </div>
+        </div>
+    </section>
+    <section formGroupName="poa" class="section">
+        <h1>{{poa?.value | json}}</h1>
+        <label class="switch">
+            <input type="checkbox">
+            <span class="slider"></span>
+        </label>
+        <h3>
+            إظهار قسم الوكالة ؟
+        </h3>
+        <div *ngIf="!showPOA" class="fields">
+            <div class="field">
+                <label for="poaNumber">أدخل رقم الوكالة</label>
+                <input type="text" formControlName="poaNumber" placeholder="ادخل الوكالة" />
+                <div class="text-danger" *ngIf="poaNumber?.invalid && poaNumber?.touched">
+                    <p *ngIf="poaNumber?.errors?.['required']">هذا الحقل مطلوب</p>
+                    <p *ngIf="poaNumber?.errors?.['minlength']">يجب أن يكون اكثر من 3 احرف</p>
+                </div>
+            </div>
+            <div class="field">
+                <label for="poaissueDate">تاريخ إصدار الوكالة</label>
+                <input type="date" formControlName="poaissueDate" />
+                <div class="text-danger" *ngIf="poaissueDate?.invalid && poaissueDate?.touched">
+                    <p *ngIf="poaissueDate?.errors?.['required']">هذا الحقل مطلوب</p>
+                </div>
+            </div>
+            <div class="field">
+                <label for="poaAuthrizedBy">الجهة المصدرة للوكالة</label>
+                <input type="text" formControlName="poaAuthrizedBy" placeholder="أدخل الجهة المصدرة للوكالة" />
+                <div class="text-danger" *ngIf="poaAuthrizedBy?.invalid && poaAuthrizedBy?.touched">
+                    <p *ngIf="poaAuthrizedBy?.errors?.['required']">هذا الحقل مطلوب</p>
+                    <p *ngIf="poaAuthrizedBy?.errors?.['minlength']">يجب أن يكون اكثر من 3 احرف</p>
+                </div>
+            </div>
+            <div class="field">
+                <label for="poaAttachment">مرفق الوكالة</label>
+                <input type="file" formControlName="poaAttachment" (change)="onFileSelected($event)" />
+            </div>
+        </div>
+    </section>
+    <div class="btns">
+        <button type="submit" class="mybtn bg-main">إرسال الموافقة</button>
+        <button type="submit" class="mybtn bg-accent ">حفظ كمسودة</button>
+    </div>
+</form>

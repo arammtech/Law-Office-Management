@@ -10,6 +10,7 @@ nav {
     border-left: 1px solid var(--txt);
     padding: 1rem 0.4rem;
     background-color: var(--secondary);
+    max-height: 100vh;
 }
 
 .logo {

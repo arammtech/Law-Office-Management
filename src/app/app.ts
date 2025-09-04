@@ -1,12 +1,10 @@
 import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
-import { Login } from "./pages/auth/login/login/login";
-import { PageHeaderComponent } from "../shared/components/page header/page-header-component/page-header-component";
+import { RouterModule, RouterOutlet } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, PageHeaderComponent, ReactiveFormsModule],
+  imports: [RouterOutlet, ReactiveFormsModule, RouterModule],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

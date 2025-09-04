@@ -1,0 +1,97 @@
+<form [formGroup]="employeeForm">
+    <a mat-dialog-close><i class="fa-solid fa-xmark"></i></a>
+    <h3>إضافة موظف جديد</h3>
+    <div class="fields field">
+        <label for="fullname">الاسم الرباعي*</label>
+        <input type="text" placeholder="أدخل الاسم الرباعي" formControlName="name">
+        @if(name?.touched) {
+        <div class="text-danger">
+            @if (name?.errors?.['required']) {
+            <p>يجب إدخال الاسم</p>
+            }
+            @if (name?.errors?.['minlength']) {
+            <p>يجب ان يحتوي الاسم على 3 حروف او اكثر</p>
+            }
+        </div>
+        }
+    </div>
+    <div class="fields field">
+        <label for="natid">رقم الهوية*</label>
+        <input type="text" placeholder="أدخل رقم الهوية" formControlName="natId">
+        @if(natId?.touched) {
+        <div class="text-danger">
+            @if (natId?.errors?.['required']) {
+            <p>يجب إدخال رقم الهوية</p>
+            }
+            @if (natId?.errors?.['pattern']) {
+            <p>يجب ان يحتوي رقم الهوية على 10 خانات</p>
+            }
+        </div>
+        }
+    </div>
+    <div class="fields field">
+        <label for="countryId">الجنسية*</label>
+        <select name="countryId" formControlName="countryId">
+            <option value="1">السعودية</option>
+            <option value="2">مصر</option>
+            <option value="3">سوريا</option>
+        </select>
+    </div>
+    <div class="fields field">
+        <label for="birthDate">تاريخ الميلاد*</label>
+        <input type="date" formControlName="birthDate">
+        <p>{{birthDate?.errors | json}}</p>
+        @if(birthDate?.touched) {
+        <div class="text-danger">
+            @if (birthDate?.errors?.['required']) {
+            <p>يجب إدخال تاريخ الميلاد</p>
+            }
+        </div>
+        }
+    </div>
+    <div class="fields field">
+        <label for="phone">رقم الجوال*</label>
+        <input type="text" name="phone" formControlName="phone">
+        @if(phone?.touched) {
+        <div class="text-danger">
+            @if (phone?.errors?.['required']) {
+            <p>يجب إدخال رقم الهاتف</p>
+            }
+            @if (phone?.errors?.['pattern']) {
+            <p>رقم الهاتف يتكون من 10 خانات ويبدا 05</p>
+            }
+        </div>
+        }
+    </div>
+    <div class="fields field">
+        <label for="phone">البريد الالكتروني*</label>
+        <input type="text" formControlName="email">
+        @if(email?.touched) {
+        <div class="text-danger">
+            @if (email?.errors?.['required']) {
+            <p>يجب إدخال البريد الالكتروني</p>
+            }
+            @if (email?.errors?.['email']) {
+            <p>تأكد من كتابة ايميل صحيح</p>
+            }
+        </div>
+        }
+    </div>
+    <div class="fields field">
+        <label for="address">العنوان</label>
+        <input type="text" name="address" formControlName="address">
+    </div>
+    <div class="fields field">
+        <label for="role">الدور*</label>
+        <select>
+            <option value="1">مدير عام</option>
+            <option value="2">دير تنفيذي</option>
+            <option value="3">مستشار</option>
+            <option value="4" selected>محامي</option>
+        </select>
+    </div>
+    <div class="btns">
+        <button class="mybtn bg-main" type="submit">حفظ العميل</button>
+        <button class="mybtn bg-accent" type="button" mat-dialog-close>إلغاء</button>
+    </div>
+</form>
