@@ -4,7 +4,7 @@ import {
   MatDialogRef,
   MatDialogModule,
 } from '@angular/material/dialog';
-import { IClient } from '../../../models/icase';
+import { INewClientModel } from '../../../models/icase';
 import {
   FormControl,
   FormGroup,
@@ -17,7 +17,7 @@ import { JsonPipe, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-add-client-component',
-  imports: [FormsModule, ReactiveFormsModule, MatDialogModule, NgIf],
+  imports: [FormsModule, ReactiveFormsModule, MatDialogModule, NgIf, JsonPipe],
   templateUrl: './add-client-component.html',
   styleUrl: './add-client-component.css',
 })
@@ -36,6 +36,16 @@ export class AddClientComponent implements OnInit {
     return this.clientForm.get('phone');
   }
 
+  
+  get address() {
+    return this.clientForm.get('address');
+  }
+
+  
+  
+  get countryCode() {
+    return this.clientForm.get('coutntryCode');
+  }
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
     private dialogRef: MatDialogRef<AddClientComponent>
@@ -54,7 +64,18 @@ export class AddClientComponent implements OnInit {
         icon: 'error',
       });
     } else {
-      this.dialogRef.close(this.clientForm.value as IClient);
+      const model: INewClientModel = {
+        address: this.address?.value,
+        birth: this.birthdate?.value,
+        name: this.name?.value, 
+        countryCode: 'YE',
+        phone: this.phone?.value,
+        natId: this.data?.NatId
+      }
+      console.log(this.clientForm.get('coutntryCode')?.value)
+      console.log('client')
+      console.log(model);
+      this.dialogRef.close(model as INewClientModel);
     }
   }
 
@@ -62,7 +83,7 @@ export class AddClientComponent implements OnInit {
     this.clientForm = new FormGroup({
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       natId: new FormControl(this.data?.NatId || ''),
-      countryId: new FormControl(1, Validators.required),
+      countryCode: new FormControl('YE', Validators.required),
       birth: new FormControl('', Validators.required),
       phone: new FormControl('', [Validators.required, Validators.pattern('^05\\d{8}$')]),
       address: new FormControl(''),

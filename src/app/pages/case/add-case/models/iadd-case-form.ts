@@ -1,11 +1,12 @@
-import { FormGroup } from "@angular/forms";
-import { ICase } from "./icase";
-import { IContract } from "./icontract";
-import { IPOA } from "./ipoa";
+import { FormGroup } from '@angular/forms';
+import { ICase, IExistingClientModel, INewClientModel } from './icase';
+import { IContract } from './icontract';
+import { IPOA } from './ipoa';
 
-export interface IAddCaseForm {
-    mycase: ICase;
-    contract: IContract;
-    poa: IPOA;
-
+export interface ICreateCaseModel {
+  case: ICase;
+  contract: IContract;
+  poa: IPOA;
+  existingClients: IExistingClientModel[];
+  newClients: INewClientModel[];
 }

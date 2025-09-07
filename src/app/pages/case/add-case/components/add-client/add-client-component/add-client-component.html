@@ -1,6 +1,7 @@
 <form [formGroup]="clientForm" (submit)="submit()">
     <a class="btn-del" mat-dialog-close><i class="fa-solid fa-xmark"></i></a>
     <h3>إضافة عميل جديد</h3>
+    <h1>{{clientForm .value | json}}</h1>
     <div class="fields">
         <div class="field">
             <label for="fullname">الاسم الرباعي*</label>
@@ -15,11 +16,11 @@
             <input type="text" placeholder="أدخل رقم الهوية" readonly formControlName="natId" class="disabled">
         </div>
         <div class="field">
-            <label for="countryId">الجنسية*</label>
-            <select formControlName="countryId">
-                <option value="1">السعودية</option>
-                <option value="2">مصر</option>
-                <option value="3">سوريا</option>
+            <label for="CountryCode">الجنسية*</label>
+            <select formControlName="countryCode">
+                <option value="YE">السعودية</option>
+                <option value="SA">مصر</option>
+                <option value="EG">سوريا</option>
             </select>
         </div>
         <div class="field">

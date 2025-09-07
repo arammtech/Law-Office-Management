@@ -18,14 +18,21 @@
                 <p *ngIf="natIdModel.errors?.['pattern']">رقم الهوية يجب أن يتكون من 10 خانات</p>
             </div>
         </form>
-        @if (clients.length > 0) {
-        <div class="parties-container" *ngIf="clients.length > 0">
+        @if (existingClients.length > 0 || newClients.length > 0) {
+        <div class="parties-container">
             <p>أطراف القضية المختارة:</p>
             <div>
-                @for(client of clients; track client.natId) {
+                @for(client of existingClients; track client.natId) {
                 <div class="parties mybtn client-id  myrow">
                     <p class="flex">رقم الهوية: {{client.natId}}</p>
-                    <a class="btn-del" (click)="deleteClient(client.natId)"><i class="fa-solid fa-xmark"></i></a>
+                    <a class="btn-del" (click)="deleteExistingClient(client.natId)"><i class="fa-solid fa-xmark"></i></a>
+                </div>
+                }
+
+                @for(client of newClients; track client.natId) {
+                <div class="parties mybtn client-id  myrow">
+                    <p class="flex">رقم الهوية: {{client.natId}}</p>
+                    <a class="btn-del" (click)="deleteNewClient(client.natId)"><i class="fa-solid fa-xmark"></i></a>
                 </div>
                 }
             </div>
@@ -34,7 +41,7 @@
         <p class="txt">💡 إذا لم يتم العثور على العميل، ستفتح نافذة لإضافة عميل جديد</p>
     </div>
 </section>
-<form [formGroup]="addcaseForm" (ngSubmit)="submit()">
+<form [formGroup]="addcaseForm">
     <section formGroupName="caseForm" class="section">
         <h3>بيانات القضية</h3>
         <div class="fields">
@@ -64,15 +71,15 @@
             <div class="field">
                 <label for="courtType">نوع المحكمة</label>
                 <select formControlName="courtType">
-                    <option value="عامة">عامة</option>
-                    <option value="جنائية">جنائية</option>
+                    <option value="A8B6E3FB-6FB0-4F8F-CF6F-5A6B7C8D9E10">عامة</option>
+                    <option value="A8B6E3FB-6FB0-4F8F-CF6F-5A6B7C8D9E10">جنائية</option>
                 </select>
             </div>
             <div class="field">
                 <label for="AssignedOfficer">الموظف الموكل على القضية</label>
                 <select formControlName="AssignedOfficer">
-                    <option value="1">عبدالعزيز</option>
-                    <option value="2">حسن</option>
+                    <option value="C98AB58A-E86D-435E-BAC4-69ED1EC9617D">عبدالعزيز</option>
+                    <option value="C98AB58A-E86D-435E-BAC4-69ED1EC9617D">حسن</option>
                 </select>
             </div>
             <div class="field">
@@ -198,7 +205,7 @@
         </div>
     </section>
     <div class="btns">
-        <button type="submit" class="mybtn bg-main">إرسال الموافقة</button>
-        <button type="submit" class="mybtn bg-accent ">حفظ كمسودة</button>
+        <button type="submit" (click)="submit(false)" class="mybtn bg-main">إرسال الموافقة</button>
+        <button type="submit" (click)="submit(true)" class="mybtn bg-accent">حفظ كمسودة</button>
     </div>
 </form>

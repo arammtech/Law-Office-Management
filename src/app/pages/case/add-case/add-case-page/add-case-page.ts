@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, model, OnInit } from '@angular/core';
 import { PageHeaderComponent } from '../../../../../shared/components/page header/page-header-component/page-header-component';
 import {
   FormControl,
@@ -8,14 +8,13 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { CommonModule, JsonPipe } from '@angular/common';
-import { ICase, IClient } from '../models/icase';
 import { MatDialog } from '@angular/material/dialog';
 import { AddClientComponent } from '../components/add-client/add-client-component/add-client-component';
 import Swal from 'sweetalert2';
-import { min } from 'rxjs';
-import { IPOA } from '../models/ipoa';
-import { IContract } from '../models/icontract';
-import { IAddCaseForm } from '../models/iadd-case-form';
+import { IExistingClientModel, INewClientModel } from '../models/icase';
+import { CaseService } from '../../services/case-service';
+import { ICreateCaseModel } from '../models/iadd-case-form';
+import { ErrorResponse } from '../../../../../core/models/error-response';
 
 @Component({
   selector: 'app-add-case-component',
@@ -32,10 +31,8 @@ import { IAddCaseForm } from '../models/iadd-case-form';
 })
 export class AddCaseComponent implements OnInit {
   addcaseForm!: FormGroup;
-  showErrors:boolean = false;
-  constructor(private dialogof: MatDialog) {
-    this.natId = '';
-  }
+  showErrors: boolean = false;
+  natId: string;
 
   get caseForm() {
     return this.addcaseForm?.get('caseForm') as FormGroup;
@@ -116,83 +113,13 @@ export class AddCaseComponent implements OnInit {
     return this.poa?.get('poaAttachment');
   }
 
-  get case(): FormGroup<ICase> {
-    return new FormGroup<ICase>({
-      subject: new FormControl('', {
-        nonNullable: true,
-        validators: [Validators.required, Validators.minLength(3)],
-      }),
-      PartiesToTheCase: new FormControl(1, {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-      estimatedTime: new FormControl('', {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-      courtType: new FormControl(1, {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-      AssignedOfficer: new FormControl(1, {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-      caseNumber: new FormControl('', { nonNullable: true }),
-      lawyerOpinion: new FormControl('', {
-        nonNullable: true,
-        validators: [Validators.required, Validators.minLength(10)],
-      }),
-    });
+  selectedContract: number = 1;
+  existingClients: IExistingClientModel[] = [];
+  newClients: INewClientModel[] = [];
+
+  constructor(private dialogof: MatDialog, private caseService: CaseService) {
+    this.natId = '';
   }
-
-  // get poa(): FormGroup<IPOA> {
-  //   return new FormGroup<IPOA>({
-  //     showPOA: new FormControl(false, { nonNullable: true }),
-  //     poaNumber: new FormControl('', {
-  //       nonNullable: true,
-  //       validators: [Validators.required, Validators.minLength(3)],
-  //     }),
-  //     poaIssueDate: new FormControl('', {
-  //       nonNullable: true,
-  //       validators: [Validators.required],
-  //     }),
-  //     poaAuthrizedBy: new FormControl('', {
-  //       nonNullable: true,
-  //       validators: [Validators.required, Validators.minLength(3)],
-  //     }),
-  //     poaAttachment: new FormControl('', { nonNullable: true }),
-  //   });
-  // }
-
-  // get contract(): FormGroup<IContract> {
-  //   return new FormGroup<IContract>({
-  //     showContract: new FormControl(false, { nonNullable: true }),
-  //     contractType: new FormControl(2, {
-  //       nonNullable: true,
-  //       validators: Validators.required,
-  //     }),
-  //     totalPrice: new FormControl(0, {
-  //       nonNullable: true,
-  //       validators: [Validators.required, Validators.min(0)],
-  //     }),
-  //     issueDate: new FormControl('', {
-  //       nonNullable: true,
-  //       validators: Validators.required,
-  //     }),
-  //     expirationDate: new FormControl('', {
-  //       nonNullable: true,
-  //       validators: Validators.required,
-  //     }),
-  //     downAmount: new FormControl(0, {
-  //       nonNullable: true,
-  //       validators: [Validators.max(0)],
-  //     }),
-  //     assigned: new FormControl(false, { nonNullable: true }),
-  //     contractAttachment: new FormControl<File | null>(null),
-  //   });
-  // }
-
   ngOnInit(): void {
     this.addcaseForm = new FormGroup({
       caseForm: this.buildCaseForm(),
@@ -201,14 +128,11 @@ export class AddCaseComponent implements OnInit {
     });
   }
 
-  selectedContract: number = 1;
-  natId: string;
-  clients: IClient[] = [];
-
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {
-      this.contractAttachment?.setValue(input.files[0]);
+      this.contractAttachment?.setValue(input.files);
+      console.log(input.files);
     }
   }
 
@@ -225,34 +149,101 @@ export class AddCaseComponent implements OnInit {
     if (isExsit) {
       this.errorToast('خطأ', 'العميل بالفعل مضاف في القضية');
       return;
-    }
-    this.dialogof
-      .open(AddClientComponent, {
-        height: '325x',
-        minWidth: '600px',
-        data: { NatId: natId },
-      })
-      .afterClosed()
-      .subscribe((result: IClient | undefined) => {
-        if (result) {
-          this.clients.push(result);
-        }
+    } else {
+      this.caseService.getClientByNatId(natId).subscribe({
+        next: (res) => {
+          const existingClient: IExistingClientModel = {
+            Id: res.id,
+            natId: res.person.natId,
+          };
+          this.existingClients.push(existingClient);
+          return;
+        },
+        error: (error) => {
+          console.log(`from get cleint ${error as ErrorResponse}`);
+          this.dialogof
+            .open(AddClientComponent, {
+              height: '325x',
+              minWidth: '600px',
+              data: { NatId: natId },
+            })
+            .afterClosed()
+            .subscribe((result: INewClientModel | undefined) => {
+              if (result) {
+                this.newClients.push(result);
+              }
+            });
+        },
       });
+    }
+
     return;
   }
 
   private isClientExsit(natId: string) {
-    return this.clients.find((c) => c.natId == natId) != undefined;
+    if (this.existingClients.find((c) => c.natId == natId) != undefined)
+      return true;
+    else return this.newClients.find((c) => c.natId == natId) != undefined;
   }
 
-  deleteClient(natid: string) {
-    this.clients = this.clients.filter((x) => x.natId != natid);
+  deleteNewClient(natId: string) {
+    this.newClients = this.newClients.filter((x) => x.natId != natId);
+  }
+  deleteExistingClient(natId: string) {
+    this.existingClients = this.existingClients.filter((x) => x.natId != natId);
   }
 
-  submit() {
-    if (this.addcaseForm.invalid) {
+  submit(isDraft: boolean) {
+    if (
+      this.caseForm.invalid ||
+      (this.showContract?.value && this.contract.invalid) ||
+      (this.showPOA?.value && this.poa.invalid)
+    ) {
       this.showErrors = true;
-      this.errorToast('خطأ', 'تأكد من ملء جميع الحقول')
+      this.errorToast('خطأ', 'تأكد من ملء جميع الحقول');
+    } else {
+      console.log('in the send part');
+      const model: ICreateCaseModel = {
+        case: {
+          caseNumber: this.caseNumber?.value,
+          courtType: this.courtType?.value,
+          lawyerOpinion: this.lawyerOpinion?.value,
+          AssignedOfficer: this.AssignedOfficer?.value,
+          subject: this.subject?.value,
+          estimatedTime: this.estimatedTime?.value,
+          PartiesToTheCase: this.PartiesToTheCase?.value,
+        },
+        contract: {
+          showContract: this.showContract?.value,
+          contractAttachment: this.contractAttachment?.value,
+          totalPrice: this.totalPrice?.value,
+          downAmount: this.downAmount?.value,
+          contractType: this.contractType?.value,
+          assigned: this.assigned?.value,
+          expirationDate: this.expirationDate?.value,
+          issueDate: this.issueDate?.value,
+        },
+        poa: {
+          poaAttachment: this.poaAttachment?.value,
+          poaIssueDate: this.poaIssueDate?.value,
+          poaNumber: this.poaNumber?.value,
+          showPOA: this.showPOA?.value,
+          poaAuthrizedBy: this.poaAuthrizedBy?.value,
+        },
+        existingClients: this.existingClients,
+        newClients: this.newClients,
+      };
+      console.log(model);
+      this.caseService.add(model, isDraft).subscribe({
+        next: (res) => {
+          this.successToast('نجاح', 'تمت إضافة القضية بنجاح')
+          console.log(res);
+        },
+        error: (res) => {
+          this.errorToast('خطأ', 'حدث خطا اثناء إضافة القضية');
+          console.log(res as ErrorResponse);
+        },
+      });
     }
   }
 
@@ -274,8 +265,8 @@ export class AddCaseComponent implements OnInit {
     });
   }
 
-  private buildPOAForm(): FormGroup<IPOA> {
-    return new FormGroup<IPOA>({
+  private buildPOAForm(): FormGroup {
+    return new FormGroup({
       showPOA: new FormControl(false, { nonNullable: true }),
       poaNumber: new FormControl('', {
         nonNullable: true,
@@ -293,8 +284,8 @@ export class AddCaseComponent implements OnInit {
     });
   }
 
-  private buildContractForm(): FormGroup<IContract> {
-    return new FormGroup<IContract>({
+  private buildContractForm(): FormGroup {
+    return new FormGroup({
       showContract: new FormControl(false, { nonNullable: true }),
       contractType: new FormControl(2, {
         nonNullable: true,
@@ -318,6 +309,14 @@ export class AddCaseComponent implements OnInit {
       }),
       assigned: new FormControl(false, { nonNullable: true }),
       contractAttachment: new FormControl<File | null>(null),
+    });
+  }
+
+  successToast(title: string, msg: string) {
+    Swal.fire({
+      title: title,
+      text: msg,
+      icon: 'success',
     });
   }
 }

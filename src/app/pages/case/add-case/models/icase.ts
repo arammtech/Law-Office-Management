@@ -1,19 +1,38 @@
-import { FormControl, FormGroup, Validators } from "@angular/forms";
-
 export interface ICase {
-  subject: FormControl<string>;
-  PartiesToTheCase: FormControl<number>;
-  estimatedTime: FormControl<string>;
-  courtType: FormControl<number>;
-  AssignedOfficer: FormControl<number>;
-  caseNumber: FormControl<string>;
-  lawyerOpinion: FormControl<string>;
+  subject: string;
+  PartiesToTheCase: number;
+  estimatedTime: string;
+  courtType: number;
+  AssignedOfficer: number;
+  caseNumber: string;
+  lawyerOpinion: string;
 }
-export interface IClient {
+export interface INewClientModel {
   natId: string;
   name: string;
   address: string;
   birth: Date;
-  countryId: number;
+  countryCode: string;
   phone: string;
+}
+
+export interface IExistingClientModel {
+  Id: string;
+  natId: string;
+}
+
+export interface IPersonModel {
+  id: string;
+  name: 'string';
+  natId: 'string';
+  birthDate: '2025-09-06';
+  phone: 'string';
+  address: 'string';
+  countryCode: 'string';
+}
+
+
+export interface IClientModel {
+  id: string;
+  person:IPersonModel
 }
