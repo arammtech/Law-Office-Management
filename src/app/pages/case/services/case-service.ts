@@ -1,10 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environmentDev } from '../../../../environments/environment.development';
-import { ICreateCaseModel } from '../add-case/models/iadd-case-form';
 import { map, Observable } from 'rxjs';
-import { IClientModel } from '../add-case/models/forms-builder';
 import { ClientAdapter } from '../add-case/adapters/client-adappter';
+import { IAddCaseForm } from '../add-case/models/iadd-case-form';
+import { INewClientForm } from '../add-case/models/inew-client-form';
+import { IClientDetails } from '../add-case/models/iclient-details';
 
 @Injectable({
   providedIn: 'root',
@@ -15,93 +16,92 @@ export class CaseService {
     private http: HttpClient,
     private clientAdappter: ClientAdapter
   ) {}
-  add(createCaseModel: ICreateCaseModel, isDraft: boolean): Observable<string> {
+  add(createCaseModel: IAddCaseForm, isDraft: boolean): Observable<string> {
     const formData = new FormData();
     // قيم عادية
-    formData.append('caseNumber', `${createCaseModel.case.caseNumber}`);
-    formData.append('courtTypeId', `${createCaseModel.case.courtType}`);
-    formData.append('caseSubject', `${createCaseModel.case.subject}`);
-    formData.append('partyRole', `${createCaseModel.case.PartiesToTheCase}`);
-    formData.append('clientRequestDetails', `${createCaseModel.case.subject}`);
+    formData.append('caseNumber', `${createCaseModel?.case.value.caseNumber}`);
+    formData.append('courtTypeId', `${createCaseModel?.case.value.courtType}`);
+    formData.append('caseSubject', `${createCaseModel?.case.value.subject}`);
+    formData.append(
+      'partyRole',
+      `${createCaseModel?.case.value.partiesToTheCase}`
+    );
+    formData.append(
+      'clientRequestDetails',
+      `${createCaseModel?.case.value.subject}`
+    );
     formData.append(
       'estimatedReviewDate',
-      `${createCaseModel.case.estimatedTime}`
+      `${createCaseModel?.case.value.estimatedTime}`
     );
-    formData.append('lawyerOpinion', `${createCaseModel?.case.lawyerOpinion}`);
+    formData.append(
+      'lawyerOpinion',
+      `${createCaseModel?.case.value.lawyerOpinion}`
+    );
     // الموظف المسؤول
     formData.append(
       'assignedEmployeeId',
-      `${createCaseModel?.case?.AssignedOfficer}`
+      `${createCaseModel?.case?.value.assignedOfficer}`
     );
     formData.append('isDraft', `${isDraft}`);
 
-    // بيانات العقد
-    if (createCaseModel.contract?.showContract) {
-      formData.append(
-        'hasContracts',
-        `${createCaseModel?.contract?.showContract}`
-      );
-      formData.append(
-        'contractsData[0].contractType',
-        `${createCaseModel.contract.contractType}`
-      );
-      formData.append(
-        'contractsData[0].issueDate',
-        `${createCaseModel?.contract?.issueDate}`
-      );
-      formData.append(
-        'contractsData[0].expiryDate',
-        `${createCaseModel?.contract?.expirationDate}`
-      );
-      formData.append(
-        'contractsData[0].baseAmount',
-        `${createCaseModel?.contract?.totalPrice}`
-      );
-      formData.append(
-        'contractsData[0].initialPayment',
-        `${createCaseModel?.contract?.downAmount}`
-      );
-      formData.append(
-        'contractsData[0].isAssigned',
-        `${createCaseModel?.contract?.assigned}`
-      );
-      formData.append(
-        'contractFiles[0]',
-        `${createCaseModel.contract?.contractAttachment}`
-      );
-    }
+    // // بيانات العقد
+    // if (createCaseModel.contract?.showContract) {
+    //   formData.append(
+    //     'hasContracts',
+    //     `${createCaseModel?.contract?.showContract}`
+    //   );
+    //   formData.append(
+    //     'contractsData[0].contractType',
+    //     `${createCaseModel.contract.contractType}`
+    //   );
+    //   formData.append(
+    //     'contractsData[0].issueDate',
+    //     `${createCaseModel?.contract?.issueDate}`
+    //   );
+    //   formData.append(
+    //     'contractsData[0].expiryDate',
+    //     `${createCaseModel?.contract?.expirationDate}`
+    //   );
+    //   formData.append(
+    //     'contractsData[0].baseAmount',
+    //     `${createCaseModel?.contract?.totalPrice}`
+    //   );
+    //   formData.append(
+    //     'contractsData[0].initialPayment',
+    //     `${createCaseModel?.contract?.downAmount}`
+    //   );
+    //   formData.append(
+    //     'contractsData[0].isAssigned',
+    //     `${createCaseModel?.contract?.assigned}`
+    //   );
+    //   formData.append(
+    //     'contractFiles[0]',
+    //     `${createCaseModel.contract?.contractAttachment}`
+    //   );
+    // }
 
-    // بيانات الوكالة
-    if (createCaseModel?.poa.showPOA) {
-      formData.append('hasPOAs', `${createCaseModel?.poa?.showPOA}`);
-      formData.append('poasData[0].poaNumber', 'POA-001');
-      formData.append('poasData[0].issueDate', '2024-05-20');
-      formData.append('poasData[0].issuingAuthority', 'الجهات الحكومية');
-      formData.append('poaFiles[0]', `${createCaseModel?.poa.poaAttachment}`);
-    }
+    // // بيانات الوكالة
+    // if (createCaseModel?.poa.showPOA) {
+    //   formData.append('hasPOAs', `${createCaseModel?.poa?.showPOA}`);
+    //   formData.append('poasData[0].poaNumber', 'POA-001');
+    //   formData.append('poasData[0].issueDate', '2024-05-20');
+    //   formData.append('poasData[0].issuingAuthority', 'الجهات الحكومية');
+    //   formData.append('poaFiles[0]', `${createCaseModel?.poa.poaAttachment}`);
+    // }
 
     // العملاء (مصفوفة بصيغة JSON)
     const clientsJson = [];
 
-    for (const client of createCaseModel?.newClients) {
-      const newClient = {
-        kind: 'new',
-        Client: {
-          Person: {
-            FullName: client.name,
-            NationalId: client.natId,
-            BirthDate: client.birth,
-            PhoneNumber: client.phone,
-            Address: client.address,
-            CountryCode: client.countryCode,
-          },
-        },
-      };
+    for (const client of createCaseModel?.newClients.value) {
+      const newClient = this.clientAdappter.toAddClientAPI(
+        client as INewClientForm
+      );
 
       clientsJson.push(newClient);
     }
 
-    for (const client of createCaseModel?.existingClients) {
+    for (const client of createCaseModel?.existingClients.value) {
       const newClient = {
         kind: 'existing',
         ClientId: client.Id,
@@ -117,9 +117,9 @@ export class CaseService {
       .pipe(map((data) => data as string));
   }
 
-  getClientByNatId(natId: string): Observable<IClientModel> {
+  getClientByNatId(natId: string): Observable<IClientDetails> {
     return this.http
       .get(`${this.baseURL}/clients/national-id/${natId}`)
-      .pipe(map((data) => this.clientAdappter.fromApi(data)));
+      .pipe(map((data) => this.clientAdappter.fromClientDetailsAPI(data)));
   }
 }

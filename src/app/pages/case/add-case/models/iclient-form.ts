@@ -1,5 +1,5 @@
-import { FormControl, FormGroup } from "@angular/forms";
-import { IPersonForm } from "./iperson-form";
+import { FormControl, FormGroup } from '@angular/forms';
+import { IPersonForm } from './inew-person-form';
 
 export interface IClientForm {
   id: FormControl<string>;

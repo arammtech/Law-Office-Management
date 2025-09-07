@@ -1,37 +1,40 @@
 import { Injectable } from '@angular/core';
-import { IClientModel } from '../models/forms-builder';
+import { INewClientForm } from '../models/inew-client-form';
+import { IClientDetails } from '../models/iclient-details';
+import { NonNullableFormBuilder } from '@angular/forms';
 
 @Injectable({ providedIn: 'root' })
 export class ClientAdapter {
-  // from API → to App Model
-  fromApi(api: any): IClientModel {
+  constructor(private fb: NonNullableFormBuilder) {}
+  // from App Model → to API
+  toAddClientAPI(model: INewClientForm): any {
     return {
-      id: api.clientId,
-      person: {
-        id: api.person.personId,
-        name: api.person.fullName,
-        natId: api.person.nationalId,
-        birthDate: api.person.birthDate,
-        phone: api.person.phoneNumber,
-        address: api.person.address,
-        countryCode: api.person.countryCode,
+      kind: 'new',
+      Client: {
+        Person: {
+          FullName: model.person?.value?.name,
+          NationalId: model.person?.value?.natId,
+          BirthDate: model.person?.value?.birthDate,
+          PhoneNumber: model.person?.value?.phone,
+          Address: model.person?.value?.address,
+          CountryCode: model.person?.value?.countryCode,
+        },
       },
     };
   }
 
-  // from App Model → to API
-  toApi(model: IClientModel): any {
+  fromClientDetailsAPI(model: any): IClientDetails {
     return {
-      clientId: model.id,
-      person: {
-        personId: model.person.id,
-        fullName: model.person.name,
-        nationalId: model.person.natId,
-        birthDate: model.person.birthDate,
-        phoneNumber: model.person.phone,
-        address: model.person.address,
-        countryCode: model.person.countryCode,
-      },
+      id: model.ClientId,
+      person: this.fb.group({
+        id: this.fb.control(model.PersonId),
+        name: this.fb.control(model.FullName),
+        natId: this.fb.control(model.NationalId),
+        birthDate: this.fb.control(model.BirthDate),
+        phone: this.fb.control(model.PhoneNumber),
+        address: this.fb.control(model.Address),
+        countryCode: this.fb.control(model.CountryCode),
+      }),
     };
   }
 }
