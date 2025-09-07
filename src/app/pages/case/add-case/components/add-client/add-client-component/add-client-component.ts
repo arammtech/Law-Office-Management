@@ -4,7 +4,7 @@ import {
   MatDialogRef,
   MatDialogModule,
 } from '@angular/material/dialog';
-import { INewClientModel } from '../../../models/icase';
+import { INewClientModel } from '../../../models/forms-builder';
 import {
   FormControl,
   FormGroup,
@@ -36,13 +36,10 @@ export class AddClientComponent implements OnInit {
     return this.clientForm.get('phone');
   }
 
-  
   get address() {
     return this.clientForm.get('address');
   }
 
-  
-  
   get countryCode() {
     return this.clientForm.get('coutntryCode');
   }
@@ -67,13 +64,13 @@ export class AddClientComponent implements OnInit {
       const model: INewClientModel = {
         address: this.address?.value,
         birth: this.birthdate?.value,
-        name: this.name?.value, 
+        name: this.name?.value,
         countryCode: 'YE',
         phone: this.phone?.value,
-        natId: this.data?.NatId
-      }
-      console.log(this.clientForm.get('coutntryCode')?.value)
-      console.log('client')
+        natId: this.data?.NatId,
+      };
+      console.log(this.clientForm.get('coutntryCode')?.value);
+      console.log('client');
       console.log(model);
       this.dialogRef.close(model as INewClientModel);
     }
@@ -85,7 +82,10 @@ export class AddClientComponent implements OnInit {
       natId: new FormControl(this.data?.NatId || ''),
       countryCode: new FormControl('YE', Validators.required),
       birth: new FormControl('', Validators.required),
-      phone: new FormControl('', [Validators.required, Validators.pattern('^05\\d{8}$')]),
+      phone: new FormControl('', [
+        Validators.required,
+        Validators.pattern('^05\\d{8}$'),
+      ]),
       address: new FormControl(''),
     });
   }

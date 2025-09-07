@@ -1,20 +1,19 @@
-import { Component, model, OnInit } from '@angular/core';
+import { Component, model } from '@angular/core';
 import { PageHeaderComponent } from '../../../../../shared/components/page header/page-header-component/page-header-component';
 import {
-  FormControl,
   FormGroup,
   FormsModule,
-  Validators,
   ReactiveFormsModule,
 } from '@angular/forms';
 import { CommonModule, JsonPipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
-import { AddClientComponent } from '../components/add-client/add-client-component/add-client-component';
 import Swal from 'sweetalert2';
-import { IExistingClientModel, INewClientModel } from '../models/icase';
+import {
+  FormsBuilder,
+} from '../models/forms-builder';
 import { CaseService } from '../../services/case-service';
-import { ICreateCaseModel } from '../models/iadd-case-form';
 import { ErrorResponse } from '../../../../../core/models/error-response';
+import { IAddCaseForm } from '../models/iadd-case-form';
 
 @Component({
   selector: 'app-add-case-component',
@@ -29,111 +28,19 @@ import { ErrorResponse } from '../../../../../core/models/error-response';
   templateUrl: './add-case-page.html',
   styleUrl: './add-case-page.css',
 })
-export class AddCaseComponent implements OnInit {
+export class AddCaseComponent {
   addcaseForm!: FormGroup;
   showErrors: boolean = false;
   natId: string;
+  addCaseForm: FormGroup<IAddCaseForm>;
 
-  get caseForm() {
-    return this.addcaseForm?.get('caseForm') as FormGroup;
-  }
-
-  get subject() {
-    return this.caseForm?.get('subject');
-  }
-
-  get PartiesToTheCase() {
-    return this.caseForm?.get('PartiesToTheCase');
-  }
-
-  get estimatedTime() {
-    return this.caseForm?.get('estimatedTime');
-  }
-
-  get courtType() {
-    return this.caseForm?.get('courtType');
-  }
-
-  get AssignedOfficer() {
-    return this.caseForm?.get('AssignedOfficer');
-  }
-
-  get caseNumber() {
-    return this.caseForm?.get('caseNumber');
-  }
-
-  get lawyerOpinion() {
-    return this.caseForm?.get('lawyerOpinion');
-  }
-
-  // Getters for template access
-  get contract() {
-    return this.addcaseForm?.get('contract') as FormGroup;
-  }
-  get showContract() {
-    return this.contract?.get('showContract');
-  }
-  get contractType() {
-    return this.contract?.get('contractType');
-  }
-  get totalPrice() {
-    return this.contract?.get('totalPrice');
-  }
-  get issueDate() {
-    return this.contract?.get('issueDate');
-  }
-  get expirationDate() {
-    return this.contract?.get('expirationDate');
-  }
-  get downAmount() {
-    return this.contract?.get('downAmount');
-  }
-  get assigned() {
-    return this.contract?.get('assigned');
-  }
-  get contractAttachment() {
-    return this.contract?.get('contractAttachment');
-  }
-  get poa() {
-    return this.addcaseForm?.get('poa') as FormGroup;
-  }
-  get showPOA() {
-    return this.poa?.get('showPOA');
-  }
-  get poaNumber() {
-    return this.poa?.get('poaNumber');
-  }
-  get poaIssueDate() {
-    return this.poa?.get('poaIssueDate');
-  }
-  get poaAuthrizedBy() {
-    return this.poa?.get('poaAuthrizedBy');
-  }
-  get poaAttachment() {
-    return this.poa?.get('poaAttachment');
-  }
-
-  selectedContract: number = 1;
-  existingClients: IExistingClientModel[] = [];
-  newClients: INewClientModel[] = [];
-
-  constructor(private dialogof: MatDialog, private caseService: CaseService) {
+  constructor(
+    private dialogof: MatDialog,
+    private caseService: CaseService,
+    private formsBuilder: FormsBuilder
+  ) {
     this.natId = '';
-  }
-  ngOnInit(): void {
-    this.addcaseForm = new FormGroup({
-      caseForm: this.buildCaseForm(),
-      contract: this.buildContractForm(),
-      poa: this.buildPOAForm(),
-    });
-  }
-
-  onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (input.files?.length) {
-      this.contractAttachment?.setValue(input.files);
-      console.log(input.files);
-    }
+    this.addCaseForm = this.formsBuilder.createAddCasesForm();
   }
 
   errorToast(title: string, msg: string) {
@@ -152,28 +59,29 @@ export class AddCaseComponent implements OnInit {
     } else {
       this.caseService.getClientByNatId(natId).subscribe({
         next: (res) => {
-          const existingClient: IExistingClientModel = {
-            Id: res.id,
-            natId: res.person.natId,
-          };
-          this.existingClients.push(existingClient);
+          //will be handeled throw the adappter
+          // const existingClient: IExistingClientModel = {
+          //   Id: res.id,
+          //   natId: res.person.natId,
+          // };
+          // this.addCaseForm.value.existingClients?.push(existingClient);
           return;
         },
-        error: (error) => {
-          console.log(`from get cleint ${error as ErrorResponse}`);
-          this.dialogof
-            .open(AddClientComponent, {
-              height: '325x',
-              minWidth: '600px',
-              data: { NatId: natId },
-            })
-            .afterClosed()
-            .subscribe((result: INewClientModel | undefined) => {
-              if (result) {
-                this.newClients.push(result);
-              }
-            });
-        },
+        // error: (error) => {
+        //   console.log(`from get cleint ${error as ErrorResponse}`);
+        //   this.dialogof
+        //     .open(AddClientComponent, {
+        //       height: '325x',
+        //       minWidth: '600px',
+        //       data: { NatId: natId },
+        //     })
+        //     .afterClosed()
+        //     .subscribe((result: INewClientModel | undefined) => {
+        //       if (result) {
+        //         this.newClients.push(result);
+        //       }
+        //     });
+        // },
       });
     }
 
@@ -181,62 +89,28 @@ export class AddCaseComponent implements OnInit {
   }
 
   private isClientExsit(natId: string) {
-    if (this.existingClients.find((c) => c.natId == natId) != undefined)
+    if (this.addCaseForm.value.existingClients?.find((c) => c.natId == natId) != undefined)
       return true;
-    else return this.newClients.find((c) => c.natId == natId) != undefined;
+    else return this.addCaseForm.value.newClients?.find((c) => c.natId == natId) != undefined;
   }
 
   deleteNewClient(natId: string) {
-    this.newClients = this.newClients.filter((x) => x.natId != natId);
+    this.addCaseForm.value.newClients = this.addCaseForm.value.newClients?.filter((x) => x.natId != natId);
   }
   deleteExistingClient(natId: string) {
-    this.existingClients = this.existingClients.filter((x) => x.natId != natId);
+    this.addCaseForm.value.existingClients = this.addCaseForm.value.existingClients?.filter((x) => x.natId != natId);
   }
 
   submit(isDraft: boolean) {
-    if (
-      this.caseForm.invalid ||
-      (this.showContract?.value && this.contract.invalid) ||
-      (this.showPOA?.value && this.poa.invalid)
-    ) {
+    if (this.addcaseForm.invalid) {
       this.showErrors = true;
       this.errorToast('خطأ', 'تأكد من ملء جميع الحقول');
     } else {
       console.log('in the send part');
-      const model: ICreateCaseModel = {
-        case: {
-          caseNumber: this.caseNumber?.value,
-          courtType: this.courtType?.value,
-          lawyerOpinion: this.lawyerOpinion?.value,
-          AssignedOfficer: this.AssignedOfficer?.value,
-          subject: this.subject?.value,
-          estimatedTime: this.estimatedTime?.value,
-          PartiesToTheCase: this.PartiesToTheCase?.value,
-        },
-        contract: {
-          showContract: this.showContract?.value,
-          contractAttachment: this.contractAttachment?.value,
-          totalPrice: this.totalPrice?.value,
-          downAmount: this.downAmount?.value,
-          contractType: this.contractType?.value,
-          assigned: this.assigned?.value,
-          expirationDate: this.expirationDate?.value,
-          issueDate: this.issueDate?.value,
-        },
-        poa: {
-          poaAttachment: this.poaAttachment?.value,
-          poaIssueDate: this.poaIssueDate?.value,
-          poaNumber: this.poaNumber?.value,
-          showPOA: this.showPOA?.value,
-          poaAuthrizedBy: this.poaAuthrizedBy?.value,
-        },
-        existingClients: this.existingClients,
-        newClients: this.newClients,
-      };
-      console.log(model);
+    
       this.caseService.add(model, isDraft).subscribe({
         next: (res) => {
-          this.successToast('نجاح', 'تمت إضافة القضية بنجاح')
+          this.successToast('نجاح', 'تمت إضافة القضية بنجاح');
           console.log(res);
         },
         error: (res) => {
@@ -247,70 +121,6 @@ export class AddCaseComponent implements OnInit {
     }
   }
 
-  private buildCaseForm(): FormGroup {
-    return new FormGroup({
-      subject: new FormControl('', [
-        Validators.required,
-        Validators.minLength(3),
-      ]),
-      PartiesToTheCase: new FormControl(1, Validators.required),
-      estimatedTime: new FormControl('', Validators.required),
-      courtType: new FormControl(1, Validators.required),
-      AssignedOfficer: new FormControl(1, Validators.required),
-      caseNumber: new FormControl(''),
-      lawyerOpinion: new FormControl('', [
-        Validators.required,
-        Validators.minLength(10),
-      ]),
-    });
-  }
-
-  private buildPOAForm(): FormGroup {
-    return new FormGroup({
-      showPOA: new FormControl(false, { nonNullable: true }),
-      poaNumber: new FormControl('', {
-        nonNullable: true,
-        validators: [Validators.required, Validators.minLength(3)],
-      }),
-      poaIssueDate: new FormControl('', {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-      poaAuthrizedBy: new FormControl('', {
-        nonNullable: true,
-        validators: [Validators.required, Validators.minLength(3)],
-      }),
-      poaAttachment: new FormControl('', { nonNullable: true }),
-    });
-  }
-
-  private buildContractForm(): FormGroup {
-    return new FormGroup({
-      showContract: new FormControl(false, { nonNullable: true }),
-      contractType: new FormControl(2, {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-      totalPrice: new FormControl(0, {
-        nonNullable: true,
-        validators: [Validators.required, Validators.min(0)],
-      }),
-      issueDate: new FormControl('', {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-      expirationDate: new FormControl('', {
-        nonNullable: true,
-        validators: [Validators.required],
-      }),
-      downAmount: new FormControl(0, {
-        nonNullable: true,
-        validators: [Validators.max(0)],
-      }),
-      assigned: new FormControl(false, { nonNullable: true }),
-      contractAttachment: new FormControl<File | null>(null),
-    });
-  }
 
   successToast(title: string, msg: string) {
     Swal.fire({

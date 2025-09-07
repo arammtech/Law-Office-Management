@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { environmentDev } from '../../../../environments/environment.development';
 import { ICreateCaseModel } from '../add-case/models/iadd-case-form';
 import { map, Observable } from 'rxjs';
-import { IClientModel } from '../add-case/models/icase';
+import { IClientModel } from '../add-case/models/forms-builder';
 import { ClientAdapter } from '../add-case/adapters/client-adappter';
 
 @Injectable({
@@ -11,8 +11,11 @@ import { ClientAdapter } from '../add-case/adapters/client-adappter';
 })
 export class CaseService {
   baseURL = environmentDev.baseURL;
-  constructor(private http: HttpClient, private clientAdappter:ClientAdapter) {}
-  add(createCaseModel: ICreateCaseModel, isDraft: boolean) : Observable<string> {
+  constructor(
+    private http: HttpClient,
+    private clientAdappter: ClientAdapter
+  ) {}
+  add(createCaseModel: ICreateCaseModel, isDraft: boolean): Observable<string> {
     const formData = new FormData();
     // قيم عادية
     formData.append('caseNumber', `${createCaseModel.case.caseNumber}`);
@@ -109,10 +112,14 @@ export class CaseService {
 
     formData.append('clientsJson', JSON.stringify(clientsJson));
 
-    return this.http.post(`${this.baseURL}/cases`, formData).pipe(map(data => data as string));
+    return this.http
+      .post(`${this.baseURL}/cases`, formData)
+      .pipe(map((data) => data as string));
   }
 
-  getClientByNatId(natId:string) : Observable<IClientModel> {
-    return this.http.get(`${this.baseURL}/clients/national-id/${natId}`).pipe(map(data => this.clientAdappter.fromApi(data)))
+  getClientByNatId(natId: string): Observable<IClientModel> {
+    return this.http
+      .get(`${this.baseURL}/clients/national-id/${natId}`)
+      .pipe(map((data) => this.clientAdappter.fromApi(data)));
   }
 }

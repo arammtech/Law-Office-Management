@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IClientModel } from '../models/icase';
+import { IClientModel } from '../models/forms-builder';
 
 @Injectable({ providedIn: 'root' })
 export class ClientAdapter {
