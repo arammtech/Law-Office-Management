@@ -13,6 +13,8 @@ import {
 } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { JsonPipe, NgIf } from '@angular/common';
+import { INewClientForm } from '../../../models/inew-client-form';
+import { clsFormsBuilder } from '../../../models/clsforms-builder';
 
 @Component({
   selector: 'app-add-client-component',
@@ -21,39 +23,21 @@ import { JsonPipe, NgIf } from '@angular/common';
   styleUrl: './add-client-component.css',
 })
 export class AddClientComponent implements OnInit {
-  clientForm!: FormGroup;
-
-  get name() {
-    return this.clientForm.get('name');
-  }
-
-  get birthdate() {
-    return this.clientForm.get('birth');
-  }
-
-  get phone() {
-    return this.clientForm.get('phone');
-  }
-
-  get address() {
-    return this.clientForm.get('address');
-  }
-
-  get countryCode() {
-    return this.clientForm.get('coutntryCode');
-  }
+  clientForm: FormGroup<INewClientForm>;
+  showErrors:boolean = false;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialogRef: MatDialogRef<AddClientComponent>
+    private dialogRef: MatDialogRef<AddClientComponent>,
+    private formBuilder: clsFormsBuilder
   ) {
-    this.initClient();
+    this.clientForm = this.formBuilder.createNewClientForm();
   }
 
   ngOnInit(): void {}
 
   submit() {
     if (this.clientForm.invalid) {
-      console.log(this.clientForm.errors);
+      this.showErrors = true;
       Swal.fire({
         title: 'خطأ',
         text: 'تجقق من الحقول الحمراء',
@@ -73,19 +57,5 @@ export class AddClientComponent implements OnInit {
       // console.log(model);
       // this.dialogRef.close(model as INewClientModel);
     }
-  }
-
-  private initClient() {
-    this.clientForm = new FormGroup({
-      name: new FormControl('', [Validators.required, Validators.minLength(3)]),
-      natId: new FormControl(this.data?.NatId || ''),
-      countryCode: new FormControl('YE', Validators.required),
-      birth: new FormControl('', Validators.required),
-      phone: new FormControl('', [
-        Validators.required,
-        Validators.pattern('^05\\d{8}$'),
-      ]),
-      address: new FormControl(''),
-    });
   }
 }

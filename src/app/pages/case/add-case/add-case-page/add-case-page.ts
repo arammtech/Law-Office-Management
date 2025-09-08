@@ -1,19 +1,17 @@
 import { Component, model } from '@angular/core';
 import { PageHeaderComponent } from '../../../../../shared/components/page header/page-header-component/page-header-component';
-import {
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
+import { FormGroup, FormsModule, NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule, JsonPipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
-import {
-  FormsBuilder,
-} from '../models/forms-builder';
 import { CaseService } from '../../services/case-service';
 import { ErrorResponse } from '../../../../../core/models/error-response';
 import { IAddCaseForm } from '../models/iadd-case-form';
+import { clsFormsBuilder } from '../models/clsforms-builder';
+import { IExistingClientForm } from '../models/iexisting-client-form';
+import { AddClientComponent } from '../components/add-client/add-client-component/add-client-component';
+import { INewClientForm } from '../models/inew-client-form';
+import { INewPersonForm } from '../models/inew-person-form';
 
 @Component({
   selector: 'app-add-case-component',
@@ -36,7 +34,7 @@ export class AddCaseComponent {
   constructor(
     private dialogof: MatDialog,
     private caseService: CaseService,
-    private formsBuilder: FormsBuilder
+    private formsBuilder: clsFormsBuilder
   ) {
     this.natId = '';
     this.addCaseForm = this.formsBuilder.createAddCasesForm();
@@ -56,48 +54,71 @@ export class AddCaseComponent {
       this.errorToast('خطأ', 'العميل بالفعل مضاف في القضية');
       return;
     } else {
-      this.caseService.getClientByNatId(natId).subscribe({
-        next: (res) => {
-          //will be handeled throw the adappter
-          // const existingClient: IExistingClientModel = {
-          //   Id: res.id,
-          //   natId: res.person.natId,
-          // };
-          // this.addCaseForm.value.existingClients?.push(existingClient);
-          return;
-        },
-        // error: (error) => {
-        //   console.log(`from get cleint ${error as ErrorResponse}`);
-        //   this.dialogof
-        //     .open(AddClientComponent, {
-        //       height: '325x',
-        //       minWidth: '600px',
-        //       data: { NatId: natId },
-        //     })
-        //     .afterClosed()
-        //     .subscribe((result: INewClientModel | undefined) => {
-        //       if (result) {
-        //         this.newClients.push(result);
-        //       }
-        //     });
-        // },
-      });
+      // this.caseService.getClientByNatId(natId).subscribe({
+      //   next: (res) => {
+      //     //will be handeled throw the adappter
+      //     const existingClient = this.fb.group<IExistingClientForm>({
+      //       Id: this.fb.control(res.id),
+      //       natId: this.fb.control(res.person.value.natId!),
+      //     })
+
+      //     this.addCaseForm.value.existingClients?.push(existingClient?.value);
+      //     return;
+      //   },
+      //   error: (error) => {
+      //     console.log(`from get cleint ${error as ErrorResponse}`);
+      //     this.dialogof
+      //       .open(AddClientComponent, {
+      //         height: '325x',
+      //         minWidth: '600px',
+      //         data: { NatId: natId },
+      //       })
+      //       // .afterClosed()
+      //       // .subscribe((result: INewClientForm) => {
+      //       //   if (result) {
+      //       //     const test =  this.fb.group<INewClientForm>({
+      //       //       person: this.fb.group<INewPersonForm>({})
+      //       //     })
+      //       //     this.addCaseForm?.value?.newClients?.push(result);
+      //       //   }
+      //       // });
+      //   },
+      // });
+    
+        this.dialogof
+            .open(AddClientComponent, {
+              height: '325x',
+              minWidth: '600px',
+              data: { NatId: natId },
+            })
     }
 
     return;
   }
 
   private isClientExsit(natId: string) {
-    if (this.addCaseForm.value.existingClients?.find((c) => c.natId == natId) != undefined)
+    if (
+      this.addCaseForm.value.existingClients?.find((c) => c.natId == natId) !=
+      undefined
+    )
       return true;
-    else return this.addCaseForm.value.newClients?.find((c) => c.person?.natId == natId) != undefined;
+    else
+      return (
+        this.addCaseForm.value.newClients?.find(
+          (c) => c.person?.natId == natId
+        ) != undefined
+      );
   }
 
   deleteNewClient(natId: string) {
-    this.addCaseForm.value.newClients = this.addCaseForm.value.newClients?.filter((x) => x.person?.natId != natId);
+    this.addCaseForm.value.newClients =
+      this.addCaseForm.value.newClients?.filter(
+        (x) => x.person?.natId != natId
+      );
   }
   deleteExistingClient(natId: string) {
-    this.addCaseForm.value.existingClients = this.addCaseForm.value.existingClients?.filter((x) => x.natId != natId);
+    this.addCaseForm.value.existingClients =
+      this.addCaseForm.value.existingClients?.filter((x) => x.natId != natId);
   }
 
   submit(isDraft: boolean) {
@@ -106,7 +127,7 @@ export class AddCaseComponent {
       this.errorToast('خطأ', 'تأكد من ملء جميع الحقول');
     } else {
       console.log('in the send part');
-    
+
       this.caseService.add(this.addCaseForm, isDraft).subscribe({
         next: (res) => {
           this.successToast('نجاح', 'تمت إضافة القضية بنجاح');
@@ -119,7 +140,6 @@ export class AddCaseComponent {
       });
     }
   }
-
 
   successToast(title: string, msg: string) {
     Swal.fire({

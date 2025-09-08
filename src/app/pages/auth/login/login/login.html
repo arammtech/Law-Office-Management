@@ -8,16 +8,21 @@
         <div class="content">
             <div class="field">
                 <label class="required">رقم الهوية</label>
-                <input type="text" name="natId" #natId="ngModel" [ngModel]="credential.natId" required minlength="10"
-                    placeholder="أدخل رقم الهوية">
-                <div class="errors" *ngIf="natId.touched" animate.enter="animation">
+                <input type="text" name="natId" #natId="ngModel" [class.border-error]="natId.invalid && natId.touched"
+                    [ngModel]="credential.natId" required minlength="10" placeholder="أدخل رقم الهوية">
+                <div class="errors" *ngIf="natId.touched" animate.enter="error-animation">
                     <p *ngIf="natId?.errors?.['required']">هذا الحقل مطلوب</p>
-                    <p *ngIf="">يجب أن يكون على الأقل 3 أحرف</p>
+                    <p *ngIf="natId?.errors?.['minlength']">يجب أن يكون على الأقل 3 أحرف</p>
                 </div>
             </div>
             <div class="field">
                 <label class="required">كلمة المرور</label>
-                <input type="password" name="password" [ngModel]="credential.password" placeholder="أدخل كلمة المرور">
+                <input type="password" name="password" #password="ngModel"
+                    [class.border-error]="password.touched && password.invalid" [ngModel]="credential.password" required
+                    placeholder="أدخل كلمة المرور">
+                <div class="errors" *ngIf="password.touched" animate.enter="error-animation">
+                    <p *ngIf="password?.errors?.['required']">هذا الحقل مطلوب</p>
+                </div>
             </div>
         </div>
         <input type="submit" [disabled]="credentialForm.invalid" [class.disabled]="credentialForm.invalid"

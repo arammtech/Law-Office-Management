@@ -11,6 +11,4 @@ export const routes: Routes = [
   { path: 'add-case', component: AddCaseComponent },
   { path: 'add-client', component: AddClientComponent },
   { path: 'employees', component: MangeEmployeePage }
-
-
 ];

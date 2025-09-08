@@ -7,13 +7,14 @@
             <div class="field-row">
                 <div class="field flex">
                     <label for="natId">رقم الهوية</label>
-                    <input type="text" name="natid" [(ngModel)]="natId" #natIdModel="ngModel" required maxlength="10"
+                    <input type="text" name="natid" [(ngModel)]="natId" #natIdModel="ngModel"
+                        [class.border-error]="natIdModel.invalid && natIdModel.touched" required maxlength="10"
                         pattern="^\d{10}$" placeholder="أدخل رقم الهوية للبحث" />
                 </div>
                 <input type="submit" value="بحث" [disabled]="searchForm.invalid" [class.disabled]="searchForm.invalid"
                     class="mybtn bg-main searchbtn" />
             </div>
-            <div *ngIf="natIdModel.touched || showErrors" class="errors text-danger">
+            <div *ngIf="natIdModel.touched || showErrors" class="errors" animate.enter="error-animation">
                 <p *ngIf="natIdModel.errors?.['required']">يجب إدخال رقم الهوية</p>
                 <p *ngIf="natIdModel.errors?.['pattern']">رقم الهوية يجب أن يتكون من 10 خانات</p>
             </div>
@@ -25,14 +26,16 @@
                 @for(client of addCaseForm.value.existingClients; track client.natId) {
                 <div class="parties mybtn client-id  myrow">
                     <p class="flex">رقم الهوية: {{client.natId}}</p>
-                    <a class="btn-del" (click)="deleteExistingClient(client.natId!)"><i class="fa-solid fa-xmark"></i></a>
+                    <a class="btn-del" (click)="deleteExistingClient(client.natId!)"><i
+                            class="fa-solid fa-xmark"></i></a>
                 </div>
                 }
 
                 @for(client of addCaseForm.value.newClients; track client.person?.natId) {
                 <div class="parties mybtn client-id  myrow">
                     <p class="flex">رقم الهوية: {{client?.person?.natId}}</p>
-                    <a class="btn-del" (click)="deleteNewClient(client.person?.natId!)"><i class="fa-solid fa-xmark"></i></a>
+                    <a class="btn-del" (click)="deleteNewClient(client.person?.natId!)"><i
+                            class="fa-solid fa-xmark"></i></a>
                 </div>
                 }
             </div>
@@ -47,10 +50,13 @@
         <div class="fields">
             <div class="field">
                 <label>موضوع القضية</label>
-                <input type="text" formControlName="subject" placeholder="أدخل موضوع القضية" />
-                <div class="text-danger errors" *ngIf="addCaseForm.value?.case?.subject">
+                <input type="text" formControlName="subject" placeholder="أدخل موضوع القضية"
+                    [class.border-error]="addCaseForm.controls.case.controls.subject.touched && addCaseForm.controls.case.controls.subject.invalid" />
+                <div class="errors" *ngIf="addCaseForm?.controls?.case?.controls?.subject?.touched"
+                    animate.enter="error-animation">
                     <p *ngIf="addCaseForm.controls?.case?.controls?.subject?.errors?.['required']">هذا الحقل مطلوب</p>
-                    <p *ngIf="addCaseForm.controls?.case?.controls?.subject?.errors?.['minlength']">يجب أن يكون على الأقل 3 أحرف</p>
+                    <p *ngIf="addCaseForm.controls?.case?.controls?.subject?.errors?.['minlength']">يجب أن يكون على
+                        الأقل 3 أحرف</p>
                 </div>
             </div>
             <div class="field">
@@ -61,11 +67,14 @@
                 </select>
             </div>
             <div class="field">
-                <label for="estimatedTime">الوقت المتوقع للدراسة</label>
-                <input type="date" formControlName="estimatedTime" />
-                <div *ngIf="addCaseForm.controls?.case?.controls?.estimatedTime?.touched || showErrors" class="text-danger errors">
-                    <p *ngIf="addCaseForm.controls?.case?.controls?.estimatedTime?.errors?.['required']">يرجى تحديد التاريخ</p>
-                    <p *ngIf="addCaseForm.controls?.case?.controls?.estimatedTime?.errors?.['min']">ادخل وقت في الحاضر او المستقبل</p>
+                <label>الوقت المتوقع للدراسة</label>
+                <input type="date" formControlName="estimatedTime" [class.border-error]="addCaseForm.controls.case.controls.estimatedTime.touched && addCaseForm.controls.case.controls.estimatedTime.invalid" />
+                <div *ngIf="addCaseForm.controls?.case?.controls?.estimatedTime?.touched || showErrors" class="errors"
+                    animate.enter="error-animation">
+                    <p *ngIf="addCaseForm.controls?.case?.controls?.estimatedTime?.errors?.['required']">يرجى تحديد
+                        التاريخ</p>
+                    <p *ngIf="addCaseForm.controls?.case?.controls?.estimatedTime?.errors?.['min']">ادخل وقت في الحاضر
+                        او المستقبل</p>
                 </div>
             </div>
             <div class="field">
@@ -84,14 +93,22 @@
             </div>
             <div class="field">
                 <label>رقم القضية</label>
-                <input type="text" formControlName="caseNumber" placeholder="أدخل رقم القضية" />
+                <input type="text" formControlName="caseNumber" placeholder="أدخل رقم القضية" [class.border-error]="addCaseForm.controls.case.controls.caseNumber.touched && addCaseForm.controls.case.controls.caseNumber.invalid" />
+                <div class=" errors" *ngIf="addCaseForm.controls?.case?.controls?.caseNumber?.touched || showErrors"
+                    animate.enter="error-animation">
+                    <p *ngIf="addCaseForm.controls?.case?.controls?.caseNumber?.errors?.['required']">هذا الحقل مطلوب
+                    </p>
+                </div>
             </div>
             <div class="field lawyer-opnion">
                 <label>رأي المحامي</label>
-                <textarea formControlName="lawyerOpinion" placeholder="رأي المحامي"></textarea>
-                <div class="text-danger errors" *ngIf="addCaseForm.controls?.case?.controls?.lawyerOpinion?.touched || showErrors">
-                    <p *ngIf="addCaseForm.controls?.case?.controls?.lawyerOpinion?.errors?.['required']">هذا الحقل مطلوب</p>
-                    <p *ngIf="addCaseForm.controls?.case?.controls?.lawyerOpinion?.errors?.['minlength']">يجب أن يحتوي على 10 أحرف على الأقل</p>
+                <textarea formControlName="lawyerOpinion" [class.border-error]="addCaseForm.controls.case.controls.lawyerOpinion.touched && addCaseForm.controls.case.controls.lawyerOpinion.invalid"  placeholder="رأي المحامي"></textarea>
+                <div class=" errors" *ngIf="addCaseForm.controls?.case?.controls?.lawyerOpinion?.touched || showErrors"
+                    animate.enter="error-animation">
+                    <p *ngIf="addCaseForm.controls?.case?.controls?.lawyerOpinion?.errors?.['required']">هذا الحقل مطلوب
+                    </p>
+                    <p *ngIf="addCaseForm.controls?.case?.controls?.lawyerOpinion?.errors?.['minlength']">يجب أن يحتوي
+                        على 10 أحرف على الأقل</p>
                 </div>
             </div>
         </div>
