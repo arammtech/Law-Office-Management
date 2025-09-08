@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddCaseComponent } from './add-case-component';
+import { AddCaseComponent } from './add-case-page';
 
 describe('AddCaseComponent', () => {
   let component: AddCaseComponent;

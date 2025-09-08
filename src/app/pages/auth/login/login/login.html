@@ -1,5 +1,5 @@
 <div class="body">
-    <form onsubmit="login()">
+    <form #credentialForm="ngForm" onsubmit="login()">
         <div class="icon">icon</div>
         <div class="text">
             <h3>نظام إدارة القضايا القانونية</h3>
@@ -7,14 +7,20 @@
         </div>
         <div class="content">
             <div class="field">
-                <label for="natid">رقم الهوية</label>
-                <input type="text" placeholder="أدخل رقم الهوية">
+                <label class="required">رقم الهوية</label>
+                <input type="text" name="natId" #natId="ngModel" [ngModel]="credential.natId" required minlength="10"
+                    placeholder="أدخل رقم الهوية">
+                <div class="errors" *ngIf="natId.touched" animate.enter="animation">
+                    <p *ngIf="natId?.errors?.['required']">هذا الحقل مطلوب</p>
+                    <p *ngIf="">يجب أن يكون على الأقل 3 أحرف</p>
+                </div>
             </div>
             <div class="field">
-                <label for="password">كلمة المرور</label>
-                <input type="password" placeholder="أدخل كلمة المرور">
+                <label class="required">كلمة المرور</label>
+                <input type="password" name="password" [ngModel]="credential.password" placeholder="أدخل كلمة المرور">
             </div>
         </div>
-        <input type="submit" value="تسجيل الدخول">
+        <input type="submit" [disabled]="credentialForm.invalid" [class.disabled]="credentialForm.invalid"
+            value="تسجيل الدخول">
     </form>
 </div>

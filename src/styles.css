@@ -23,8 +23,9 @@
     --txt: rgba(191, 191, 191, 0.621)
 }
 
+
 input {
-    outline-color: var(--primary);
+    outline: none;
 }
 
 a {
@@ -68,31 +69,31 @@ textarea {
 }
 
 .field label {
-    font-size: 0.7rem;
+    font-size: 1rem;
     margin-bottom: 0.3rem;
 }
 
+.field label::after {
+    content: ' *';
+    font-weight: bold;
+}
 
-.field input, .field select, .field textarea {
+
+.field input,
+.field select,
+.field textarea {
     font-size: 0.9rem;
     border-radius: 5px;
-    padding: 0.5rem 1rem;
+    padding: 0.8rem 1rem;
     border: 1.2px solid var(--txt);
     margin-left: 1rem;
-
+    color: rgb(135, 135, 135);
 }
 
 .field select {
     height: 38px;
-    
-}
 
-.field input:focus, .field select:focus, .field textarea:focus {
-    outline-color: var(--primary);
-    outline-width: 3px;
-    outline-style: solid;
 }
-
 
 .mybtn {
     padding: 0.5rem;
@@ -127,11 +128,21 @@ textarea {
 }
 
 .disabled {
-    pointer-events: fill;
     cursor: not-allowed;
+    pointer-events: fill;
     opacity: 0.8;
 }
 
 .errors {
+    margin-top: 0.2rem;
     font-size: 0.8rem;
+    font-weight: 700;
+    color: rgb(246, 55, 55);
 }
+
+.animation {
+    transition: 0.3s;
+    transform: translateY(10px);
+}
+
+.errors p {}
