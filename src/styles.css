@@ -9,19 +9,16 @@
 
 :root {
     /* Primary: Dark Blue #1E3A5F */
-    --primary: hsl(210 54% 25%);
+    --primary: #CC3333FF;
     --primary-foreground: hsl(0 0% 100%);
-    --primary-light: hsl(210 54% 35%);
-    --primary-dark: hsl(210 54% 15%);
 
     /* Secondary: Gray #D9D9D9 */
-    --secondary: hsla(0, 0%, 90%, 0.277);
-    --secondary-foreground: hsl(210 18% 18%);
+    --secondary: rgb(29, 64, 98);
+    --secondary-foreground: hsl(0, 0%, 86%);
 
     /* Gold Accent #C9A227 */
-    --accent: hsl(47 71% 47%);
-    --accent-foreground: hsl(0 0% 100%);
-    --accent-light: hsl(47 71% 57%);
+    --accent: #EAECEFFF;
+    --accent-foreground: rgba(5, 3, 3, 0.792);
 
     --txt: rgba(191, 191, 191, 0.621)
 }
@@ -116,13 +113,13 @@ textarea {
 
 .bg-main {
     background-color: var(--primary);
-    color: white;
+    color: var(--primary-foreground);
 }
 
 
 .bg-accent {
     background-color: var(--accent);
-    color: white;
+    color: var(--accent-foreground);
 }
 
 .txt {

@@ -29,7 +29,6 @@ import { IAddCaseForm } from '../models/iadd-case-form';
   styleUrl: './add-case-page.css',
 })
 export class AddCaseComponent {
-  addcaseForm!: FormGroup;
   showErrors: boolean = false;
   natId: string;
   addCaseForm: FormGroup<IAddCaseForm>;
@@ -91,24 +90,24 @@ export class AddCaseComponent {
   private isClientExsit(natId: string) {
     if (this.addCaseForm.value.existingClients?.find((c) => c.natId == natId) != undefined)
       return true;
-    else return this.addCaseForm.value.newClients?.find((c) => c.natId == natId) != undefined;
+    else return this.addCaseForm.value.newClients?.find((c) => c.person?.natId == natId) != undefined;
   }
 
   deleteNewClient(natId: string) {
-    this.addCaseForm.value.newClients = this.addCaseForm.value.newClients?.filter((x) => x.natId != natId);
+    this.addCaseForm.value.newClients = this.addCaseForm.value.newClients?.filter((x) => x.person?.natId != natId);
   }
   deleteExistingClient(natId: string) {
     this.addCaseForm.value.existingClients = this.addCaseForm.value.existingClients?.filter((x) => x.natId != natId);
   }
 
   submit(isDraft: boolean) {
-    if (this.addcaseForm.invalid) {
+    if (this.addCaseForm.invalid) {
       this.showErrors = true;
       this.errorToast('خطأ', 'تأكد من ملء جميع الحقول');
     } else {
       console.log('in the send part');
     
-      this.caseService.add(model, isDraft).subscribe({
+      this.caseService.add(this.addCaseForm, isDraft).subscribe({
         next: (res) => {
           this.successToast('نجاح', 'تمت إضافة القضية بنجاح');
           console.log(res);

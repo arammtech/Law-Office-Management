@@ -9,7 +9,7 @@ nav {
     flex-direction: column;
     border-left: 1px solid var(--txt);
     padding: 1rem 0.4rem;
-    background-color: var(--secondary);
+    background-color: white;
     max-height: 100vh;
 }
 
@@ -51,7 +51,8 @@ a:hover li {
 
 .logout a {
     display: block;
-    background-color: white;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
     margin: 1rem 0.5rem 0;
     padding: 0.5rem;
     width: 100%;
@@ -62,8 +63,7 @@ a:hover li {
 }
 
 .logout a:hover {
-    background-color: var(--accent);
-    color: white;
+    opacity: 0.9;
 }
 
 main {

@@ -4,7 +4,6 @@ import {
   MatDialogRef,
   MatDialogModule,
 } from '@angular/material/dialog';
-import { INewClientModel } from '../../../models/forms-builder';
 import {
   FormControl,
   FormGroup,
@@ -61,18 +60,18 @@ export class AddClientComponent implements OnInit {
         icon: 'error',
       });
     } else {
-      const model: INewClientModel = {
-        address: this.address?.value,
-        birth: this.birthdate?.value,
-        name: this.name?.value,
-        countryCode: 'YE',
-        phone: this.phone?.value,
-        natId: this.data?.NatId,
-      };
-      console.log(this.clientForm.get('coutntryCode')?.value);
-      console.log('client');
-      console.log(model);
-      this.dialogRef.close(model as INewClientModel);
+      // const model: INewClientModel = {
+      //   address: this.address?.value,
+      //   birth: this.birthdate?.value,
+      //   name: this.name?.value,
+      //   countryCode: 'YE',
+      //   phone: this.phone?.value,
+      //   natId: this.data?.NatId,
+      // };
+      // console.log(this.clientForm.get('coutntryCode')?.value);
+      // console.log('client');
+      // console.log(model);
+      // this.dialogRef.close(model as INewClientModel);
     }
   }
 

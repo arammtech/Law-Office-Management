@@ -29,10 +29,10 @@
                 </div>
                 }
 
-                @for(client of addCaseForm.value.newClients; track client.natId) {
+                @for(client of addCaseForm.value.newClients; track client.person?.natId) {
                 <div class="parties mybtn client-id  myrow">
-                    <p class="flex">رقم الهوية: {{client.natId}}</p>
-                    <a class="btn-del" (click)="deleteNewClient(client.natId!)"><i class="fa-solid fa-xmark"></i></a>
+                    <p class="flex">رقم الهوية: {{client?.person?.natId}}</p>
+                    <a class="btn-del" (click)="deleteNewClient(client.person?.natId!)"><i class="fa-solid fa-xmark"></i></a>
                 </div>
                 }
             </div>
@@ -41,7 +41,7 @@
         <p class="txt">💡 إذا لم يتم العثور على العميل، ستفتح نافذة لإضافة عميل جديد</p>
     </div>
 </section>
-<form [formGroup]="addcaseForm">
+<form [formGroup]="addCaseForm">
     <section formGroupName="case" class="section">
         <h3>بيانات القضية</h3>
         <div class="fields">

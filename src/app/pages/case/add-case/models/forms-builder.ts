@@ -2,7 +2,6 @@ import { FormGroup, Validators, NonNullableFormBuilder } from '@angular/forms';
 import { ICaseForm } from './icase-form';
 import { INewClientForm } from './inew-client-form';
 import { IExistingClientForm } from './iexisting-client-form';
-import { IClientForm } from './iclient-form';
 import { IAddCaseForm } from './iadd-case-form';
 import { INewPersonForm } from './inew-person-form';
 
@@ -45,12 +44,12 @@ export class FormsBuilder {
     });
   }
 
-  createClientForm(): FormGroup<IClientForm> {
-    return this.fb.group({
-      id: this.fb.control(''),
-      person: this.createPersonForm(),
-    });
-  }
+  // createClientForm(): FormGroup<IClientForm> {
+  //   return this.fb.group({
+  //     id: this.fb.control(''),
+  //     person: this.createPersonForm(),
+  //   });
+  // }
 
   createAddCasesForm(): FormGroup<IAddCaseForm> {
     return this.fb.group({

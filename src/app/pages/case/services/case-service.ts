@@ -6,6 +6,7 @@ import { ClientAdapter } from '../add-case/adapters/client-adappter';
 import { IAddCaseForm } from '../add-case/models/iadd-case-form';
 import { INewClientForm } from '../add-case/models/inew-client-form';
 import { IClientDetails } from '../add-case/models/iclient-details';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
@@ -16,32 +17,32 @@ export class CaseService {
     private http: HttpClient,
     private clientAdappter: ClientAdapter
   ) {}
-  add(createCaseModel: IAddCaseForm, isDraft: boolean): Observable<string> {
+  add(createCaseModel: FormGroup<IAddCaseForm>, isDraft: boolean): Observable<string> {
     const formData = new FormData();
     // قيم عادية
-    formData.append('caseNumber', `${createCaseModel?.case.value.caseNumber}`);
-    formData.append('courtTypeId', `${createCaseModel?.case.value.courtType}`);
-    formData.append('caseSubject', `${createCaseModel?.case.value.subject}`);
+    formData.append('caseNumber', `${createCaseModel?.value?.case?.caseNumber}`);
+    formData.append('courtTypeId', `${createCaseModel?.value?.case?.courtType}`);
+    formData.append('caseSubject', `${createCaseModel?.value?.case?.subject}`);
     formData.append(
       'partyRole',
-      `${createCaseModel?.case.value.partiesToTheCase}`
+      `${createCaseModel?.value?.case?.partiesToTheCase}`
     );
     formData.append(
       'clientRequestDetails',
-      `${createCaseModel?.case.value.subject}`
+      `${createCaseModel?.value?.case?.subject}`
     );
     formData.append(
       'estimatedReviewDate',
-      `${createCaseModel?.case.value.estimatedTime}`
+      `${createCaseModel?.value?.case?.estimatedTime}`
     );
     formData.append(
       'lawyerOpinion',
-      `${createCaseModel?.case.value.lawyerOpinion}`
+      `${createCaseModel?.value?.case?.lawyerOpinion}`
     );
     // الموظف المسؤول
     formData.append(
       'assignedEmployeeId',
-      `${createCaseModel?.case?.value.assignedOfficer}`
+      `${createCaseModel?.value?.case?.assignedOfficer}`
     );
     formData.append('isDraft', `${isDraft}`);
 
@@ -93,7 +94,7 @@ export class CaseService {
     // العملاء (مصفوفة بصيغة JSON)
     const clientsJson = [];
 
-    for (const client of createCaseModel?.newClients.value) {
+    for (const client of createCaseModel?.value?.newClients!) {
       const newClient = this.clientAdappter.toAddClientAPI(
         client as INewClientForm
       );
@@ -101,7 +102,7 @@ export class CaseService {
       clientsJson.push(newClient);
     }
 
-    for (const client of createCaseModel?.existingClients.value) {
+    for (const client of createCaseModel?.value?.existingClients!) {
       const newClient = {
         kind: 'existing',
         ClientId: client.Id,
