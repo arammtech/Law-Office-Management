@@ -12,6 +12,7 @@ import { IExistingClientForm } from '../models/iexisting-client-form';
 import { AddClientComponent } from '../components/add-client/add-client-component/add-client-component';
 import { INewClientForm } from '../models/inew-client-form';
 import { INewPersonForm } from '../models/inew-person-form';
+import { ToasterService } from '../../../../../core/services/toaster-service';
 
 @Component({
   selector: 'app-add-case-component',
@@ -34,7 +35,8 @@ export class AddCaseComponent {
   constructor(
     private dialogof: MatDialog,
     private caseService: CaseService,
-    private formsBuilder: clsFormsBuilder
+    private formsBuilder: clsFormsBuilder,
+    private toasterService:ToasterService
   ) {
     this.natId = '';
     this.addCaseForm = this.formsBuilder.createAddCasesForm();
@@ -130,11 +132,11 @@ export class AddCaseComponent {
 
       this.caseService.add(this.addCaseForm, isDraft).subscribe({
         next: (res) => {
-          this.successToast('نجاح', 'تمت إضافة القضية بنجاح');
+          this.toasterService.success('تمت إضافة القضية بنجاح', 'حسنا');
           console.log(res);
         },
         error: (res) => {
-          this.errorToast('خطأ', 'حدث خطا اثناء إضافة القضية');
+          this.toasterService.error('تمت إضافة القضية بنجاح', 'حسنا');  
           console.log(res as ErrorResponse);
         },
       });
