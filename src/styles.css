@@ -118,6 +118,15 @@ textarea {
     color: var(--primary-foreground);
 }
 
+.bg-sub {
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
+}
+
+.bg-accent:hover {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+}
 
 .bg-accent {
     background-color: var(--accent);

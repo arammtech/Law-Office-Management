@@ -38,8 +38,8 @@ li {
 }
 
 a:hover li {
-    background-color: var(--primary);
-    color: white;
+    background-color: var(--accent);
+    color: var(--accent-foreground);
 }
 
 .logout {

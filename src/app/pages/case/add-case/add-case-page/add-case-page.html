@@ -8,11 +8,11 @@
                 <div class="field flex">
                     <label for="natId">رقم الهوية</label>
                     <input type="text" name="natid" [(ngModel)]="natId" #natIdModel="ngModel"
-                        [class.border-error]="natIdModel.invalid && natIdModel.touched" required maxlength="10"
-                        pattern="^\d{10}$" placeholder="أدخل رقم الهوية للبحث" />
+                        [class.border-error]="(natIdModel.invalid && natIdModel.touched) || showErrors" required
+                        maxlength="10" pattern="^\d{10}$" placeholder="أدخل رقم الهوية للبحث" />
                 </div>
                 <input type="submit" value="بحث" [disabled]="searchForm.invalid" [class.disabled]="searchForm.invalid"
-                    class="mybtn bg-main searchbtn" />
+                    class="mybtn bg-sub searchbtn" />
             </div>
             <div *ngIf="natIdModel.touched || showErrors" class="errors" animate.enter="error-animation">
                 <p *ngIf="natIdModel.errors?.['required']">يجب إدخال رقم الهوية</p>
@@ -51,7 +51,7 @@
             <div class="field">
                 <label>موضوع القضية</label>
                 <input type="text" formControlName="subject" placeholder="أدخل موضوع القضية"
-                    [class.border-error]="addCaseForm.controls.case.controls.subject.touched && addCaseForm.controls.case.controls.subject.invalid" />
+                    [class.border-error]="(addCaseForm.controls.case.controls.subject.touched && addCaseForm.controls.case.controls.subject.invalid) || showErrors" />
                 <div class="errors" *ngIf="addCaseForm?.controls?.case?.controls?.subject?.touched"
                     animate.enter="error-animation">
                     <p *ngIf="addCaseForm.controls?.case?.controls?.subject?.errors?.['required']">هذا الحقل مطلوب</p>
@@ -68,7 +68,8 @@
             </div>
             <div class="field">
                 <label>الوقت المتوقع للدراسة</label>
-                <input type="date" formControlName="estimatedTime" [class.border-error]="addCaseForm.controls.case.controls.estimatedTime.touched && addCaseForm.controls.case.controls.estimatedTime.invalid" />
+                <input type="date" formControlName="estimatedTime"
+                    [class.border-error]="(addCaseForm.controls.case.controls.estimatedTime.touched && addCaseForm.controls.case.controls.estimatedTime.invalid) || showErrors" />
                 <div *ngIf="addCaseForm.controls?.case?.controls?.estimatedTime?.touched || showErrors" class="errors"
                     animate.enter="error-animation">
                     <p *ngIf="addCaseForm.controls?.case?.controls?.estimatedTime?.errors?.['required']">يرجى تحديد
@@ -93,7 +94,8 @@
             </div>
             <div class="field">
                 <label>رقم القضية</label>
-                <input type="text" formControlName="caseNumber" placeholder="أدخل رقم القضية" [class.border-error]="addCaseForm.controls.case.controls.caseNumber.touched && addCaseForm.controls.case.controls.caseNumber.invalid" />
+                <input type="text" formControlName="caseNumber" placeholder="أدخل رقم القضية"
+                    [class.border-error]="(addCaseForm.controls.case.controls.caseNumber.touched && addCaseForm.controls.case.controls.caseNumber.invalid) || showErrors" />
                 <div class=" errors" *ngIf="addCaseForm.controls?.case?.controls?.caseNumber?.touched || showErrors"
                     animate.enter="error-animation">
                     <p *ngIf="addCaseForm.controls?.case?.controls?.caseNumber?.errors?.['required']">هذا الحقل مطلوب
@@ -102,7 +104,9 @@
             </div>
             <div class="field lawyer-opnion">
                 <label>رأي المحامي</label>
-                <textarea formControlName="lawyerOpinion" [class.border-error]="addCaseForm.controls.case.controls.lawyerOpinion.touched && addCaseForm.controls.case.controls.lawyerOpinion.invalid"  placeholder="رأي المحامي"></textarea>
+                <textarea formControlName="lawyerOpinion"
+                    [class.border-error]="(addCaseForm.controls.case.controls.lawyerOpinion.touched && addCaseForm.controls.case.controls.lawyerOpinion.invalid) || showErrors"
+                    placeholder="رأي المحامي"></textarea>
                 <div class=" errors" *ngIf="addCaseForm.controls?.case?.controls?.lawyerOpinion?.touched || showErrors"
                     animate.enter="error-animation">
                     <p *ngIf="addCaseForm.controls?.case?.controls?.lawyerOpinion?.errors?.['required']">هذا الحقل مطلوب
@@ -114,7 +118,7 @@
         </div>
     </section>
     <div class="btns">
-        <button type="submit" (click)="submit(false)" class="mybtn bg-main">إرسال الموافقة</button>
+        <button type="submit" (click)="submit(false)" class="mybtn bg-sub">إرسال الموافقة</button>
         <button type="submit" (click)="submit(true)" class="mybtn bg-accent">حفظ كمسودة</button>
     </div>
 </form>

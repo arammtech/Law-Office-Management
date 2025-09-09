@@ -1,4 +1,5 @@
 <form [formGroup]="clientForm" (submit)="submit()">
+    <h1>{{clientForm.controls.person.errors| json}}</h1>
     <div formGroupName="person">
         <a class="btn-del" mat-dialog-close><i class="fa-solid fa-xmark"></i></a>
         <h3>إضافة عميل جديد</h3>
@@ -18,7 +19,7 @@
             </div>
             <div class="field">
                 <label>رقم الهوية</label>
-                <input type="text" placeholder="أدخل رقم الهوية" readonly class="disabled" formControlName="natid">
+                <input type="text" placeholder="أدخل رقم الهوية" class="disabled" formControlName="natId">
             </div>
             <div class="field">
                 <label>الجنسية</label>
