@@ -122,10 +122,10 @@ export class AddCaseComponent {
   }
 
   submit(isDraft: boolean) {
-    if (this.addCaseForm.invalid) {
-      this.showErrors = true;
-      this.errorToast('خطأ', 'تأكد من ملء جميع الحقول');
-    } else {
+    // if (this.addCaseForm.invalid) {
+    //   this.showErrors = true;
+    //   this.errorToast('خطأ', 'تأكد من ملء جميع الحقول');
+    // } else {
       console.log('in the send part');
 
       this.caseService.add(this.addCaseForm, isDraft).subscribe({
@@ -138,7 +138,7 @@ export class AddCaseComponent {
           console.log(res as ErrorResponse);
         },
       });
-    }
+    // }
   }
 
   successToast(title: string, msg: string) {

@@ -69,3 +69,8 @@ a:hover li {
 main {
     padding: 1rem 2rem;
 }
+
+ngx-spinner {
+    z-index: 99; 
+}
+
