@@ -1,18 +1,24 @@
-import { Component, model } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { PageHeaderComponent } from '../../../../../shared/components/page header/page-header-component/page-header-component';
-import { FormGroup, FormsModule, NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormGroup,
+  FormsModule,
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { CommonModule, JsonPipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
-import Swal from 'sweetalert2';
 import { CaseService } from '../../services/case-service';
 import { ErrorResponse } from '../../../../../core/models/error-response';
 import { IAddCaseForm } from '../models/iadd-case-form';
 import { clsFormsBuilder } from '../models/clsforms-builder';
-import { IExistingClientForm } from '../models/iexisting-client-form';
 import { AddClientComponent } from '../components/add-client/add-client-component/add-client-component';
-import { INewClientForm } from '../models/inew-client-form';
-import { INewPersonForm } from '../models/inew-person-form';
 import { ToasterService } from '../../../../../core/services/toaster-service';
+import { IExistingClientForm } from '../models/iexisting-client-form';
+import { INewClientForm } from '../models/inew-client-form';
+import { ICourt } from '../models/icourt';
+import { IemployeeName } from '../models/iemployee-name';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-add-case-component',
@@ -27,72 +33,74 @@ import { ToasterService } from '../../../../../core/services/toaster-service';
   templateUrl: './add-case-page.html',
   styleUrl: './add-case-page.css',
 })
-export class AddCaseComponent {
+export class AddCaseComponent implements OnInit {
   showErrors: boolean = false;
   natId: string;
   addCaseForm: FormGroup<IAddCaseForm>;
+  courts!: ICourt[];
+  employeeNames!: IemployeeName[];
 
   constructor(
     private dialogof: MatDialog,
     private caseService: CaseService,
     private formsBuilder: clsFormsBuilder,
-    private toasterService:ToasterService
+    private toasterService: ToasterService,
+    private fb: NonNullableFormBuilder,
+    private activatedRoute: ActivatedRoute
   ) {
     this.natId = '';
     this.addCaseForm = this.formsBuilder.createAddCasesForm();
   }
+  ngOnInit(): void {
+    this.handelCourtTypes();
+    this.handelEmployeeNames();
+  }
 
-  errorToast(title: string, msg: string) {
-    Swal.fire({
-      title: title,
-      text: msg,
-      icon: 'error',
-    });
+  private handelCourtTypes() {
+    this.courts = this.activatedRoute.snapshot.data['court'] as ICourt[];
+    console.log('court resolver');
+  }
+
+  private handelEmployeeNames() {
+    this.employeeNames = this.activatedRoute.snapshot.data['employeeNames'] as IemployeeName[];
+    console.log('empolyeenames resolver');
   }
 
   search(natId: string) {
     const isExsit: boolean = this.isClientExsit(natId);
     if (isExsit) {
-      this.errorToast('خطأ', 'العميل بالفعل مضاف في القضية');
+      this.toasterService.error('العميل بالفعل مضاف في القضية', 'حسنا');
       return;
     } else {
-      // this.caseService.getClientByNatId(natId).subscribe({
-      //   next: (res) => {
-      //     //will be handeled throw the adappter
-      //     const existingClient = this.fb.group<IExistingClientForm>({
-      //       Id: this.fb.control(res.id),
-      //       natId: this.fb.control(res.person.value.natId!),
-      //     })
+      this.caseService.getClientByNatId(natId).subscribe({
+        next: (res) => {
+          //will be handeled throw the adappter
+          const existingClient = this.fb.group<IExistingClientForm>({
+            Id: this.fb.control(res.id),
+            natId: this.fb.control(res.person.value.natId!),
+          });
 
-      //     this.addCaseForm.value.existingClients?.push(existingClient?.value);
-      //     return;
-      //   },
-      //   error: (error) => {
-      //     console.log(`from get cleint ${error as ErrorResponse}`);
-      //     this.dialogof
-      //       .open(AddClientComponent, {
-      //         height: '325x',
-      //         minWidth: '600px',
-      //         data: { NatId: natId },
-      //       })
-      //       // .afterClosed()
-      //       // .subscribe((result: INewClientForm) => {
-      //       //   if (result) {
-      //       //     const test =  this.fb.group<INewClientForm>({
-      //       //       person: this.fb.group<INewPersonForm>({})
-      //       //     })
-      //       //     this.addCaseForm?.value?.newClients?.push(result);
-      //       //   }
-      //       // });
-      //   },
-      // });
-    
-        this.dialogof
+          this.addCaseForm.value.existingClients?.push(existingClient?.value);
+          return;
+        },
+        error: (error) => {
+          this.dialogof
             .open(AddClientComponent, {
               height: '325x',
               minWidth: '600px',
               data: { NatId: natId },
             })
+            .afterClosed()
+            .subscribe((result: FormGroup<INewClientForm>) => {
+              if (result) {
+                if (result instanceof FormGroup) {
+                  console.log('abudlaziz');
+                }
+                this.addCaseForm?.controls.newClients?.push(result);
+              }
+            });
+        },
+      });
     }
 
     return;
@@ -124,30 +132,20 @@ export class AddCaseComponent {
   }
 
   submit(isDraft: boolean) {
-    // if (this.addCaseForm.invalid) {
-    //   this.showErrors = true;
-    //   this.errorToast('خطأ', 'تأكد من ملء جميع الحقول');
-    // } else {
-      console.log('in the send part');
-
+    if (this.addCaseForm.invalid) {
+      this.showErrors = true;
+      this.toasterService.error('تأكد من ملء جميع الحقول', 'حسنا');
+    } else {
       this.caseService.add(this.addCaseForm, isDraft).subscribe({
         next: (res) => {
           this.toasterService.success('تمت إضافة القضية بنجاح', 'حسنا');
           console.log(res);
         },
         error: (res) => {
-          this.toasterService.error('تمت إضافة القضية بنجاح', 'حسنا');  
+          this.toasterService.error('خطا في اضافة القضية', 'حسنا');
           console.log(res as ErrorResponse);
         },
       });
-    // }
-  }
-
-  successToast(title: string, msg: string) {
-    Swal.fire({
-      title: title,
-      text: msg,
-      icon: 'success',
-    });
+    }
   }
 }

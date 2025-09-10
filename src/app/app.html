@@ -3,12 +3,26 @@
         <div class="logo">نظام إدارة القضايا</div>
         <p>القائمة الرئيسية</p>
         <ul>
-            <a href=""><li><i class="fa-solid fa-house"></i> الرئيسية</li></a>
-            <a><li routerLink="/add-case" routerLinkActive="bg-accent"><i class="fa-solid fa-plus"></i> إضافة قضية جديدة</li></a>
-            <a href=""><li><i class="fa-solid fa-sheet-plastic"></i> القضايا المستلمة</li></a>
-            <a href=""><li><i class="fa-solid fa-gavel"></i> القضايا حسب الصكوك</li></a>
-            <a href=""><li><i class="fa-solid fa-align-justify"></i> النماذج</li></a>
-            <a><li routerLink="/employees" routerLinkActive="bg-accent"><i class="fa-solid fa-users"></i> إدارة الموظفين</li></a>
+            <a href="">
+                <li><i class="fa-solid fa-house"></i> الرئيسية</li>
+            </a>
+            <a>
+                <li routerLink="/add-case" routerLinkActive="bg-accent"><i class="fa-solid fa-plus"></i> إضافة قضية
+                    جديدة</li>
+            </a>
+            <a href="">
+                <li><i class="fa-solid fa-sheet-plastic"></i> القضايا المستلمة</li>
+            </a>
+            <a href="">
+                <li><i class="fa-solid fa-gavel"></i> القضايا حسب الصكوك</li>
+            </a>
+            <a href="">
+                <li><i class="fa-solid fa-align-justify"></i> النماذج</li>
+            </a>
+            <a>
+                <li routerLink="/employees" routerLinkActive="bg-accent"><i class="fa-solid fa-users"></i> إدارة
+                    الموظفين</li>
+            </a>
         </ul>
         <div class="logout">
             <a href="#">تسجيب الخروج</a>
@@ -17,5 +31,7 @@
     <main>
         <router-outlet></router-outlet>
     </main>
-    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "medium" color = "#fff" type = "ball-clip-rotate" [fullScreen] = "true"><p style="color: white" > Loading... </p></ngx-spinner>
+    <ngx-spinner bdColor="#3312051a" size="medium" color="#fff" type="ball-clip-rotate" [fullScreen]="true">
+        <p style="color: white"> Loading... </p>
+    </ngx-spinner>
 </div>

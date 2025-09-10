@@ -7,6 +7,10 @@ import { IAddCaseForm } from '../add-case/models/iadd-case-form';
 import { INewClientForm } from '../add-case/models/inew-client-form';
 import { IClientDetails } from '../add-case/models/iclient-details';
 import { FormGroup } from '@angular/forms';
+import { ICourt } from '../add-case/models/icourt';
+import { CourtAdapter } from '../add-case/adapters/courts/court-adapter';
+import { EmployeeAdapter } from '../add-case/adapters/employee/employee-adapter';
+import { IemployeeName } from '../add-case/models/iemployee-name';
 
 @Injectable({
   providedIn: 'root',
@@ -15,106 +19,64 @@ export class CaseService {
   baseURL = environmentDev.baseURL;
   constructor(
     private http: HttpClient,
-    private clientAdappter: ClientAdapter
+    private clientAdappter: ClientAdapter,
+    private courtAdapter: CourtAdapter,
+    private employeeAdapter: EmployeeAdapter
   ) {}
-  add(createCaseModel: FormGroup<IAddCaseForm>, isDraft: boolean): Observable<string> {
-    const formData = new FormData();
-    // قيم عادية
-    formData.append('caseNumber', `${createCaseModel?.value?.case?.caseNumber}`);
-    formData.append('courtTypeId', `${createCaseModel?.value?.case?.courtType}`);
-    formData.append('caseSubject', `${createCaseModel?.value?.case?.subject}`);
-    formData.append(
-      'partyRole',
-      `${createCaseModel?.value?.case?.partiesToTheCase}`
-    );
-    formData.append(
-      'clientRequestDetails',
-      `${createCaseModel?.value?.case?.subject}`
-    );
-    formData.append(
-      'estimatedReviewDate',
-      `${createCaseModel?.value?.case?.estimatedTime}`
-    );
-    formData.append(
-      'lawyerOpinion',
-      `${createCaseModel?.value?.case?.lawyerOpinion}`
-    );
-    // الموظف المسؤول
-    formData.append(
-      'assignedEmployeeId',
-      `${createCaseModel?.value?.case?.assignedOfficer}`
-    );
-    formData.append('isDraft', `${isDraft}`);
 
-    // // بيانات العقد
-    // if (createCaseModel.contract?.showContract) {
-    //   formData.append(
-    //     'hasContracts',
-    //     `${createCaseModel?.contract?.showContract}`
-    //   );
-    //   formData.append(
-    //     'contractsData[0].contractType',
-    //     `${createCaseModel.contract.contractType}`
-    //   );
-    //   formData.append(
-    //     'contractsData[0].issueDate',
-    //     `${createCaseModel?.contract?.issueDate}`
-    //   );
-    //   formData.append(
-    //     'contractsData[0].expiryDate',
-    //     `${createCaseModel?.contract?.expirationDate}`
-    //   );
-    //   formData.append(
-    //     'contractsData[0].baseAmount',
-    //     `${createCaseModel?.contract?.totalPrice}`
-    //   );
-    //   formData.append(
-    //     'contractsData[0].initialPayment',
-    //     `${createCaseModel?.contract?.downAmount}`
-    //   );
-    //   formData.append(
-    //     'contractsData[0].isAssigned',
-    //     `${createCaseModel?.contract?.assigned}`
-    //   );
-    //   formData.append(
-    //     'contractFiles[0]',
-    //     `${createCaseModel.contract?.contractAttachment}`
-    //   );
-    // }
+  toAddCaseAPI(creaCaseForm: FormGroup<IAddCaseForm>, isDraft: boolean): any {
+    const formValue = creaCaseForm.getRawValue(); // safer than .value for disabled fields
+    const newClients = formValue.newClients?.map((clientGroup) => ({
+      kind: 'new',
+      client: {
+        person: {
+          fullName: clientGroup.person.name,
+          nationalId: clientGroup.person.natId,
+          birthDate: clientGroup.person.birthDate,
+          phoneNumber: clientGroup.person.phone.e164Number,
+          address: clientGroup.person.address,
+          countryCode: clientGroup.person.countryCode,
+        },
+      },
+    }));
 
-    // // بيانات الوكالة
-    // if (createCaseModel?.poa.showPOA) {
-    //   formData.append('hasPOAs', `${createCaseModel?.poa?.showPOA}`);
-    //   formData.append('poasData[0].poaNumber', 'POA-001');
-    //   formData.append('poasData[0].issueDate', '2024-05-20');
-    //   formData.append('poasData[0].issuingAuthority', 'الجهات الحكومية');
-    //   formData.append('poaFiles[0]', `${createCaseModel?.poa.poaAttachment}`);
-    // }
-
-    // العملاء (مصفوفة بصيغة JSON)
-    const clientsJson = [];
-
-    for (const client of createCaseModel?.value?.newClients!) {
-      const newClient = this.clientAdappter.toAddClientAPI(
-        client as INewClientForm
-      );
-
-      clientsJson.push(newClient);
-    }
-
-    for (const client of createCaseModel?.value?.existingClients!) {
-      const newClient = {
+    const existingClients = formValue.existingClients?.map(
+      (existingClient) => ({
         kind: 'existing',
-        ClientId: client.Id,
-      };
+        ClientId: existingClient.Id,
+      })
+    );
 
-      clientsJson.push(newClient);
-    }
+    const allClients = [
+  ...(newClients ?? []),
+  ...(existingClients ?? [])
+];
 
-    formData.append('clientsJson', JSON.stringify(clientsJson));
 
+    const body = {
+      caseNumber: formValue.case?.caseNumber,
+      courtTypeId: formValue.case?.courtType,
+      caseSubject: formValue.case?.subject,
+      partyRole: formValue.case.partiesToTheCase as number,
+      clientRequestDetails: formValue.case.subject,
+      estimatedReviewDate: formValue.case.estimatedTime,
+      isDraft: isDraft,
+      lawyerOpinion: formValue.case.lawyerOpinion,
+      assignedEmployeeId: formValue.case.assignedOfficer,
+      clients: allClients,
+    };
+
+    console.log(body);
+    return body;
+  }
+
+  add(
+    createCaseModel: FormGroup<IAddCaseForm>,
+    isDraft: boolean
+  ): Observable<string> {
+    const body = this.toAddCaseAPI(createCaseModel, isDraft);
     return this.http
-      .post(`${this.baseURL}/cases`, formData)
+      .post(`${this.baseURL}/cases`, body)
       .pipe(map((data) => data as string));
   }
 
@@ -122,5 +84,25 @@ export class CaseService {
     return this.http
       .get(`${this.baseURL}/clients/national-id/${natId}`)
       .pipe(map((data) => this.clientAdappter.fromClientDetailsAPI(data)));
+  }
+
+  getCourtSDetails(): Observable<ICourt[]> {
+    return this.http
+      .get<any[]>(`${this.baseURL}/court-types`)
+      .pipe(
+        map((data) =>
+          data.map((ele) => this.courtAdapter.fromCourtDetailsAPI(ele))
+        )
+      );
+  }
+
+  getEmpoloyeeNames(): Observable<IemployeeName[]> {
+    return this.http
+      .get<any[]>(`${this.baseURL}/employees/names`)
+      .pipe(
+        map((data) =>
+          data.map((ele) => this.employeeAdapter.fromEmployeeNamesAPI(ele))
+        )
+      );
   }
 }

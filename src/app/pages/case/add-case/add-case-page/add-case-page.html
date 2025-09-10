@@ -81,15 +81,13 @@
             <div class="field">
                 <label>نوع المحكمة</label>
                 <select formControlName="courtType">
-                    <option value="A8B6E3FB-6FB0-4F8F-CF6F-5A6B7C8D9E10">عامة</option>
-                    <option value="A8B6E3FB-6FB0-4F8F-CF6F-5A6B7C8D9E10">جنائية</option>
+                    <option *ngFor="let court of courts" [value]="court.courtTypeId">{{court.name}}</option>
                 </select>
             </div>
             <div class="field">
                 <label>الموظف الموكل على القضية</label>
                 <select formControlName="assignedOfficer">
-                    <option value="C98AB58A-E86D-435E-BAC4-69ED1EC9617D">عبدالعزيز</option>
-                    <option value="C98AB58A-E86D-435E-BAC4-69ED1EC9617D">حسن</option>
+                    <option *ngFor="let employeeName of employeeNames" [value]="employeeName.id">{{employeeName.name}}</option>
                 </select>
             </div>
             <div class="field">

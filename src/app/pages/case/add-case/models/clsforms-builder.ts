@@ -6,6 +6,8 @@ import { IAddCaseForm } from './iadd-case-form';
 import { INewPersonForm } from './inew-person-form';
 import { Injectable } from '@angular/core';
 import { INewEmployee } from '../../../employee/components/add-employee/model/iemployee';
+import { IPhone } from './icourt';
+import { minAgeValidator } from '../../../../../shared/validators/minuimum-date.validator';
 
 @Injectable({
   providedIn: 'root',
@@ -20,14 +22,15 @@ export class clsFormsBuilder {
         validators: [Validators.required],
       }),
       estimatedTime: this.fb.control('', { validators: [Validators.required] }),
-      courtType: this.fb.control(1),
-      assignedOfficer: this.fb.control(1),
-      caseNumber: this.fb.control('', Validators.required),
+      courtType: this.fb.control(''),
+      assignedOfficer: this.fb.control(''),
+      caseNumber: this.fb.control(''),
       lawyerOpinion: this.fb.control('', Validators.required),
     });
   }
 
   createNewClientForm(): FormGroup<INewClientForm> {
+    
     return this.fb.group({
       person: this.createPersonForm(),
     });
@@ -53,14 +56,13 @@ export class clsFormsBuilder {
   createPersonForm(obj?:INewPersonForm): FormGroup<INewPersonForm> {
     return this.fb.group({
       name: this.fb.control(obj?.name || '', {validators: [Validators.required, Validators.minLength(3)]}),
-      natId: this.fb.control(obj?.natId || '', {validators: [Validators.required, Validators.pattern(/^d{10}$/)]}),
-      birthDate: this.fb.control(obj?.birthDate || '', {validators: [Validators.required]}),
-      phone: this.fb.control(obj?.phone || '', {validators: [Validators.required, Validators.pattern(/^05\d{8}$/)]}),
-      address: this.fb.control(obj?.address || '', {validators: [Validators.required, Validators.minLength(3)]}),
-      countryCode: this.fb.control(obj?.countryCode || '', {validators: [Validators.required]}),
+      natId: this.fb.control(obj?.natId || '', {validators: [Validators.required, Validators.pattern(/^\d{10}/)]}),
+      birthDate: this.fb.control(obj?.birthDate || '', {validators: [Validators.required, minAgeValidator(18)]}),
+      phone: this.fb.control<IPhone>(obj?.phone || {} as IPhone, {validators: [Validators.required, Validators.min(9), Validators.max(15)]}),
+      address: this.fb.control(obj?.address || '', {validators: [Validators.required, Validators.minLength(10)]}),
+      countryCode: this.fb.control(obj?.countryCode || 'SA', {validators: [Validators.required]}),
     });
   }
-
 
   createAddCasesForm(): FormGroup<IAddCaseForm> {
     return this.fb.group({

@@ -15,7 +15,6 @@ export class LoaderService {
       type: 'ball-clip-rotate',
       fullScreen: true,
     });
-    console.log(this._service);
     this._service.show();
   }
 

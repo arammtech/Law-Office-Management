@@ -1,11 +1,9 @@
 <form [formGroup]="clientForm" (submit)="submit()">
-    <h1>{{clientForm.controls.person.errors| json}}</h1>
     <div formGroupName="person">
         <a class="btn-del" mat-dialog-close><i class="fa-solid fa-xmark"></i></a>
         <h3>إضافة عميل جديد</h3>
-        <h1>{{clientForm.value| json}}</h1>
         <div class="fields">
-            <div class="field">
+            <div class="field mb">
                 <label>الاسم الرباعي </label>
                 <input type="text" placeholder="أدخل الاسم الرباعي" formControlName="name"
                     [class.border-error]="(clientForm.controls.person.controls.name.touched && clientForm.controls.person.controls.name.invalid) || showErrors">
@@ -17,44 +15,47 @@
                         او اكثر</p>
                 </div>
             </div>
-            <div class="field">
+            <div class="field mb">
                 <label>رقم الهوية</label>
-                <input type="text" placeholder="أدخل رقم الهوية" class="disabled" formControlName="natId">
+                <input type="text" placeholder="أدخل رقم الهوية" readonly class="disabled" formControlName="natId">
             </div>
-            <div class="field">
+            <div class="field mb">
                 <label>الجنسية</label>
-                <select formControlName="countryCode" [class.border-error]="(clientForm.controls.person.controls.countryCode.touched && clientForm.controls.person.controls.countryCode.invalid) || showErrors">
-                    <option value="YE">السعودية</option>
-                    <option value="SA">مصر</option>
-                    <option value="EG">سوريا</option>
+                <select formControlName="countryCode"
+                    [class.border-error]="(clientForm.controls.person.controls.countryCode.touched && clientForm.controls.person.controls.countryCode.invalid) || showErrors">
+                    <option *ngFor="let country of counties" [value]="country.alpha2">{{country.translations.ar}}
+                    </option>
                 </select>
                 <div *ngIf="clientForm.controls.person.controls?.countryCode?.touched || showErrors" class=" errors"
                     animate.enter="error-animation">
-                    <p *ngIf="clientForm.controls.person.controls?.countryCode?.errors?.['required']">هاذا الحقل مطلوب</p>
+                    <p *ngIf="clientForm.controls.person.controls?.countryCode?.errors?.['required']">هاذا الحقل مطلوب
+                    </p>
                 </div>
             </div>
-            <div class="field">
+            <div class="field mb">
                 <label>تاريخ الميلاد</label>
                 <input type="date" formControlName="birthDate"
                     [class.border-error]="(clientForm.controls.person.controls.birthDate.touched && clientForm.controls.person.controls.birthDate.invalid) || showErrors">
                 <div *ngIf="clientForm.controls.person.controls?.birthDate?.touched || showErrors" class=" errors"
                     animate.enter="error-animation">
                     <p *ngIf="clientForm.controls.person.controls?.birthDate?.errors?.['required']">هاذا الحقل مطلوب</p>
+                    <p *ngIf="clientForm.controls.person.controls?.birthDate?.errors?.['minAge']">عمر العميل يجب ان يكون اكبر من 18</p>
                 </div>
             </div>
-            <div class="field">
+            <div class="field mb">
                 <label>رقم الجوال</label>
-                <input type="text" formControlName="phone"
-                    [class.border-error]="(clientForm.controls.person.controls.phone.touched && clientForm.controls.person.controls.phone.invalid) || showErrors">
+                <ngx-intl-tel-input formControlName="phone" [phoneValidation]="true" [separateDialCode]="true"
+                    [preferredCountries]="[clientForm.value.person?.countryCode!.toLowerCase()]"
+                    [searchCountryFlag]="true" [phoneValidation]="true" minlength="9" maxlength="15">
+                </ngx-intl-tel-input>
                 <div *ngIf="clientForm.controls.person.controls?.phone?.touched || showErrors" class=" errors"
                     animate.enter="error-animation">
                     <p *ngIf="clientForm.controls.person.controls?.phone?.errors?.['required']">هاذا الحقل مطلوب</p>
-                    <p *ngIf="clientForm.controls.person.controls?.phone?.errors?.['pattern']">رقم الهاتف يتكون من 10
-                        خانات
-                        ويبدا 05</p>
+                    <p *ngIf="clientForm.controls.person.controls?.phone?.errors?.['min']">ادخل اكثر من 8 خانات</p>
+                    <p *ngIf="clientForm.controls.person.controls?.phone?.errors?.['min']">ادخل اقل من 15 خانة</p>
                 </div>
             </div>
-            <div class="field">
+            <div class="field mb">
                 <label>العنوان</label>
                 <input type="text" formControlName="address"
                     [class.border-error]="(clientForm.controls.person.controls.address.touched && clientForm.controls.person.controls.address.invalid) || showErrors">
