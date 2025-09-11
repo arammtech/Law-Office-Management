@@ -16,9 +16,9 @@ import { AddClientComponent } from '../components/add-client/add-client-componen
 import { ToasterService } from '../../../../../core/services/toaster-service';
 import { IExistingClientForm } from '../models/iexisting-client-form';
 import { INewClientForm } from '../models/inew-client-form';
-import { ICourt } from '../models/icourt';
 import { IemployeeName } from '../models/iemployee-name';
 import { ActivatedRoute } from '@angular/router';
+import { ICourt } from '../../models/icourt';
 
 @Component({
   selector: 'app-add-case-component',
@@ -62,7 +62,9 @@ export class AddCaseComponent implements OnInit {
   }
 
   private handelEmployeeNames() {
-    this.employeeNames = this.activatedRoute.snapshot.data['employeeNames'] as IemployeeName[];
+    this.employeeNames = this.activatedRoute.snapshot.data[
+      'employeeNames'
+    ] as IemployeeName[];
     console.log('empolyeenames resolver');
   }
 

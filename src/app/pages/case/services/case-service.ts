@@ -7,10 +7,12 @@ import { IAddCaseForm } from '../add-case/models/iadd-case-form';
 import { INewClientForm } from '../add-case/models/inew-client-form';
 import { IClientDetails } from '../add-case/models/iclient-details';
 import { FormGroup } from '@angular/forms';
-import { ICourt } from '../add-case/models/icourt';
 import { CourtAdapter } from '../add-case/adapters/courts/court-adapter';
 import { EmployeeAdapter } from '../add-case/adapters/employee/employee-adapter';
 import { IemployeeName } from '../add-case/models/iemployee-name';
+import { ICourt } from '../models/icourt';
+import { ICasesList } from '../cases list/models/i-cases-list';
+import { ICourtDetaills } from '../cases list/models/icourt-detaills';
 
 @Injectable({
   providedIn: 'root',
@@ -47,11 +49,7 @@ export class CaseService {
       })
     );
 
-    const allClients = [
-  ...(newClients ?? []),
-  ...(existingClients ?? [])
-];
-
+    const allClients = [...(newClients ?? []), ...(existingClients ?? [])];
 
     const body = {
       caseNumber: formValue.case?.caseNumber,
@@ -86,7 +84,7 @@ export class CaseService {
       .pipe(map((data) => this.clientAdappter.fromClientDetailsAPI(data)));
   }
 
-  getCourtSDetails(): Observable<ICourt[]> {
+  getCourtSDetails(): Observable<ICourtDetaills[]> {
     return this.http
       .get<any[]>(`${this.baseURL}/court-types`)
       .pipe(
@@ -104,5 +102,22 @@ export class CaseService {
           data.map((ele) => this.employeeAdapter.fromEmployeeNamesAPI(ele))
         )
       );
+  }
+
+  getCasesList(
+    courtId: string,
+    year: string,
+    pageNumber: number = 1,
+    pageSize: number = 10
+  ): Observable<ICasesList> {
+    return this.http
+      .get<any>(
+        `${this.baseURL}/cases/by-court-type/${courtId}/year/${year}?pageNumber=${pageNumber}&pageSize=${pageSize}`
+      )
+      .pipe(map((data) => data as ICasesList));
+  }
+
+  getYearsForCourt(courtId: string): Observable<string[]> {
+    return this.http.get<any>(`${this.baseURL}/court-types/${courtId}/years`);
   }
 }

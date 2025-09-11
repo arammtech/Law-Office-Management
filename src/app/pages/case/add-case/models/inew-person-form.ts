@@ -1,5 +1,5 @@
-import { FormControl } from "@angular/forms";
-import { IPhone } from "./icourt";
+import { FormControl } from '@angular/forms';
+import { IPhone } from './iphone';
 
 export interface INewPersonForm {
   name: FormControl<string>;

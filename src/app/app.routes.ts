@@ -6,6 +6,7 @@ import { AddClientComponent } from './pages/case/add-case/components/add-client/
 import { MangeEmployeePage } from './pages/employee/mange-employee-page/mange-employee-page/mange-employee-page';
 import { courtResolverResolver } from './pages/case/resolvers/court-resolver-resolver';
 import { employeeNamesResolver } from './pages/case/resolvers/employee/employee-names-resolver';
+import { CasesListPage } from './pages/case/cases list/cases-list-page/cases-list-page/cases-list-page';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
@@ -20,4 +21,11 @@ export const routes: Routes = [
   },
   { path: 'add-client', component: AddClientComponent },
   { path: 'employees', component: MangeEmployeePage },
+  {
+    path: 'cases-list',
+    component: CasesListPage,
+    resolve: {
+      court: courtResolverResolver,
+    },
+  },
 ];
