@@ -20,8 +20,9 @@ export interface PeriodicElement {
   imports: [
     PageHeaderComponent,
     MatTableModule,
-    FormsModule
-  ],
+    FormsModule,
+    RouterLink
+],
   templateUrl: './cases-list-page.html',
   styleUrl: './cases-list-page.css',
 })

@@ -13,6 +13,8 @@ import { IemployeeName } from '../add-case/models/iemployee-name';
 import { ICourt } from '../models/icourt';
 import { ICasesList } from '../cases list/models/i-cases-list';
 import { ICourtDetaills } from '../cases list/models/icourt-detaills';
+import { CaseAdappter } from '../adappters/case-adappter';
+import { ICseGeneralDetails } from '../case details/components/case-details-component/case-details-component';
 
 @Injectable({
   providedIn: 'root',
@@ -23,7 +25,8 @@ export class CaseService {
     private http: HttpClient,
     private clientAdappter: ClientAdapter,
     private courtAdapter: CourtAdapter,
-    private employeeAdapter: EmployeeAdapter
+    private employeeAdapter: EmployeeAdapter, 
+    private caseAdappter:CaseAdappter
   ) {}
 
   toAddCaseAPI(creaCaseForm: FormGroup<IAddCaseForm>, isDraft: boolean): any {
@@ -119,5 +122,9 @@ export class CaseService {
 
   getYearsForCourt(courtId: string): Observable<string[]> {
     return this.http.get<any>(`${this.baseURL}/court-types/${courtId}/years`);
+  }
+
+  getCaeDetails(caseId: string): Observable<ICseGeneralDetails> {
+    return this.http.get<any>(`${this.baseURL}/cases/${caseId}`).pipe(map(res => this.caseAdappter.fromCaseDetailsAPI(res)));
   }
 }

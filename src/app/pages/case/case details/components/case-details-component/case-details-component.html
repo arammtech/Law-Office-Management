@@ -1,0 +1,53 @@
+<section class="section">
+    <header>
+        <h3>معلومات القضية</h3>
+    </header>
+
+    <section class="case-content d-myflex my-justi">
+        <div class="text">
+            <p><span class="title">رقم القضية:</span> <span class="content">{{case.caseNumber}}</span></p>
+        </div>
+        <div class="text">
+            <p><span class="title">نوع المحكمة:</span> <span class="content">{{case.courtType}}</span></p>
+        </div>
+        <div class="text">
+            <p><span class="title">الموظف الموكل:</span> <span class="content">{{case.assignedLawyerName}}</span></p>
+        </div>
+        <div class="text">
+            <p><span class="title">الحالة:</span> <span class="content">{{case.status}}</span></p>
+        </div>
+    </section>
+</section>
+
+<section class="section">
+    <header>
+        <h3>اطراف القضية</h3>
+    </header>
+
+    
+        <table mat-table [dataSource]="case.caseParites" class="mat-elevation-z8">
+
+            <ng-container [matColumnDef]="displayedColumns[0]">
+                <th mat-header-cell *matHeaderCellDef> اسم العميل</th>
+                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+            </ng-container>
+
+            <ng-container [matColumnDef]="displayedColumns[1]">
+                <th mat-header-cell *matHeaderCellDef> رقم الهوية </th>
+                <td mat-cell *matCellDef="let element"> {{element.natId}} </td>
+            </ng-container>
+
+            <ng-container [matColumnDef]="displayedColumns[2]">
+                <th mat-header-cell *matHeaderCellDef> رقم الهاتف </th>
+                <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
+            </ng-container>
+
+            <ng-container [matColumnDef]="displayedColumns[3]">
+                <th mat-header-cell *matHeaderCellDef> الجنسية </th>
+                <td mat-cell *matCellDef="let element"> السعودية </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+</section>

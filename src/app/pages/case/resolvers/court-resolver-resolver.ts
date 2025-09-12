@@ -8,5 +8,6 @@ export const courtResolverResolver: ResolveFn<Observable<ICourt[]>> = (
   route,
   state
 ) => {
+  console.log('didn\'t the list work ?')
   return inject(CaseService).getCourtSDetails();
 };

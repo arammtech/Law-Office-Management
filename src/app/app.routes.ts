@@ -7,6 +7,9 @@ import { MangeEmployeePage } from './pages/employee/mange-employee-page/mange-em
 import { courtResolverResolver } from './pages/case/resolvers/court-resolver-resolver';
 import { employeeNamesResolver } from './pages/case/resolvers/employee/employee-names-resolver';
 import { CasesListPage } from './pages/case/cases list/cases-list-page/cases-list-page/cases-list-page';
+import { CaseDetailsPage } from './pages/case/case details/case-details-page/case-details-page';
+import { CaseDetailsComponent } from './pages/case/case details/components/case-details-component/case-details-component';
+import { caseDetailsResolverResolver } from './pages/case/resolvers/case/case-details-resolver-resolver';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
@@ -27,5 +30,24 @@ export const routes: Routes = [
     resolve: {
       court: courtResolverResolver,
     },
+  },
+
+  {
+    path: 'case-details/:caseId',
+    component: CaseDetailsPage,
+    children: [
+      {
+        path: '',
+        redirectTo: 'case',
+        pathMatch: 'full',
+      },
+      {
+        path: `case`,
+        component: CaseDetailsComponent,
+        resolve: {
+          caseDetails: caseDetailsResolverResolver,
+        },
+      },
+    ],
   },
 ];
