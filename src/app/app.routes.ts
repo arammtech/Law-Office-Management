@@ -10,6 +10,7 @@ import { CasesListPage } from './pages/case/cases list/cases-list-page/cases-lis
 import { CaseDetailsPage } from './pages/case/case details/case-details-page/case-details-page';
 import { CaseDetailsComponent } from './pages/case/case details/components/case-details-component/case-details-component';
 import { caseDetailsResolverResolver } from './pages/case/resolvers/case/case-details-resolver-resolver';
+import { CaseContract } from './pages/case/case details/components/case-contract/case-contract';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
@@ -47,6 +48,10 @@ export const routes: Routes = [
         resolve: {
           caseDetails: caseDetailsResolverResolver,
         },
+      },
+      {
+        path: `contracts`,
+        component: CaseContract,
       },
     ],
   },

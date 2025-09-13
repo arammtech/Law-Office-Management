@@ -15,6 +15,7 @@ import { ICasesList } from '../cases list/models/i-cases-list';
 import { ICourtDetaills } from '../cases list/models/icourt-detaills';
 import { CaseAdappter } from '../adappters/case-adappter';
 import { ICseGeneralDetails } from '../case details/components/case-details-component/case-details-component';
+import { IAddContract } from '../case details/components/add-contract/add-contract';
 
 @Injectable({
   providedIn: 'root',
@@ -25,8 +26,8 @@ export class CaseService {
     private http: HttpClient,
     private clientAdappter: ClientAdapter,
     private courtAdapter: CourtAdapter,
-    private employeeAdapter: EmployeeAdapter, 
-    private caseAdappter:CaseAdappter
+    private employeeAdapter: EmployeeAdapter,
+    private caseAdappter: CaseAdappter
   ) {}
 
   toAddCaseAPI(creaCaseForm: FormGroup<IAddCaseForm>, isDraft: boolean): any {
@@ -125,6 +126,14 @@ export class CaseService {
   }
 
   getCaeDetails(caseId: string): Observable<ICseGeneralDetails> {
-    return this.http.get<any>(`${this.baseURL}/cases/${caseId}`).pipe(map(res => this.caseAdappter.fromCaseDetailsAPI(res)));
+    return this.http
+      .get<any>(`${this.baseURL}/cases/${caseId}`)
+      .pipe(map((res) => this.caseAdappter.fromCaseDetailsAPI(res)));
+  }
+
+  addContract(caseId: string, addContractForm:FormGroup<IAddContract>): Observable<ICseGeneralDetails> {
+    return this.http
+      .get<any>(`${this.baseURL}/cases/${caseId}`)
+      .pipe(map((res) => this.caseAdappter.fromCaseDetailsAPI(res)));
   }
 }

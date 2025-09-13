@@ -67,6 +67,7 @@
                 </select>
             </div>
             <div class="field">
+                <h2>{{addCaseForm.controls?.case?.controls?.estimatedTime?.errors| json}}</h2>
                 <label>الوقت المتوقع للدراسة</label>
                 <input type="date" formControlName="estimatedTime"
                     [class.border-error]="(addCaseForm.controls.case.controls.estimatedTime.touched && addCaseForm.controls.case.controls.estimatedTime.invalid) || showErrors" />
@@ -74,7 +75,7 @@
                     animate.enter="error-animation">
                     <p *ngIf="addCaseForm.controls?.case?.controls?.estimatedTime?.errors?.['required']">يرجى تحديد
                         التاريخ</p>
-                    <p *ngIf="addCaseForm.controls?.case?.controls?.estimatedTime?.errors?.['min']">ادخل وقت في الحاضر
+                    <p *ngIf="addCaseForm.controls?.case?.controls?.estimatedTime?.errors?.['pastDate']">ادخل وقت في الحاضر
                         او المستقبل</p>
                 </div>
             </div>
