@@ -1,0 +1,23 @@
+<form [formGroup]="addAttachmentForm" (ngSubmit)="submit()">
+    <a class="btn-del" mat-dialog-close><i class="fa-solid fa-xmark"></i></a>
+
+    <div class="fields">
+        <div class="field mb">
+            <label>اسم المرفق</label>
+            <input type="text" formControlName="name"
+                [class.border-error]="(addAttachmentForm.controls.name.touched && addAttachmentForm.controls.name.invalid)" />
+            <div class="errors" *ngIf="addAttachmentForm.controls.name.touched" animate.enter="error-animation">
+                <p *ngIf="addAttachmentForm.controls.name?.errors?.['required']">هذا الحقل مطلوب</p>
+            </div>
+        </div>
+        <div class="field mb">
+            <label>مرفق الوكالة</label>
+            <input type="file" formControlName="attachmentFile"
+                [class.border-error]="(addAttachmentForm.controls.attachmentFile.touched && addAttachmentForm.controls.attachmentFile.invalid)" />
+            <div class="errors" *ngIf="addAttachmentForm.controls.attachmentFile.touched" animate.enter="error-animation">
+                <p *ngIf="addAttachmentForm.controls.attachmentFile?.errors?.['required']">هذا الحقل مطلوب</p>
+            </div>
+        </div>
+    </div>
+    <input type="submit" value="رفع المرفق" class="mybtn bg-sub">
+</form>

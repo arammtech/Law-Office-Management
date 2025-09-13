@@ -11,11 +11,19 @@ import { minAgeValidator } from '../../../../../shared/validators/minuimum-date.
 import { IAddContract } from '../../case details/components/add-contract/add-contract';
 import { featureValidator } from '../../../../../shared/validators/Date/feature-date-validator';
 import { IAddPOAForm } from '../../case details/components/add-poa/add-poa';
+import { IAddAttachmetnForm } from '../../case details/components/add-attachment/add-attachment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class clsFormsBuilder {
+
+  createAddAttachmentForm(): FormGroup<IAddAttachmetnForm> {
+    return this.fb.group({
+      name: this.fb.control(''),
+      attachmentFile: this.fb.control('')
+    })
+  }
   constructor(private fb: NonNullableFormBuilder) {}
 
   createCaseForm(): FormGroup<ICaseForm> {

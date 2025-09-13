@@ -12,6 +12,7 @@ import { CaseDetailsComponent } from './pages/case/case details/components/case-
 import { caseDetailsResolverResolver } from './pages/case/resolvers/case/case-details-resolver-resolver';
 import { CaseContract } from './pages/case/case details/components/case-contract/case-contract';
 import { CasePoa } from './pages/case/case details/components/case-poa/case-poa';
+import { CaseAttachments } from './pages/case/case details/components/case-attachments/case-attachments';
 
 export const routes: Routes = [
   { path: 'login', component: Login },
@@ -57,6 +58,11 @@ export const routes: Routes = [
       {
         path: `poas`,
         component: CasePoa,
+      },
+
+      {
+        path: `attachments`,
+        component: CaseAttachments,
       },
     ],
   },
