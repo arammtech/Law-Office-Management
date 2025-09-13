@@ -1,0 +1,28 @@
+<section class="section">
+    <header class="d-myflex my-justi">
+        <h3>العقود</h3>
+        <button (click)="openAddPOA()" class="mybtn bg-sub">إضافة وكالة</button>
+    </header>
+        <table mat-table [dataSource]="POAs" class="mat-elevation-z8">
+
+            <ng-container [matColumnDef]="displayedColumns[0]">
+                <th mat-header-cell *matHeaderCellDef>رقم العقد</th>
+                <td mat-cell *matCellDef="let element"> {{element.POAnumber}} </td>
+            </ng-container>
+
+            <ng-container [matColumnDef]="displayedColumns[1]">
+                <th mat-header-cell *matHeaderCellDef>تاريخ الاصدار</th>
+                <td mat-cell *matCellDef="let element"> {{element.POAissueDate}} </td>
+            </ng-container>
+
+            
+            <ng-container [matColumnDef]="displayedColumns[2]">
+                <th mat-header-cell *matHeaderCellDef>الجهة المصدرة</th>
+                <td mat-cell *matCellDef="let element"> {{element.authorizedBy}} </td>
+            </ng-container>
+
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+</section>

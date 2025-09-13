@@ -10,6 +10,7 @@ import { IPhone } from './iphone';
 import { minAgeValidator } from '../../../../../shared/validators/minuimum-date.validator';
 import { IAddContract } from '../../case details/components/add-contract/add-contract';
 import { featureValidator } from '../../../../../shared/validators/Date/feature-date-validator';
+import { IAddPOAForm } from '../../case details/components/add-poa/add-poa';
 
 @Injectable({
   providedIn: 'root',
@@ -99,6 +100,16 @@ export class clsFormsBuilder {
       expirationDate: this.fb.control('', Validators.required),
       issueDate: this.fb.control('', Validators.required),
       contractAttachment: this.fb.control('', {validators:[Validators.required]})
+    });
+  }
+
+  
+  createAddPOAForm(): FormGroup<IAddPOAForm> {
+    return this.fb.group({
+      poaNumber: this.fb.control('', {validators:[Validators.required]}),
+      poaAuthrizedBy: this.fb.control('', {validators:[Validators.required]}),
+      poaIssueDate: this.fb.control(new Date, {validators:[Validators.required]}),
+      poaAttachment: this.fb.control('')
     });
   }
 }
