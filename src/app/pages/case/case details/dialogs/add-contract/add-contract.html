@@ -1,53 +1,53 @@
 <form [formGroup]="contractForm" (ngSubmit)="submit()">
     <a class="btn-del" mat-dialog-close><i class="fa-solid fa-xmark"></i></a>
 
-    <div class="fields">
-        <div class="field mb">
-            <label>مرفق العقد</label>
+    <mat-dialog-content class="row d-flex g-3">
+        <div class="col-md-6">
+            <label class="form-label">مرفق العقد</label>
             <input type="file" formControlName="contractAttachment" placeholder="لم يتم اختيار الملف"
-                [class.border-error]="(contractForm.controls.contractAttachment.touched && contractForm.controls.contractAttachment.invalid)" />
+                [class.border-error]="(contractForm.controls.contractAttachment.touched && contractForm.controls.contractAttachment.invalid)" class="form-control"/>
             <div class="errors" *ngIf="contractForm.controls.contractAttachment.touched"
                 animate.enter="error-animation">
                 <p *ngIf="contractForm.controls?.contractAttachment?.errors?.['required']">هذا الحقل مطلوب</p>
             </div>
         </div>
-        <div class="field mb">
+        <div class="col-md-6">
             <label>نوع العقد</label>
-            <select formControlName="contractType">
+            <select formControlName="contractType" class="form-control">
                 <option value="1">غير محدد بمدة</option>
                 <option value="2">محدد بمدة</option>
             </select>
         </div>
         @if (contractForm.value.contractType == 2) {
-        <div class="field mb">
-            <label>تاريخ البداية</label>
+        <div class="col-md-6">
+            <label class="form-label">تاريخ البداية</label>
             <input type="date" formControlName="issueDate"
-                [class.border-error]="(contractForm.controls.issueDate.touched && contractForm.controls.issueDate.invalid)" />
+                [class.border-error]="(contractForm.controls.issueDate.touched && contractForm.controls.issueDate.invalid)" class="form-control" />
             <div *ngIf="contractForm.controls?.issueDate?.touched" class="errors" animate.enter="error-animation">
                 <p *ngIf="contractForm.controls?.issueDate?.errors?.['required']">هاذا الحقل مطلوب</p>
             </div>
         </div>
-        <div class="field mb">
-            <label>تاريخ النهاية</label>
+        <div class="col-md-6">
+            <label class="form-label">تاريخ النهاية</label>
             <input type="date" formControlName="expirationDate"
-                [class.border-error]="(contractForm.controls.expirationDate.touched && contractForm.controls.expirationDate.invalid)" />
+                [class.border-error]="(contractForm.controls.expirationDate.touched && contractForm.controls.expirationDate.invalid)" class="form-control"/>
             <div *ngIf="contractForm.controls?.expirationDate?.touched" class="errors" animate.enter="error-animation">
                 <p *ngIf="contractForm.controls?.expirationDate?.errors?.['required']">هاذا الحقل مطلوب</p>
             </div>
         </div>
         }
-        <div class="field mb">
-            <label>قيمة العقد</label>
+        <div class="col-md-6">
+            <label class="form-label">قيمة العقد</label>
             <input type="number" formControlName="totalPrice"
-                [class.border-error]="(contractForm.controls.totalPrice.touched && contractForm.controls.totalPrice.invalid)" />
+                [class.border-error]="(contractForm.controls.totalPrice.touched && contractForm.controls.totalPrice.invalid)" class="form-control"/>
             <div *ngIf="contractForm.controls?.totalPrice?.touched" class="errors" animate.enter="error-animation">
                 <p *ngIf="contractForm.controls?.totalPrice?.errors?.['min']">ادخل قيمة صالحة</p>
             </div>
         </div>
-        <div class="field mb">
-            <label>مقدم العقد</label>
+        <div class="col-md-6">
+            <label class="form-label">مقدم العقد</label>
             <input type="number" formControlName="downAmount"
-                [class.border-error]="(contractForm.controls.downAmount.touched && contractForm.controls.downAmount.invalid)" />
+                [class.border-error]="(contractForm.controls.downAmount.touched && contractForm.controls.downAmount.invalid)" class="form-control"/>
             <div *ngIf="contractForm.controls?.downAmount?.touched" class="errors" animate.enter="error-animation">
                 <p *ngIf="contractForm.controls?.downAmount?.errors?.['min']">ادخل قيمة صالحة</p>
 
@@ -56,10 +56,12 @@
                 }
             </div>
         </div>
-        <div class="field mb assigned">
-            <label>موقع ؟</label>
-            <input type="checkbox" formControlName="assigned">
+        <div class="col-md-6 assigned">
+            <label class="form-check-label">موقع ؟</label>
+            <input type="checkbox" formControlName="assigned" class="form-check-input">
         </div>
-    </div>
-    <input type="submit" value="رفع العقد" class="mybtn bg-sub">
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <input type="submit" value="رفع العقد" class="btn bg-sub">
+    </mat-dialog-actions>
 </form>

@@ -7,5 +7,5 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 
 bootstrapApplication(App, appConfig)
   .catch((err) => console.error(err));
-importProvidersFrom(NgxSpinnerModule.forRoot({ type: 'ball-clip-rotate' }));
+importProvidersFrom(NgxSpinnerModule.forRoot({ type: 'square-jelly-box' }));
 provideAnimations();

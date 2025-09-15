@@ -1,10 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
+import { CaseStatus } from '../../../cases list/directives/case-status/case-status';
 
 @Component({
   selector: 'app-case-details-component',
-  imports: [MatTableModule],
+  imports: [MatTableModule, CaseStatus],
   templateUrl: './case-details-component.html',
   styleUrl: './case-details-component.css',
 })

@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { clsFormsBuilder } from '../../../add-case/models/clsforms-builder';
 import { NgIf } from '@angular/common';
+import { MatDialogModule } from "@angular/material/dialog";
 
 @Component({
   selector: 'app-add-poa',
-  imports: [ReactiveFormsModule, NgIf],
+  imports: [ReactiveFormsModule, NgIf, MatDialogModule],
   templateUrl: './add-poa.html',
   styleUrl: './add-poa.css'
 })

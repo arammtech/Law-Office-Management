@@ -177,16 +177,37 @@ textarea {
 }
 
 
+mat-snack-bar-container {
+    margin: 0;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    transform: translateY(-10px);
+    transition: transform 0.3s ;
+}
+
+.d-myflex {
+    display: flex;
+}
+
+.my-justi {
+    justify-content: space-between;
+    align-items: center;
+
+}
 
 .snackbar-success,
 .snackbar-error {
-    --mat-snack-bar-button-color: rgb(4, 1, 1);
-
+    color: white;
+    border-radius: 5px;
 
 }
 
 .mat-mdc-snack-bar-action {
     background-color: rgba(white, 0.2);
+    color: white;
+}
+
+.mdc-button__label {
+    color: white;
 }
 
 .snackbar-success {
@@ -195,7 +216,7 @@ textarea {
 }
 
 .snackbar-error {
-    background-color: #e63528;
+    background-color: #b22e25;
 }
 
 
@@ -303,16 +324,6 @@ ngx-intl-tel-input input[disabled] {
     margin-bottom: 2rem;
 }
 
-
-.d-myflex {
-    display: flex;
-}
-
-.my-justi {
-    justify-content: space-between;
-    align-items: center;
-
-}
 
 .w-fit {
     width: fit-content;

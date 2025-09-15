@@ -1,22 +1,30 @@
 import { inject, Injectable } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar'
+import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ToasterService {
   private snackBar = inject(MatSnackBar);
 
-  success(mes:string, lbl:string) {
-    this.snackBar.open(mes, lbl, {
+  private template(mes: string, lbl?: string, config?: MatSnackBarConfig) {
+    this.snackBar.open(mes, lbl, config);
+  }
+
+  success(mes: string, lbl?: string) {
+    this.template(mes, lbl,  {
       duration: 9000,
-      panelClass: ['snackbar-success']
+      panelClass: ['snackbar-success'],
+      direction: 'rtl',
+      horizontalPosition: 'right',
     });
   }
 
-  error(mes:string, lbl:string) {
-    this.snackBar.open(mes, lbl, {
+  error(mes: string, lbl?: string) {
+    this.template(mes, lbl, {
       duration: 9000,
-      panelClass: ['snackbar-error']
+      panelClass: ['snackbar-error'],
+      direction: 'rtl',
+      horizontalPosition: 'right',
     });
   }
 }

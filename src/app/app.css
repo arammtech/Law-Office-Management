@@ -51,5 +51,5 @@ a:hover {
 
 
 ngx-spinner {
-    z-index: 99;
+    /* z-index: 99; */
 }

@@ -9,6 +9,7 @@ import { CaseService } from '../../../services/case-service';
 import { FormsModule, NgModel } from '@angular/forms';
 import { ICourtDetaills } from '../../models/icourt-detaills';
 import { CaseStatus } from '../../directives/case-status/case-status';
+import { NgClass } from '@angular/common';
 
 export interface PeriodicElement {
   name: string;
@@ -23,17 +24,22 @@ export interface PeriodicElement {
     MatTableModule,
     FormsModule,
     RouterLink,
-    CaseStatus
-],
+    CaseStatus,
+    NgClass,
+  ],
   templateUrl: './cases-list-page.html',
   styleUrl: './cases-list-page.css',
 })
 export class CasesListPage implements OnInit {
+  setActiveButton(code: number) {
+    this.activeButton = code
+  }
+  activeButton:number = 100;
   courts!: ICourtDetaills[];
   tableRowsData!: ICaseRow[];
   casesList!: ICasesList;
-  selectedYear!:string;
-  selectedCourt!:ICourtDetaills;
+  selectedYear!: string;
+  selectedCourt!: ICourtDetaills;
   displayedColumns: string[] = [
     'position',
     'name',
@@ -47,9 +53,11 @@ export class CasesListPage implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.courts = this.activatedRoute.snapshot.data['court'] as ICourtDetaills[];
+    this.courts = this.activatedRoute.snapshot.data[
+      'court'
+    ] as ICourtDetaills[];
     this.selectedCourt = this.courts[0];
-    this.selectedYear = this.selectedCourt?.years[0]
+    this.selectedYear = this.selectedCourt?.years[0];
     this.updateTableData(this.selectedCourt.courtTypeId, this.selectedYear);
   }
 
@@ -71,7 +79,6 @@ export class CasesListPage implements OnInit {
     // console.log('entered year change');
   }
 
-  
   courtChanged(courtId: string) {
     // this.courtId = courtId;
     // this.updateTableData(this.courtId, this.year);
@@ -79,11 +86,11 @@ export class CasesListPage implements OnInit {
   }
 
   updateTableData(courtId: string, year: string) {
-    console.log(`court: ${courtId} and the year is ${year}`)
+    console.log(`court: ${courtId} and the year is ${year}`);
     this.caseService.getCasesList(courtId, year).subscribe({
       next: (data) => {
         this.casesList = data;
-        console.log(data)
+        console.log(data);
       },
     });
   }

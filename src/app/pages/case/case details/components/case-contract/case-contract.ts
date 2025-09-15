@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { AddContract } from '../../dialogs/add-contract/add-contract';
+import { ContractType } from '../../directives/contract-type';
 
 @Component({
   selector: 'app-case-contract',
-  imports: [MatTableModule],
+  imports: [MatTableModule, ContractType],
   templateUrl: './case-contract.html',
   styleUrl: './case-contract.css',
 })

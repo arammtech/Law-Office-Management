@@ -10,6 +10,7 @@ export const loaderInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     finalize(() => {
       delay(10000);
+      console.log('don"t forget me in the loader interceptor');
       loaderService.hideLoader();
     })
   );

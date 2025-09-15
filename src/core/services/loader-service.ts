@@ -12,7 +12,7 @@ export class LoaderService {
       size: 'medium',
       color: '#fff',
       zIndex: 9999,
-      type: 'ball-clip-rotate',
+      type: 'square-jelly-box',
       fullScreen: true,
     });
     this._service.show();

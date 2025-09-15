@@ -1,39 +1,41 @@
 <form [formGroup]="addPOAForm" (ngSubmit)="submit()">
     <a class="btn-del" mat-dialog-close><i class="fa-solid fa-xmark"></i></a>
 
-    <div class="fields">
-        <div class="field mb">
-            <label>رقم الوكالة</label>
+    <mat-dialog-content class="row d-flex g-3">
+        <div class="col-md-6">
+            <label class="form-label">رقم الوكالة</label>
             <input type="file" formControlName="poaNumber" placeholder="لم يتم اختيار الملف"
-                [class.border-error]="(addPOAForm.controls.poaNumber.touched && addPOAForm.controls.poaNumber.invalid)" />
+                [class.border-error]="(addPOAForm.controls.poaNumber.touched && addPOAForm.controls.poaNumber.invalid)" class="form-control"/>
             <div class="errors" *ngIf="addPOAForm.controls.poaNumber.touched" animate.enter="error-animation">
                 <p *ngIf="addPOAForm.controls.poaNumber?.errors?.['required']">هذا الحقل مطلوب</p>
             </div>
         </div>
-        <div class="field mb">
-            <label>تاريخ الاصدار</label>
+        <div class="col-md-6">
+            <label class="form-label">تاريخ الاصدار</label>
             <input type="date" formControlName="poaIssueDate"
-                [class.border-error]="(addPOAForm.controls.poaIssueDate.touched && addPOAForm.controls.poaIssueDate.invalid)" />
+                [class.border-error]="(addPOAForm.controls.poaIssueDate.touched && addPOAForm.controls.poaIssueDate.invalid)" class="form-control"/>
             <div *ngIf="addPOAForm.controls.poaIssueDate.touched" class="errors" animate.enter="error-animation">
                 <p *ngIf="addPOAForm.controls.poaIssueDate.errors?.['required']">هاذا الحقل مطلوب</p>
             </div>
         </div>
-        <div class="field mb">
-            <label>الجهة المصدرة</label>
+        <div class="col-md-6">
+            <label class="form-label">الجهة المصدرة</label>
             <input type="text" formControlName="poaAuthrizedBy"
-                [class.border-error]="(addPOAForm.controls.poaAuthrizedBy.touched && addPOAForm.controls.poaAuthrizedBy.invalid)" />
+                [class.border-error]="(addPOAForm.controls.poaAuthrizedBy.touched && addPOAForm.controls.poaAuthrizedBy.invalid)" class="form-control"/>
             <div class="errors" *ngIf="addPOAForm.controls.poaAuthrizedBy.touched" animate.enter="error-animation">
                 <p *ngIf="addPOAForm.controls.poaAuthrizedBy?.errors?.['required']">هذا الحقل مطلوب</p>
             </div>
         </div>
-        <div class="field mb">
-            <label>مرفق الوكالة</label>
+        <div class="col-md-6">
+            <label class="form-label">مرفق الوكالة</label>
             <input type="file" formControlName="poaAttachment"
-                [class.border-error]="(addPOAForm.controls.poaAttachment.touched && addPOAForm.controls.poaAttachment.invalid)" />
+                [class.border-error]="(addPOAForm.controls.poaAttachment.touched && addPOAForm.controls.poaAttachment.invalid)" class="form-control"/>
             <div class="errors" *ngIf="addPOAForm.controls.poaAttachment.touched" animate.enter="error-animation">
                 <p *ngIf="addPOAForm.controls.poaAttachment?.errors?.['required']">هذا الحقل مطلوب</p>
             </div>
         </div>
-    </div>
-    <input type="submit" value="رفع العقد" class="mybtn bg-sub">
+    </mat-dialog-content>
+    <mat-dialog-actions>
+        <input type="submit" value="رفع العقد" class="btn bg-sub">
+    </mat-dialog-actions>
 </form>
