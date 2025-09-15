@@ -12,55 +12,63 @@ import { caseDetailsResolverResolver } from './pages/case/resolvers/case/case-de
 import { CaseContract } from './pages/case/case details/components/case-contract/case-contract';
 import { CasePoa } from './pages/case/case details/components/case-poa/case-poa';
 import { CaseAttachments } from './pages/case/case details/components/case-attachments/case-attachments';
+import { App } from './app';
 
 export const routes: Routes = [
-  { path: 'login', component: Login },
-  { path: 'home', component: HomeComponent },
+  { path: '', component: Login },
   {
-    path: 'add-case',
-    component: AddCaseComponent,
-    resolve: {
-      court: courtResolverResolver,
-      employeeNames: employeeNamesResolver,
-    },
-  },
-  { path: 'employees', component: MangeEmployeePage },
-  {
-    path: 'cases-list',
-    component: CasesListPage,
-    resolve: {
-      court: courtResolverResolver,
-    },
-  },
-
-  {
-    path: 'case-details/:caseId',
-    component: CaseDetailsPage,
+    path: 'office',
+    component: App,
     children: [
+      {path: '', redirectTo: 'cases-list', pathMatch:'full'},
+      { path: 'home', component: App },
       {
-        path: '',
-        redirectTo: 'case',
-        pathMatch: 'full',
-      },
-      {
-        path: `case`,
-        component: CaseDetailsComponent,
+        path: 'add-case',
+        component: AddCaseComponent,
         resolve: {
-          caseDetails: caseDetailsResolverResolver,
+          court: courtResolverResolver,
+          employeeNames: employeeNamesResolver,
         },
       },
+      { path: 'employees', component: MangeEmployeePage },
       {
-        path: `contracts`,
-        component: CaseContract,
-      },
-      {
-        path: `poas`,
-        component: CasePoa,
+        path: 'cases-list',
+        component: CasesListPage,
+        resolve: {
+          court: courtResolverResolver,
+        },
       },
 
       {
-        path: `attachments`,
-        component: CaseAttachments,
+        path: 'case-details/:caseId',
+        component: CaseDetailsPage,
+        children: [
+          {
+            path: '',
+            redirectTo: 'case',
+            pathMatch: 'full',
+          },
+          {
+            path: `case`,
+            component: CaseDetailsComponent,
+            resolve: {
+              caseDetails: caseDetailsResolverResolver,
+            },
+          },
+          {
+            path: `contracts`,
+            component: CaseContract,
+          },
+          {
+            path: `poas`,
+            component: CasePoa,
+          },
+
+          {
+            path: `attachments`,
+            component: CaseAttachments,
+          },
+        ],
       },
     ],
   },

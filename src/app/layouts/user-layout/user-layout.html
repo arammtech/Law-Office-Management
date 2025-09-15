@@ -1,0 +1,35 @@
+<div class="body row">
+    <nav class="col-2">
+        <div class="logo"><i class="fa-solid fa-gavel"></i></div>
+        <ul>
+            <a class="btn">
+                <i class="fa-solid fa-house"></i> الرئيسية
+            </a>
+            <a routerLink="/add-case" routerLinkActive="bg-accent" class="btn">
+                <i class="fa-solid fa-plus"></i> إضافة قضية
+                جديدة
+            </a>
+            <a routerLink="/cases-list" routerLinkActive="bg-accent" class="btn">
+                <i class="fa-solid fa-sheet-plastic"></i>
+                القضايا المستلمة
+            </a>
+            <a class="btn">
+                <i class="fa-solid fa-gavel"></i> القضايا حسب الصكوك
+            </a>
+            <a class="btn">
+                <i class="fa-solid fa-align-justify"></i> النماذج
+            </a>
+            <a routerLink="/employees" routerLinkActive="bg-accent" class="btn">
+                <i class="fa-solid fa-users"></i> إدارة
+                الموظفين
+            </a>
+        </ul>
+        <div class="logout">
+            <a href="#" class="btn bg-main">تسجيب الخروج</a>
+        </div>
+    </nav>
+    <main class="col-10">
+        <router-outlet></router-outlet>
+    </main>
+<ngx-spinner bdColor = "rgba(0,0,0,0.59)" size = "medium" color = "#fff" type = "square-jelly-box" [fullScreen] = "true"></ngx-spinner>
+</div>
