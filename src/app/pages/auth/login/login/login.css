@@ -45,14 +45,3 @@ h3 {
 .field input {
     width: 100%;
 }
-
-input[type="submit"] {
-    padding: 0.6rem 1rem;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: var(--primary);
-    color: white;
-    font-size: 0.9rem;
-}
-
-

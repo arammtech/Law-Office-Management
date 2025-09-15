@@ -12,14 +12,14 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { JsonPipe, NgIf, NgFor } from '@angular/common';
-import { INewClientForm } from '../../../models/inew-client-form';
-import { clsFormsBuilder } from '../../../models/clsforms-builder';
-import { ToasterService } from '../../../../../../../core/services/toaster-service';
 import {
   NgxIntlTelInputModule,
   NgxIntlTelInputComponent,
 } from 'ngx-intl-tel-input';
 import { Country, CountrySelectComponent } from '@wlucha/ng-country-select';
+import { INewClientForm } from '../../models/inew-client-form';
+import { ToasterService } from '../../../../../../core/services/toaster-service';
+import { clsFormsBuilder } from '../../models/clsforms-builder';
 
 @Component({
   selector: 'app-add-client-component',
@@ -33,8 +33,8 @@ import { Country, CountrySelectComponent } from '@wlucha/ng-country-select';
     NgFor,
     CountrySelectComponent,
   ],
-  templateUrl: './add-client-component.html',
-  styleUrl: './add-client-component.css',
+  templateUrl: './add-client-dialog.html',
+  styleUrl: './add-client-dialog.css',
 })
 export class AddClientComponent implements OnInit {
   clientForm: FormGroup<INewClientForm>;

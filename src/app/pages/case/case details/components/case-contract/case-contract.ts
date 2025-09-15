@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
-import { AddContract } from '../add-contract/add-contract';
+import { AddContract } from '../../dialogs/add-contract/add-contract';
 
 @Component({
   selector: 'app-case-contract',

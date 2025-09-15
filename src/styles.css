@@ -96,11 +96,6 @@ textarea {
 
 }
 
-.mybtn {
-    padding: 0.5rem;
-    border-radius: 6px;
-}
-
 .btn-del {
     color: red;
     padding: 0.1rem 0.4rem;
@@ -321,4 +316,39 @@ ngx-intl-tel-input input[disabled] {
 
 .w-fit {
     width: fit-content;
+}
+
+
+/* library */
+.btn {
+    transition: hover 0.3s;
+    border-color: transparent;
+}
+
+.btn.bg-main:hover {
+    opacity: 0.9;
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+}
+
+.btn.bg-sub:hover {
+    opacity: 0.9;
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
+}
+
+
+.btn.bg-accent:hover {
+    opacity: 0.9;
+    background-color: var(--accent);
+    color: var(--accent-foreground);
+}
+
+
+/*rest classes*/
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--txt);
+    box-shadow: none;
+    outline: none;
 }

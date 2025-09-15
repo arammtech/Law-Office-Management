@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
-import { AddPoa } from '../add-poa/add-poa';
+import { AddPoa } from '../../dialogs/add-poa/add-poa';
 
 @Component({
   selector: 'app-case-poa',

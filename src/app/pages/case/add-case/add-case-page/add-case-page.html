@@ -4,15 +4,16 @@
     <h3>البحث عن العميل</h3>
     <div class="search-box">
         <form #searchForm="ngForm" (ngSubmit)="search(natId)">
-            <div class="field-row">
-                <div class="field flex">
-                    <label for="natId">رقم الهوية</label>
+            <div class="row g-3">
+                <div class="col-md-10">
                     <input type="text" name="natid" [(ngModel)]="natId" #natIdModel="ngModel"
                         [class.border-error]="(natIdModel.invalid && natIdModel.touched) || showErrors" required
-                        maxlength="10" pattern="^\d{10}$" placeholder="أدخل رقم الهوية للبحث" />
+                        maxlength="10" pattern="^\d{10}$" placeholder="أدخل رقم الهوية للبحث" class="form-control" />
                 </div>
-                <input type="submit" value="بحث" [disabled]="searchForm.invalid" [class.disabled]="searchForm.invalid"
-                    class="mybtn bg-sub searchbtn" />
+                <div class="col-md-2">
+                    <input type="submit" value="بحث" [disabled]="searchForm.invalid"
+                        [class.disabled]="searchForm.invalid" class="btn bg-sub searchbtn form-control" />
+                </div>
             </div>
             <div *ngIf="natIdModel.touched || showErrors" class="errors" animate.enter="error-animation">
                 <p *ngIf="natIdModel.errors?.['required']">يجب إدخال رقم الهوية</p>
@@ -47,11 +48,12 @@
 <form [formGroup]="addCaseForm">
     <section formGroupName="case" class="section">
         <h3>بيانات القضية</h3>
-        <div class="fields">
-            <div class="field">
-                <label>موضوع القضية</label>
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">موضوع القضية</label>
                 <input type="text" formControlName="subject" placeholder="أدخل موضوع القضية"
-                    [class.border-error]="(addCaseForm.controls.case.controls.subject.touched && addCaseForm.controls.case.controls.subject.invalid) || showErrors" />
+                    [class.border-error]="(addCaseForm.controls.case.controls.subject.touched && addCaseForm.controls.case.controls.subject.invalid) || showErrors"
+                    class="form-control" />
                 <div class="errors" *ngIf="addCaseForm?.controls?.case?.controls?.subject?.touched"
                     animate.enter="error-animation">
                     <p *ngIf="addCaseForm.controls?.case?.controls?.subject?.errors?.['required']">هذا الحقل مطلوب</p>
@@ -59,53 +61,56 @@
                         الأقل 3 أحرف</p>
                 </div>
             </div>
-            <div class="field">
-                <label>اطراف الدعوى</label>
-                <select formControlName="partiesToTheCase">
+            <div class="col-md-6">
+                <label class="form-label">اطراف الدعوى</label>
+                <select formControlName="partiesToTheCase" class="form-control">
                     <option value="1">مدعي</option>
                     <option value="2">مدعي عليه</option>
                 </select>
             </div>
-            <div class="field">
-                <h2>{{addCaseForm.controls?.case?.controls?.estimatedTime?.errors| json}}</h2>
-                <label>الوقت المتوقع للدراسة</label>
+            <div class="col-md-6">
+                <label class="form-label">الوقت المتوقع للدراسة</label>
                 <input type="date" formControlName="estimatedTime"
-                    [class.border-error]="(addCaseForm.controls.case.controls.estimatedTime.touched && addCaseForm.controls.case.controls.estimatedTime.invalid) || showErrors" />
+                    [class.border-error]="(addCaseForm.controls.case.controls.estimatedTime.touched && addCaseForm.controls.case.controls.estimatedTime.invalid) || showErrors"
+                    class="form-control" />
                 <div *ngIf="addCaseForm.controls?.case?.controls?.estimatedTime?.touched || showErrors" class="errors"
                     animate.enter="error-animation">
                     <p *ngIf="addCaseForm.controls?.case?.controls?.estimatedTime?.errors?.['required']">يرجى تحديد
                         التاريخ</p>
-                    <p *ngIf="addCaseForm.controls?.case?.controls?.estimatedTime?.errors?.['pastDate']">ادخل وقت في الحاضر
+                    <p *ngIf="addCaseForm.controls?.case?.controls?.estimatedTime?.errors?.['pastDate']">ادخل وقت في
+                        الحاضر
                         او المستقبل</p>
                 </div>
             </div>
-            <div class="field">
-                <label>نوع المحكمة</label>
-                <select formControlName="courtType">
+            <div class="col-md-6">
+                <label class="form-label">نوع المحكمة</label>
+                <select formControlName="courtType" class="form-select">
                     <option *ngFor="let court of courts" [value]="court.courtTypeId">{{court.name}}</option>
                 </select>
             </div>
-            <div class="field">
-                <label>الموظف الموكل على القضية</label>
-                <select formControlName="assignedOfficer">
-                    <option *ngFor="let employeeName of employeeNames" [value]="employeeName.id">{{employeeName.name}}</option>
+            <div class="col-md-6">
+                <label class="form-label">الموظف الموكل على القضية</label>
+                <select formControlName="assignedOfficer" class="form-select">
+                    <option *ngFor="let employeeName of employeeNames" [value]="employeeName.id">{{employeeName.name}}
+                    </option>
                 </select>
             </div>
-            <div class="field">
-                <label>رقم القضية</label>
+            <div class="col-md-6">
+                <label class="form-label">رقم القضية</label>
                 <input type="text" formControlName="caseNumber" placeholder="أدخل رقم القضية"
-                    [class.border-error]="(addCaseForm.controls.case.controls.caseNumber.touched && addCaseForm.controls.case.controls.caseNumber.invalid) || showErrors" />
+                    [class.border-error]="(addCaseForm.controls.case.controls.caseNumber.touched && addCaseForm.controls.case.controls.caseNumber.invalid) || showErrors"
+                    class="form-control" />
                 <div class=" errors" *ngIf="addCaseForm.controls?.case?.controls?.caseNumber?.touched || showErrors"
                     animate.enter="error-animation">
                     <p *ngIf="addCaseForm.controls?.case?.controls?.caseNumber?.errors?.['required']">هذا الحقل مطلوب
                     </p>
                 </div>
             </div>
-            <div class="field lawyer-opnion">
-                <label>رأي المحامي</label>
+            <div class="col-12 lawyer-opnion">
+                <label class="form-label">رأي المحامي</label>
                 <textarea formControlName="lawyerOpinion"
                     [class.border-error]="(addCaseForm.controls.case.controls.lawyerOpinion.touched && addCaseForm.controls.case.controls.lawyerOpinion.invalid) || showErrors"
-                    placeholder="رأي المحامي"></textarea>
+                    placeholder="رأي المحامي" class="form-control"></textarea>
                 <div class=" errors" *ngIf="addCaseForm.controls?.case?.controls?.lawyerOpinion?.touched || showErrors"
                     animate.enter="error-animation">
                     <p *ngIf="addCaseForm.controls?.case?.controls?.lawyerOpinion?.errors?.['required']">هذا الحقل مطلوب
@@ -116,8 +121,8 @@
             </div>
         </div>
     </section>
-    <div class="btns">
-        <button type="submit" (click)="submit(false)" class="mybtn bg-sub">إرسال الموافقة</button>
-        <button type="submit" (click)="submit(true)" class="mybtn bg-accent">حفظ كمسودة</button>
+    <div class="btn-group" role="group" aria-label="Buttons Action group">
+        <button type="submit" (click)="submit(false)" class="btn bg-sub">إرسال الموافقة</button>
+        <button type="submit" (click)="submit(true)" class="btn bg-accent">حفظ كمسودة</button>
     </div>
 </form>

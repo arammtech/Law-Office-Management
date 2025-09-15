@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
-import { AddAttachment } from '../add-attachment/add-attachment';
+import { AddAttachment } from '../../dialogs/add-attachment/add-attachment';
 
 @Component({
   selector: 'app-case-attachments',
@@ -12,17 +12,16 @@ import { AddAttachment } from '../add-attachment/add-attachment';
 export class CaseAttachments {
   attachments: IAttachmentRow[] = [
     { name: 'عبدالعزيز', raisedBy: 'عبدالعزيز', rasiedDate: '2025' },
-
   ];
-  
+
   displayedColumns: string[] = ['name', 'raisedDate', 'raisedBy'];
   constructor(private dialogof: MatDialog) {}
 
   openAddAttachment() {
-        this.dialogof.open(AddAttachment, {
-          height: '325x',
-          minWidth: '600px',
-        });
+    this.dialogof.open(AddAttachment, {
+      height: '325x',
+      minWidth: '600px',
+    });
   }
 }
 

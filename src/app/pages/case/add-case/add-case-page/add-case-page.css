@@ -6,16 +6,13 @@ section,
     margin-bottom: 2rem;
 }
 
+
 h3 {
     margin-bottom: 1rem;
     font-size: 1.5rem;
     font-weight: 500;
 }
 
-
-.field {
-    margin-bottom: 1rem;
-}
 
 .parties-container {
     margin-bottom: 1rem;
@@ -44,15 +41,7 @@ h3 {
     display: d;
 }
 
-.lawyer-opnion {
-    grid-column: 2 span;
-    min-height: 20px;
-}
-
-.btns {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
+.btn-group {
     gap: 1rem;
 }
 
@@ -60,37 +49,4 @@ h3 {
     display: flex;
     align-items: center;
     justify-content: space-between;
-}
-/* From Uiverse.io by SelfMadeSystem */
-.container {
-    cursor: pointer;
-    width: fit-content;
-}
-
-.container input {
-    display: none;
-}
-
-.container svg {
-    overflow: visible;
-    width: 20px;
-    height: 20px;
-}
-
-.path {
-    fill: none;
-    stroke: hsl(210 54% 25%);
-    stroke-width: 8;
-    stroke-linecap: round;
-    stroke-linejoin: round;
-    transition: stroke-dasharray 0.5s ease, stroke-dashoffset 0.5s ease;
-    stroke-dasharray: 241 9999999;
-    stroke-dashoffset: 0;
-
-
-}
-
-.container input:checked~svg .path {
-    stroke-dasharray: 70.5096664428711 9999999;
-    stroke-dashoffset: -262.2723388671875;
 }

@@ -1,12 +1,12 @@
+<h3 mat-dialog-title><a class="btn-del" mat-dialog-close><i class="fa-solid fa-xmark"></i></a><span>إضافة عميل جديد</span></h3>
+
 <form [formGroup]="clientForm" (submit)="submit()">
     <div formGroupName="person">
-        <a class="btn-del" mat-dialog-close><i class="fa-solid fa-xmark"></i></a>
-        <h3>إضافة عميل جديد</h3>
-        <div class="fields">
-            <div class="field mb">
-                <label>الاسم الرباعي </label>
+        <mat-dialog-content  class="d-flex row g-3">
+            <div class="col-md-6">
+                <label class="form-label">الاسم الرباعي </label>
                 <input type="text" placeholder="أدخل الاسم الرباعي" formControlName="name"
-                    [class.border-error]="(clientForm.controls.person.controls.name.touched && clientForm.controls.person.controls.name.invalid) || showErrors">
+                    [class.border-error]="(clientForm.controls.person.controls.name.touched && clientForm.controls.person.controls.name.invalid) || showErrors" class="form-control">
                 <div *ngIf="clientForm.controls.person.controls.name?.touched || showErrors" class="errors"
                     animate.enter="error-animation">
                     <p *ngIf="clientForm.controls.person.controls.name?.errors?.['required']">هاذا الحقل مطلوب</p>
@@ -15,14 +15,14 @@
                         او اكثر</p>
                 </div>
             </div>
-            <div class="field mb">
-                <label>رقم الهوية</label>
-                <input type="text" placeholder="أدخل رقم الهوية" readonly class="disabled" formControlName="natId">
+            <div class="col-md-6">
+                <label class="form-label">رقم الهوية</label>
+                <input type="text" placeholder="أدخل رقم الهوية" readonly class="disabled" formControlName="natId" class="form-control">
             </div>
-            <div class="field mb">
-                <label>الجنسية</label>
+            <div class="col-md-6">
+                <label class="form-label">الجنسية</label>
                 <select formControlName="countryCode"
-                    [class.border-error]="(clientForm.controls.person.controls.countryCode.touched && clientForm.controls.person.controls.countryCode.invalid) || showErrors">
+                    [class.border-error]="(clientForm.controls.person.controls.countryCode.touched && clientForm.controls.person.controls.countryCode.invalid) || showErrors" class="form-select">
                     <option *ngFor="let country of counties" [value]="country.alpha2">{{country.translations.ar}}
                     </option>
                 </select>
@@ -32,21 +32,21 @@
                     </p>
                 </div>
             </div>
-            <div class="field mb">
-                <label>تاريخ الميلاد</label>
+            <div class="col-md-6">
+                <label class="form-label">تاريخ الميلاد</label>
                 <input type="date" formControlName="birthDate"
-                    [class.border-error]="(clientForm.controls.person.controls.birthDate.touched && clientForm.controls.person.controls.birthDate.invalid) || showErrors">
+                    [class.border-error]="(clientForm.controls.person.controls.birthDate.touched && clientForm.controls.person.controls.birthDate.invalid) || showErrors" class="form-control"> 
                 <div *ngIf="clientForm.controls.person.controls?.birthDate?.touched || showErrors" class=" errors"
                     animate.enter="error-animation">
                     <p *ngIf="clientForm.controls.person.controls?.birthDate?.errors?.['required']">هاذا الحقل مطلوب</p>
                     <p *ngIf="clientForm.controls.person.controls?.birthDate?.errors?.['minAge']">عمر العميل يجب ان يكون اكبر من 18</p>
                 </div>
             </div>
-            <div class="field mb">
-                <label>رقم الجوال</label>
+            <div class="col-md-6">
+                <label class="form-label">رقم الجوال</label>
                 <ngx-intl-tel-input formControlName="phone" [phoneValidation]="true" [separateDialCode]="true"
                     [preferredCountries]="[clientForm.value.person?.countryCode!.toLowerCase()]"
-                    [searchCountryFlag]="true" [phoneValidation]="true" minlength="9" maxlength="15">
+                    [searchCountryFlag]="true" [phoneValidation]="true" minlength="9" maxlength="15" class="form-control">
                 </ngx-intl-tel-input>
                 <div *ngIf="clientForm.controls.person.controls?.phone?.touched || showErrors" class=" errors"
                     animate.enter="error-animation">
@@ -55,10 +55,10 @@
                     <p *ngIf="clientForm.controls.person.controls?.phone?.errors?.['min']">ادخل اقل من 15 خانة</p>
                 </div>
             </div>
-            <div class="field mb">
-                <label>العنوان</label>
+            <div class="col-md-6">
+                <label class="form-label">العنوان</label>
                 <input type="text" formControlName="address"
-                    [class.border-error]="(clientForm.controls.person.controls.address.touched && clientForm.controls.person.controls.address.invalid) || showErrors">
+                    [class.border-error]="(clientForm.controls.person.controls.address.touched && clientForm.controls.person.controls.address.invalid) || showErrors" class="form-control">
                 <div *ngIf="clientForm.controls.person.controls.address.touched || showErrors" class="errors"
                     animate.enter="error-animation">
                     <p *ngIf="clientForm.controls.person.controls.address?.errors?.['required']">هاذا الحقل مطلوب</p>
@@ -68,11 +68,11 @@
                 </div>
             </div>
 
-            <div class="btns">
-                <button class="mybtn bg-main" type="submit">حفظ العميل</button>
-                <button class="mybtn bg-accent" type="button" mat-dialog-close>إلغاء</button>
-            </div>
-        </div>
+        </mat-dialog-content>
+        <mat-dialog-actions align="start"  class="btn-group g-3" role="group">
+            <button class="btn bg-main" type="submit">حفظ العميل</button>
+            <button class="btn bg-accent" type="button" mat-dialog-close>إلغاء</button>
+        </mat-dialog-actions>
     </div>
 
 </form>

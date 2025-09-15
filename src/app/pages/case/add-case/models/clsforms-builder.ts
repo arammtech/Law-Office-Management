@@ -8,21 +8,20 @@ import { Injectable } from '@angular/core';
 import { INewEmployee } from '../../../employee/components/add-employee/model/iemployee';
 import { IPhone } from './iphone';
 import { minAgeValidator } from '../../../../../shared/validators/minuimum-date.validator';
-import { IAddContract } from '../../case details/components/add-contract/add-contract';
+import { IAddContract } from '../../case details/dialogs/add-contract/add-contract';
 import { featureValidator } from '../../../../../shared/validators/Date/feature-date-validator';
-import { IAddPOAForm } from '../../case details/components/add-poa/add-poa';
-import { IAddAttachmetnForm } from '../../case details/components/add-attachment/add-attachment';
+import { IAddPOAForm } from '../../case details/dialogs/add-poa/add-poa';
+import { IAddAttachmetnForm } from '../../case details/dialogs/add-attachment/add-attachment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class clsFormsBuilder {
-
   createAddAttachmentForm(): FormGroup<IAddAttachmetnForm> {
     return this.fb.group({
       name: this.fb.control(''),
-      attachmentFile: this.fb.control('')
-    })
+      attachmentFile: this.fb.control(''),
+    });
   }
   constructor(private fb: NonNullableFormBuilder) {}
 
@@ -32,7 +31,9 @@ export class clsFormsBuilder {
       partiesToTheCase: this.fb.control(1, {
         validators: [Validators.required],
       }),
-      estimatedTime: this.fb.control(new Date(), { validators: [Validators.required, featureValidator] }),
+      estimatedTime: this.fb.control(new Date(), {
+        validators: [Validators.required, featureValidator],
+      }),
       courtType: this.fb.control(''),
       assignedOfficer: this.fb.control(''),
       caseNumber: this.fb.control(''),
@@ -98,7 +99,6 @@ export class clsFormsBuilder {
     });
   }
 
-  
   createAddContractForm(): FormGroup<IAddContract> {
     return this.fb.group({
       assigned: this.fb.control(false),
@@ -107,17 +107,22 @@ export class clsFormsBuilder {
       downAmount: this.fb.control(0, Validators.min(0)),
       expirationDate: this.fb.control('', Validators.required),
       issueDate: this.fb.control('', Validators.required),
-      contractAttachment: this.fb.control('', {validators:[Validators.required]})
+      contractAttachment: this.fb.control('', {
+        validators: [Validators.required],
+      }),
     });
   }
 
-  
   createAddPOAForm(): FormGroup<IAddPOAForm> {
     return this.fb.group({
-      poaNumber: this.fb.control('', {validators:[Validators.required]}),
-      poaAuthrizedBy: this.fb.control('', {validators:[Validators.required]}),
-      poaIssueDate: this.fb.control(new Date, {validators:[Validators.required]}),
-      poaAttachment: this.fb.control('')
+      poaNumber: this.fb.control('', { validators: [Validators.required] }),
+      poaAuthrizedBy: this.fb.control('', {
+        validators: [Validators.required],
+      }),
+      poaIssueDate: this.fb.control(new Date(), {
+        validators: [Validators.required],
+      }),
+      poaAttachment: this.fb.control(''),
     });
   }
 }

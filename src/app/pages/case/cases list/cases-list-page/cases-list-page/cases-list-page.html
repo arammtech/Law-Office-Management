@@ -6,8 +6,8 @@
         <div class="courts-container d-myflex my-justi w-fit">
             @for (court of courts; track court.courtTypeId; let firstItem = $first) {
             <button (click)="updateTableData(court.courtTypeId, selectedYear)" (click)="onCourtChange(court)"
-                class="mybtn">
-                {{ court.code }}
+                class="btn bg-sub">
+                {{ court.name }}
             </button>
             }
         </div>
