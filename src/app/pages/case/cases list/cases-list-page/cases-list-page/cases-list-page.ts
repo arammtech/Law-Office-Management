@@ -8,6 +8,7 @@ import { ICasesList } from '../../models/i-cases-list';
 import { CaseService } from '../../../services/case-service';
 import { FormsModule, NgModel } from '@angular/forms';
 import { ICourtDetaills } from '../../models/icourt-detaills';
+import { CaseStatus } from '../../directives/case-status/case-status';
 
 export interface PeriodicElement {
   name: string;
@@ -21,7 +22,8 @@ export interface PeriodicElement {
     PageHeaderComponent,
     MatTableModule,
     FormsModule,
-    RouterLink
+    RouterLink,
+    CaseStatus
 ],
   templateUrl: './cases-list-page.html',
   styleUrl: './cases-list-page.css',
