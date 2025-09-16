@@ -75,11 +75,10 @@ export class clsFormsBuilder {
       birthDate: this.fb.control(obj?.birthDate || '', {
         validators: [Validators.required, minAgeValidator(18)],
       }),
-      phone: this.fb.control<IPhone>(obj?.phone || ({} as IPhone), {
+      phone: this.fb.control<string>(obj?.phone || '', {
         validators: [
           Validators.required,
-          Validators.min(9),
-          Validators.max(15),
+          Validators.pattern(/^05\d{8}$/)
         ],
       }),
       address: this.fb.control(obj?.address || '', {

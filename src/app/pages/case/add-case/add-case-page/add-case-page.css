@@ -21,19 +21,22 @@ h3 {
 .parties {
     margin-top: -0.5rem;
     background-color: rgba(210, 210, 210, 0.232);
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding: 0.5rem;
     color: black;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 7px;
+}
+
+.parties p {
+    margin: 0;
 }
 
 .searchbtn {
     height: fit-content;
     align-self: center;
     padding: 0.4rem 1rem;
-}
-
-.myrow {
-    margin-bottom: 1rem;
 }
 
 .disable {
@@ -43,10 +46,4 @@ h3 {
 
 .btn-group {
     gap: 1rem;
-}
-
-.section-chk {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
 }

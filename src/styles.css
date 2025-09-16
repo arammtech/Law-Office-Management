@@ -366,3 +366,8 @@ ngx-intl-tel-input input[disabled] {
     box-shadow: none;
     outline: none;
 }
+
+option:hover {
+    background-color: var(--secondary);
+    color: var(--primary-foreground);
+}

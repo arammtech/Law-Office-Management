@@ -61,7 +61,7 @@ export class AddClientComponent implements OnInit {
   submit() {
     if (this.clientForm.invalid) {
       this.showErrors = true;
-      this.toastService.error('يرجى ملئ الحقول المطلوب', 'حسنا');
+      this.toastService.error('يرجى ملئ الحقول المطلوب');
     } else {
       this.dialogRef.close(this.clientForm);
     }

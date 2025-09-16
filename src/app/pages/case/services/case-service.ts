@@ -40,7 +40,7 @@ export class CaseService {
           fullName: clientGroup.person.name,
           nationalId: clientGroup.person.natId,
           birthDate: clientGroup.person.birthDate,
-          phoneNumber: clientGroup.person.phone.e164Number,
+          phoneNumber: clientGroup.person.phone,
           address: clientGroup.person.address,
           countryCode: clientGroup.person.countryCode,
         },

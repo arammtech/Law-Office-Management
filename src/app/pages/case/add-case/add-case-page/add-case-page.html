@@ -25,7 +25,7 @@
             <p>أطراف القضية المختارة:</p>
             <div>
                 @for(client of addCaseForm.value.existingClients; track client.natId) {
-                <div class="parties mybtn client-id  myrow">
+                <div class="parties client-id  myrow">
                     <p class="flex">رقم الهوية: {{client.natId}}</p>
                     <a class="btn-del" (click)="deleteExistingClient(client.natId!)"><i
                             class="fa-solid fa-xmark"></i></a>
@@ -33,7 +33,7 @@
                 }
 
                 @for(client of addCaseForm.value.newClients; track client.person?.natId) {
-                <div class="parties mybtn client-id  myrow">
+                <div class="parties client-id  myrow">
                     <p class="flex">رقم الهوية: {{client?.person?.natId}}</p>
                     <a class="btn-del" (click)="deleteNewClient(client.person?.natId!)"><i
                             class="fa-solid fa-xmark"></i></a>

@@ -1,5 +1,4 @@
 <h3 mat-dialog-title><a class="btn-del" mat-dialog-close><i class="fa-solid fa-xmark"></i></a><span>إضافة عميل جديد</span></h3>
-
 <form [formGroup]="clientForm" (submit)="submit()">
     <div formGroupName="person">
         <mat-dialog-content  class="d-flex row g-3">
@@ -44,15 +43,11 @@
             </div>
             <div class="col-md-6">
                 <label class="form-label">رقم الجوال</label>
-                <ngx-intl-tel-input formControlName="phone" [phoneValidation]="true" [separateDialCode]="true"
-                    [preferredCountries]="[clientForm.value.person?.countryCode!.toLowerCase()]"
-                    [searchCountryFlag]="true" [phoneValidation]="true" minlength="9" maxlength="15" class="form-control">
-                </ngx-intl-tel-input>
+                <input type="text" formControlName="phone" class="form-control">
                 <div *ngIf="clientForm.controls.person.controls?.phone?.touched || showErrors" class=" errors"
                     animate.enter="error-animation">
                     <p *ngIf="clientForm.controls.person.controls?.phone?.errors?.['required']">هاذا الحقل مطلوب</p>
-                    <p *ngIf="clientForm.controls.person.controls?.phone?.errors?.['min']">ادخل اكثر من 8 خانات</p>
-                    <p *ngIf="clientForm.controls.person.controls?.phone?.errors?.['min']">ادخل اقل من 15 خانة</p>
+                    <p *ngIf="clientForm.controls.person.controls?.phone?.errors?.['pattern']">ادخل رقم هاتف صحيح</p>
                 </div>
             </div>
             <div class="col-md-6">
