@@ -16,6 +16,7 @@ import { ICourtDetaills } from '../cases list/models/icourt-detaills';
 import { CaseAdappter } from '../adappters/case-adappter';
 import { ICseGeneralDetails } from '../case details/components/case-details-component/case-details-component';
 import { IAddContract } from '../case details/dialogs/add-contract/add-contract';
+import { IContractRaw } from '../case details/components/case-contract/case-contract';
 
 @Injectable({
   providedIn: 'root',
@@ -138,5 +139,13 @@ export class CaseService {
     return this.http
       .get<any>(`${this.baseURL}/cases/${caseId}`)
       .pipe(map((res) => this.caseAdappter.fromCaseDetailsAPI(res)));
+  }
+
+  
+  getCaseContracts(caseId: string): Observable<IContractRaw[]> {
+    console.log('i am the id', caseId);
+    return this.http
+      .get<any>(`${this.baseURL}/cases/${caseId}/contracts`)
+      .pipe(map((res) => this.caseAdappter.fromCaseContractsAPI(res)));
   }
 }

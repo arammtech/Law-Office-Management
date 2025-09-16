@@ -13,14 +13,22 @@ import { CaseContract } from './pages/case/case details/components/case-contract
 import { CasePoa } from './pages/case/case details/components/case-poa/case-poa';
 import { CaseAttachments } from './pages/case/case details/components/case-attachments/case-attachments';
 import { App } from './app';
+import { authGuard } from '../core/guards/authGuard/auth-guard';
 
 export const routes: Routes = [
-  { path: '', component: Login },
+  {
+    path: '',
+    children: [
+      { path: '', redirectTo: 'login' ,pathMatch:'full' },
+      { path: 'login', component: Login },
+    ],
+  },
   {
     path: 'office',
-    component: App,
+    canActivate: [authGuard],
+    loadComponent: () => import('././layouts/user-layout/user-layout').then((c) => c.UserLayout),
     children: [
-      {path: '', redirectTo: 'cases-list', pathMatch:'full'},
+      { path: '', redirectTo: 'cases-list', pathMatch: 'full' },
       { path: 'home', component: App },
       {
         path: 'add-case',

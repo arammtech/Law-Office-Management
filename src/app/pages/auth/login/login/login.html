@@ -1,31 +1,34 @@
 <div class="body">
-    <form #credentialForm="ngForm" onsubmit="login()">
-        <div class="icon">icon</div>
-        <div class="text">
-            <h3>نظام إدارة القضايا القانونية</h3>
-            <p>تسجيل الدخول للنظام</p>
-        </div>
-        <div class="content">
-            <div class="field">
-                <label class="required">رقم الهوية</label>
-                <input type="text" name="natId" #natId="ngModel" [class.border-error]="natId.invalid && natId.touched"
-                    [ngModel]="credential.natId" required minlength="10" placeholder="أدخل رقم الهوية">
-                <div class="errors" *ngIf="natId.touched" animate.enter="error-animation">
-                    <p *ngIf="natId?.errors?.['required']">هذا الحقل مطلوب</p>
-                    <p *ngIf="natId?.errors?.['minlength']">يجب أن يكون على الأقل 3 أحرف</p>
+    <h1>{{credential.value | json}}</h1>
+    <form [formGroup]="credential" (ngSubmit)="login()" class="col-lg-3 col-md-6 col-sm-9">
+        <header>
+            <div class="icon">icon</div>
+            <div class="text">
+                <h3>نظام إدارة القضايا القانونية</h3>
+                <p>تسجيل الدخول للنظام</p>
+            </div>
+        </header>
+        <div class="content row g-3">
+            <div class="col-md-12">
+                <label class="form-label">رقم الهوية</label>
+                <input type="text"  [class.border-error]="credential.controls.natId.invalid && credential.controls.natId.touched"
+                    formControlName="natId" required placeholder="أدخل رقم الهوية" class="form-control">
+                <div class="errors" *ngIf="credential.controls.natId.touched" animate.enter="error-animation">
+                    <p *ngIf="credential.controls.natId?.errors?.['required']">هذا الحقل مطلوب</p>
+                    <p *ngIf="credential.controls.natId?.errors?.['minlength']">يجب أن يكون على الأقل 3 أحرف</p>
                 </div>
             </div>
-            <div class="field">
-                <label class="required">كلمة المرور</label>
-                <input type="password" name="password" #password="ngModel"
-                    [class.border-error]="password.touched && password.invalid" [ngModel]="credential.password" required
-                    placeholder="أدخل كلمة المرور">
-                <div class="errors" *ngIf="password.touched" animate.enter="error-animation">
-                    <p *ngIf="password?.errors?.['required']">هذا الحقل مطلوب</p>
+            <div class="col-md-12">
+                <label class="form-label">كلمة المرور</label>
+                <input type="password" formControlName="password"
+                    [class.border-error]="credential.controls.password.touched && credential.controls.password.invalid" required
+                    placeholder="أدخل كلمة المرور" class="form-control">
+                <div class="errors" *ngIf="credential.controls.password.touched" animate.enter="error-animation">
+                    <p *ngIf="credential.controls.password?.errors?.['required']">هذا الحقل مطلوب</p>
                 </div>
             </div>
         </div>
-        <input type="submit" [disabled]="credentialForm.invalid" [class.disabled]="credentialForm.invalid"
-            value="تسجيل الدخول" class="btn bg-main">
+        <input type="submit" [disabled]="credential.invalid" [class.disabled]="credential.invalid"
+            value="تسجيل الدخول" class="btn bg-main w-fill">
     </form>
 </div>

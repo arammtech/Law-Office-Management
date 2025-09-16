@@ -14,7 +14,6 @@ export class CaseDetailsPage {
   constructor(private route: ActivatedRoute) {
     this.route.paramMap.subscribe(params => {
     this.csesId = params.get('caseId')??'';
-    console.log('Case ID:', this.csesId);
   });
   }
 }

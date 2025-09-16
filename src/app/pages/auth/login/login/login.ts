@@ -1,37 +1,36 @@
 import { JsonPipe, NgIf, NgClass } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormsModule, NgModel } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, NgModel, NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { AuthManagement } from '../../../../../core/services/auth/auth-management';
+import { Router } from '@angular/router';
+import { ToasterService } from '../../../../../core/services/toaster-service';
 
-export interface login {
-  natId:string;
-  password:string;
+export interface loginCredtial {
+  natId: FormControl<string>;
+  password: FormControl<string>;
 }
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, JsonPipe, NgIf, NgClass],
+  imports: [FormsModule, NgIf, JsonPipe, ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrl: './login.css',
-  // animations : [
-  //       trigger('fade', [
-  //     // 👇 بدل ما تستخدم animation() القديم
-  //     transition(':enter', [
-  //       style({ opacity: 0, transform: 'translateY(-10px)' }),
-  //       animate('300ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
-  //     ]),
-  // ])]
 })
 export class Login {
-  credential:login;
-  constructor() {
-    this.credential = {
-      natId: '',
-      password: ''
-    }
+  credential: FormGroup<loginCredtial>;
+  constructor(private authService: AuthManagement, private route:Router, private toastService:ToasterService, private fb:NonNullableFormBuilder) {
+    this.credential = this.fb.group({
+      natId: this.fb.control(''),
+      password: this.fb.control('')
+    }) 
+      
   }
   login() {
-
+    this.authService.login(this.credential.controls.natId.value.trim(), this.credential.controls.password.value.trim()).subscribe({
+      next: () => {this.route.navigate(['office']);},
+      error: () => {this.toastService.error('كلمة المرور او اسم المستخدم غير صحيحن');}
+    })
   }
 }

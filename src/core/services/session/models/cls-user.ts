@@ -1,6 +1,7 @@
-export interface clsUser {
-  Id:number;
-  Username:string;
-  Role:string;
-  Expiration:number;
+export interface loggedUser {
+  id:string;
+  username:string;
+  role:string;
+  isTempPassword:boolean;
+  expiration:Date;
 }

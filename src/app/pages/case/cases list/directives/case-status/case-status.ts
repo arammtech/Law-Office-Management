@@ -18,32 +18,33 @@ export class CaseStatus implements AfterViewInit {
   }
 
   private highlight() {
-    this.renderer.setStyle(
-      this.el.nativeElement,
-      'backgroundColor',
-      this.textColor()
-    );
     this.renderer.setStyle(this.el.nativeElement, 'textAlign', 'center');
     this.renderer.setStyle(this.el.nativeElement, 'borderRadius', '50px');
     this.renderer.setStyle(this.el.nativeElement, 'padding', '0.1rem 2rem');
     this.renderer.setStyle(this.el.nativeElement, 'color', 'white');
-    this.renderer.setStyle(this.el.nativeElement, 'boxShadow', 'rgba(0, 0, 0, 0.35) 0px 5px 15px');
+    // this.renderer.setStyle(this.el.nativeElement, 'boxShadow', 'rgba(0, 0, 0, 0.35) 0px 5px 15px');
+    this.customColor();
   }
 
-  private textColor() {
-    console.log(this.el.nativeElement.textContent);
+  private customColor() {
     switch (this.el.nativeElement.innerText) {
       case 'مسودة':
-        return '#4e504ebc';
+        this.renderer.setStyle(this.el.nativeElement, 'backgroundColor', '#4e504e63');
+        this.renderer.setStyle(this.el.nativeElement, 'color', '#4e504eff');
+        break;
 
       case 'نظر':
-        return '#09e427';
+        this.renderer.setStyle(this.el.nativeElement, 'backgroundColor', '#09e42652');
+        this.renderer.setStyle(this.el.nativeElement, 'color', '#00e91fff');
+        break;
 
       case 'معلق':
-        return '#d20c05ff';
+        this.renderer.setStyle(this.el.nativeElement, 'backgroundColor', '#d20c054b');
+        this.renderer.setStyle(this.el.nativeElement, 'color', '#d20c05ff');
+        break;
 
       default:
-        return 'red';
+        break;
     }
   }
 }

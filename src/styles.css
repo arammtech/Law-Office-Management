@@ -329,6 +329,9 @@ ngx-intl-tel-input input[disabled] {
     width: fit-content;
 }
 
+.w-fill {
+    width: 100%;
+}
 
 /* library */
 .btn {

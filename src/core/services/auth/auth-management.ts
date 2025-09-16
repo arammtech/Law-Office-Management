@@ -3,7 +3,7 @@ import { environmentDev } from '../../../environments/environment.development';
 import { Injectable } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { SessionManagement } from '../session/session-management';
-import { clsUser } from '../session/models/cls-user';
+import { loggedUser } from '../session/models/cls-user';
 
 @Injectable({
   providedIn: 'root',
@@ -15,28 +15,80 @@ export class AuthManagement {
   ) {}
   baseURL = environmentDev.baseURL;
 
-  loginUser(nathId: string, password: string): Observable<clsUser> {
+  login(natId: string, password: string): Observable<any> {
+    console.log('the id', natId, 'the password is: ', password);
     return this.http
-      .post<clsUser>(
-        `${this.baseURL}/login`,
-        { nathId, password },
-        { withCredentials: true }
-      )
+      .post<LoginResponse>(`${this.baseURL}/auth/login`, {
+        username: natId,
+        password: password,
+      })
       .pipe(
-        tap((user) => {
-          if (user) {
-            this.sessionService.setSession(user);
+        tap((responses) => {
+          if (responses) {
+            const myLoggedUser: loggedUser = {
+              id: responses.user.userId,
+              expiration: responses.tokenResponse.expiresOn,
+              isTempPassword: responses.user.isUsingTempPassword,
+              username: responses.user.username,
+              role: responses.user.roles[0],
+            };
+            this.sessionService.setSession(myLoggedUser);
           }
         })
       );
   }
 
-  logout(): Observable<clsUser> {
+  logout(): Observable<loggedUser> {
     this.sessionService.endSession();
-    return this.http
-      .post<clsUser>(
-        `${this.baseURL}/logout`,
-        { withCredentials: true }
-      )
+    return this.http.post<loggedUser>(`${this.baseURL}/auth/logout`, {
+      withCredentials: true,
+    });
   }
+
+  refreshToken(): Observable<loggedUser> {
+    return this.http.post<loggedUser>(
+      `${this.baseURL}/auth/token/refresh-token`,
+      null
+    );
+  }
+}
+
+interface LoginResponse {
+  user: {
+    userId:string;
+    email:string;
+    username:string;
+    isUsingTempPassword: boolean;
+    roles:string[];
+    claims: [
+      {
+        issuer: 'string';
+        originalIssuer: 'string';
+        properties: {
+          additionalProp1: 'string';
+          additionalProp2: 'string';
+          additionalProp3: 'string';
+        };
+        subject: {
+          authenticationType: 'string';
+          isAuthenticated: true;
+          actor: 'string';
+          bootstrapContext: 'string';
+          claims: ['string'];
+          label: 'string';
+          name: 'string';
+          nameClaimType: 'string';
+          roleClaimType: 'string';
+        };
+        type: 'string';
+        value: 'string';
+        valueType: 'string';
+      }
+    ];
+  };
+  tokenResponse: {
+    accessToken:string;
+    refreshToken: string;
+    expiresOn: Date;
+  };
 }

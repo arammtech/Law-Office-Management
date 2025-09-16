@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { clsUser } from './models/cls-user';
+import { loggedUser } from './models/cls-user';
 
 @Injectable({
   providedIn: 'root',
@@ -8,11 +8,11 @@ export class SessionManagement {
   private sessionKey = 'user_session';
   
   // Set the session data in localStorage
-  setSession(sessionData: clsUser): void {
+  setSession(sessionData: loggedUser): void {
     localStorage.setItem(this.sessionKey, JSON.stringify(sessionData));
   }
   // Retrieve session data from localStorage
-  getSession(): clsUser | null {
+  getSession(): loggedUser | null {
     const session = localStorage.getItem(this.sessionKey);
     return session ? JSON.parse(session) : null;
   }
@@ -24,9 +24,4 @@ export class SessionManagement {
   isAuthenticated(): boolean {
     return !!this.getSession();
   }
-  // Optionally handle session expiry (add your logic)
-  handleSessionExpiry(): void {
-    // Example: Implement session expiration logic here
-  }
-  IsLoggedIn() {}
 }
