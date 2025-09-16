@@ -9,9 +9,9 @@ import {
 } from '@angular/forms';
 import { MatDialogClose } from '@angular/material/dialog';
 import Swal from 'sweetalert2';
-import { INewEmployee } from '../model/iemployee';
 import { EmployeeService } from '../../../services/employee-service';
-import { clsFormsBuilder } from '../../../../case/add-case/models/clsforms-builder';
+import { clsFormsBuilder } from '../../../../../../core/services/formBuilder/clsforms-builder';
+import { INewEmployee } from '../../../../../../core/models/requests';
 
 @Component({
   selector: 'app-add-employee-component',

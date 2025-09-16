@@ -1,17 +1,11 @@
 import { FormGroup, Validators, NonNullableFormBuilder } from '@angular/forms';
-import { ICaseForm } from './icase-form';
-import { INewClientForm } from './inew-client-form';
-import { IExistingClientForm } from './iexisting-client-form';
-import { IAddCaseForm } from './iadd-case-form';
-import { INewPersonForm } from './inew-person-form';
+import { IAddAttachmetnForm } from '../../../app/pages/case/case details/dialogs/add-attachment/add-attachment';
 import { Injectable } from '@angular/core';
-import { INewEmployee } from '../../../employee/components/add-employee/model/iemployee';
-import { IPhone } from './iphone';
-import { minAgeValidator } from '../../../../../shared/validators/minuimum-date.validator';
-import { IAddContract } from '../../case details/dialogs/add-contract/add-contract';
-import { featureValidator } from '../../../../../shared/validators/Date/feature-date-validator';
-import { IAddPOAForm } from '../../case details/dialogs/add-poa/add-poa';
-import { IAddAttachmetnForm } from '../../case details/dialogs/add-attachment/add-attachment';
+import { IAddContract } from '../../../app/pages/case/case details/dialogs/add-contract/add-contract';
+import { IAddPOAForm } from '../../../app/pages/case/case details/dialogs/add-poa/add-poa';
+import { featureValidator } from '../../../shared/validators/Date/feature-date-validator';
+import { minAgeValidator } from '../../../shared/validators/minuimum-date.validator';
+import { ICaseForm, INewClientForm, IExistingClientForm, INewPersonForm, IAddCaseForm, INewEmployee } from '../../models/requests';
 
 @Injectable({
   providedIn: 'root',

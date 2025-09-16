@@ -17,9 +17,9 @@ import {
   NgxIntlTelInputComponent,
 } from 'ngx-intl-tel-input';
 import { Country, CountrySelectComponent } from '@wlucha/ng-country-select';
-import { INewClientForm } from '../../models/inew-client-form';
 import { ToasterService } from '../../../../../../core/services/toaster-service';
-import { clsFormsBuilder } from '../../models/clsforms-builder';
+import { INewClientForm } from '../../../../../../core/models/requests';
+import { clsFormsBuilder } from '../../../../../../core/services/formBuilder/clsforms-builder';
 
 @Component({
   selector: 'app-add-client-component',

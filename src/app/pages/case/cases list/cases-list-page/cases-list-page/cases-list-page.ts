@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { PageHeaderComponent } from '../../../../../../shared/components/page header/page-header-component/page-header-component';
 import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
-import { ICourt } from '../../../models/icourt';
 import { MatTableModule } from '@angular/material/table';
 import { ICaseRow } from '../../models/i-case-row';
 import { ICasesList } from '../../models/i-cases-list';

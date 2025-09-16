@@ -5,10 +5,10 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { clsFormsBuilder } from '../../../add-case/models/clsforms-builder';
 import { JsonPipe, NgIf } from '@angular/common';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ToasterService } from '../../../../../../core/services/toaster-service';
+import { clsFormsBuilder } from '../../../../../../core/services/formBuilder/clsforms-builder';
 
 @Component({
   selector: 'app-add-contract',

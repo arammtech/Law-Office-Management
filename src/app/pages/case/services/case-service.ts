@@ -2,21 +2,15 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environmentDev } from '../../../../environments/environment.development';
 import { map, Observable } from 'rxjs';
-import { ClientAdapter } from '../add-case/adapters/client-adappter';
-import { IAddCaseForm } from '../add-case/models/iadd-case-form';
-import { INewClientForm } from '../add-case/models/inew-client-form';
-import { IClientDetails } from '../add-case/models/iclient-details';
 import { FormGroup } from '@angular/forms';
-import { CourtAdapter } from '../add-case/adapters/courts/court-adapter';
-import { EmployeeAdapter } from '../add-case/adapters/employee/employee-adapter';
-import { IemployeeName } from '../add-case/models/iemployee-name';
-import { ICourt } from '../models/icourt';
+
 import { ICasesList } from '../cases list/models/i-cases-list';
 import { ICourtDetaills } from '../cases list/models/icourt-detaills';
-import { CaseAdappter } from '../adappters/case-adappter';
 import { ICseGeneralDetails } from '../case details/components/case-details-component/case-details-component';
 import { IAddContract } from '../case details/dialogs/add-contract/add-contract';
 import { IContractRaw } from '../case details/components/case-contract/case-contract';
+import { IAddCaseForm, IClientDetails, IemployeeName } from '../../../../core/models/requests';
+import { Addapter } from '../../../../core/services/addapter/addapter';
 
 @Injectable({
   providedIn: 'root',
@@ -25,10 +19,7 @@ export class CaseService {
   baseURL = environmentDev.baseURL;
   constructor(
     private http: HttpClient,
-    private clientAdappter: ClientAdapter,
-    private courtAdapter: CourtAdapter,
-    private employeeAdapter: EmployeeAdapter,
-    private caseAdappter: CaseAdappter
+    private addapter: Addapter,
   ) {}
 
   toAddCaseAPI(creaCaseForm: FormGroup<IAddCaseForm>, isDraft: boolean): any {
@@ -86,7 +77,7 @@ export class CaseService {
   getClientByNatId(natId: string): Observable<IClientDetails> {
     return this.http
       .get(`${this.baseURL}/clients/national-id/${natId}`)
-      .pipe(map((data) => this.clientAdappter.fromClientDetailsAPI(data)));
+      .pipe(map((data) => this.addapter.fromClientDetailsAPI(data)));
   }
 
   getCourtSDetails(): Observable<ICourtDetaills[]> {
@@ -94,7 +85,7 @@ export class CaseService {
       .get<any[]>(`${this.baseURL}/court-types`)
       .pipe(
         map((data) =>
-          data.map((ele) => this.courtAdapter.fromCourtDetailsAPI(ele))
+          data.map((ele) => this.addapter.fromCourtDetailsAPI(ele))
         )
       );
   }
@@ -104,7 +95,7 @@ export class CaseService {
       .get<any[]>(`${this.baseURL}/employees/names`)
       .pipe(
         map((data) =>
-          data.map((ele) => this.employeeAdapter.fromEmployeeNamesAPI(ele))
+          data.map((ele) => this.addapter.fromEmployeeNamesAPI(ele))
         )
       );
   }
@@ -129,7 +120,7 @@ export class CaseService {
   getCaeDetails(caseId: string): Observable<ICseGeneralDetails> {
     return this.http
       .get<any>(`${this.baseURL}/cases/${caseId}`)
-      .pipe(map((res) => this.caseAdappter.fromCaseDetailsAPI(res)));
+      .pipe(map((res) => this.addapter.fromCaseDetailsAPI(res)));
   }
 
   addContract(
@@ -138,7 +129,7 @@ export class CaseService {
   ): Observable<ICseGeneralDetails> {
     return this.http
       .get<any>(`${this.baseURL}/cases/${caseId}`)
-      .pipe(map((res) => this.caseAdappter.fromCaseDetailsAPI(res)));
+      .pipe(map((res) => this.addapter.fromCaseDetailsAPI(res)));
   }
 
   
@@ -146,6 +137,6 @@ export class CaseService {
     console.log('i am the id', caseId);
     return this.http
       .get<any>(`${this.baseURL}/cases/${caseId}/contracts`)
-      .pipe(map((res) => this.caseAdappter.fromCaseContractsAPI(res)));
+      .pipe(map((res) => this.addapter.fromCaseContractsAPI(res)));
   }
 }

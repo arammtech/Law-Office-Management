@@ -10,15 +10,11 @@ import { CommonModule, JsonPipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { CaseService } from '../../services/case-service';
 import { ErrorResponse } from '../../../../../core/models/error-response';
-import { IAddCaseForm } from '../models/iadd-case-form';
-import { clsFormsBuilder } from '../models/clsforms-builder';
-import { ToasterService } from '../../../../../core/services/toaster-service';
-import { IExistingClientForm } from '../models/iexisting-client-form';
-import { INewClientForm } from '../models/inew-client-form';
-import { IemployeeName } from '../models/iemployee-name';
 import { ActivatedRoute } from '@angular/router';
-import { ICourt } from '../../models/icourt';
 import { AddClientComponent } from '../dialogs/add-client/add-client-dialog';
+import { IAddCaseForm, ICourt, IemployeeName, IExistingClientForm, INewClientForm } from '../../../../../core/models/requests';
+import { clsFormsBuilder } from '../../../../../core/services/formBuilder/clsforms-builder';
+import { ToasterService } from '../../../../../core/services/toaster-service';
 
 @Component({
   selector: 'app-add-case-component',
