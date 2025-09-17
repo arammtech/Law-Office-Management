@@ -15,19 +15,21 @@ import { CaseAttachments } from './pages/case/case details/components/case-attac
 import { App } from './app';
 import { authGuard } from '../core/guards/authGuard/auth-guard';
 import { CaseSesstions } from './pages/case/case details/components/case-sesstions/case-sesstions';
+import { DraftCasesPage } from './pages/case/draft-cases/draft-cases-page/draft-cases-page';
 
 export const routes: Routes = [
   {
     path: '',
     children: [
-      { path: '', redirectTo: 'login' ,pathMatch:'full' },
+      { path: '', redirectTo: 'login', pathMatch: 'full' },
       { path: 'login', component: Login },
     ],
   },
   {
     path: 'office',
     canActivate: [authGuard],
-    loadComponent: () => import('././layouts/user-layout/user-layout').then((c) => c.UserLayout),
+    loadComponent: () =>
+      import('././layouts/user-layout/user-layout').then((c) => c.UserLayout),
     children: [
       { path: '', redirectTo: 'employees', pathMatch: 'full' },
       { path: 'home', component: App },
@@ -82,6 +84,13 @@ export const routes: Routes = [
         resolve: {
           court: courtResolverResolver,
         },
+      },
+      {
+        path: 'draft-cases',
+        component: DraftCasesPage,
+        // resolve: {
+        //   court: courtResolverResolver,
+        // },
       },
     ],
   },

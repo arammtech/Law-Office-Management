@@ -3,12 +3,9 @@ import { Injectable } from '@angular/core';
 import { environmentDev } from '../../../../environments/environment.development';
 import { map, Observable } from 'rxjs';
 import { FormGroup } from '@angular/forms';
-
-import { ICasesList } from '../cases list/models/i-cases-list';
-import { ICourtDetaills } from '../cases list/models/icourt-detaills';
 import { ICseGeneralDetails } from '../case details/components/case-details-component/case-details-component';
 import { IContractRaw } from '../case details/components/case-contract/case-contract';
-import { IAddCaseForm, IAddContract, IClientDetails, IemployeeName } from '../../../../core/models/requests';
+import { IAddCaseForm, IAddContract, ICaseRow, ICasesList, IClientDetails, ICourtDetaills, IemployeeName } from '../../../../core/models/requests';
 import { Addapter } from '../../../../core/services/addapter/addapter';
 
 @Injectable({
@@ -64,12 +61,12 @@ export class CaseService {
     year: string,
     pageNumber: number = 1,
     pageSize: number = 10
-  ): Observable<ICasesList> {
+  ): Observable<ICasesList<ICaseRow>> {
     return this.http
       .get<any>(
         `${this.baseURL}/cases/by-court-type/${courtId}/year/${year}?pageNumber=${pageNumber}&pageSize=${pageSize}`
       )
-      .pipe(map((data) => data as ICasesList));
+      .pipe(map((data) => data as ICasesList<ICaseRow>));
   }
 
   getYearsForCourt(courtId: string): Observable<string[]> {

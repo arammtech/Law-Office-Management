@@ -96,3 +96,43 @@ export interface ISessionsRaw {
   date: string;
   lawyer: string;
 }
+
+
+export interface ICasesList<T> {
+  pageIndex: number;
+  pageSize: number;
+  totalItemsCount: number;
+  itemsCount: number;
+  totalPages: number;
+  hasPreviousPage: boolean;
+  hasNextPage: boolean;
+  items: T[];
+}
+
+
+
+export interface IDraftCaseRow {  
+    caseId: string;
+    stats: string;
+    courtName: string;
+    subject: string;
+}
+
+
+
+export interface ICaseRow {  
+    caseId: string;
+    fileNumber: string;
+    clientName: string;
+    caseNumber: string;
+    status:string;
+}
+
+
+export interface ICourtDetaills {
+  courtTypeId: string;
+  name: string;
+  code: number;
+  description: string;
+  years: string[];
+}

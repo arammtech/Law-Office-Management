@@ -2,20 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { PageHeaderComponent } from '../../../../../../shared/components/page header/page-header-component/page-header-component';
 import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
-import { ICaseRow } from '../../models/i-case-row';
-import { ICasesList } from '../../models/i-cases-list';
 import { CaseService } from '../../../services/case-service';
 import { FormsModule, NgModel } from '@angular/forms';
-import { ICourtDetaills } from '../../models/icourt-detaills';
 import { CaseStatus } from '../../directives/case-status/case-status';
 import { NgClass } from '@angular/common';
+import { ICourtDetaills, ICaseRow, ICasesList } from '../../../../../../core/models/requests';
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
+
 @Component({
   selector: 'app-cases-list-page',
   imports: [
@@ -36,7 +29,7 @@ export class CasesListPage implements OnInit {
   activeButton:number = 100;
   courts!: ICourtDetaills[];
   tableRowsData!: ICaseRow[];
-  casesList!: ICasesList;
+  casesList!: ICasesList<ICaseRow>;
   selectedYear!: string;
   selectedCourt!: ICourtDetaills;
   displayedColumns: string[] = [

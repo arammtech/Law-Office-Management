@@ -1,11 +1,11 @@
 import { FormGroup, NonNullableFormBuilder } from '@angular/forms';
-import { ICourtDetaills } from '../../../app/pages/case/cases list/models/icourt-detaills';
 import {
   INewClientForm,
   IClientDetails,
   IemployeeName,
   IAddCaseForm,
   IAddContract,
+  ICourtDetaills,
 } from '../../models/requests';
 import { IContractRaw } from '../../../app/pages/case/case details/components/case-contract/case-contract';
 import {
