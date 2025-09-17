@@ -1,7 +1,65 @@
-<section>
+<section class="body">
 
-    <header>
-        <app-page-header-component title="إدارة الموظفين" description="إدارة وإضافة موظفي المكتب القانوني"></app-page-header-component>
-        <button class="btn bg-sub" (click)="addEmployee()"><i class="fa-solid fa-plus"></i> إضافة موظف</button>
-    </header>
+    <section class="mb-5">
+        <header class="row align-items">
+            <app-page-header-component title="إدارة الموظفين"
+                description="إدارة وإضافة موظفي المكتب القانوني" class="col-lg-10 col-sm-12"></app-page-header-component>
+            <button class="btn bg-sub col-lg-2 col-sm-12" (click)="addEmployee()"><i class="fa-solid fa-plus"></i> إضافة موظف</button>
+        </header>
+    </section>
+
+
+    <section class="section">
+
+        <div class="table-responsive">
+
+            <table mat-table [dataSource]="employees" class="mat-elevation-z8 table">
+
+                <ng-container [matColumnDef]="displayedColumns[0]">
+                    <th mat-header-cell *matHeaderCellDef>#</th>
+                    <td mat-cell *matCellDef="let i = index"> {{i + 1}} </td>
+                </ng-container>
+
+                <ng-container [matColumnDef]="displayedColumns[1]">
+                    <th mat-header-cell *matHeaderCellDef>الاسم الكامل</th>
+                    <td mat-cell *matCellDef="let element"> <span appContractType>{{element.name}}</span></td>
+                </ng-container>
+
+
+                <ng-container [matColumnDef]="displayedColumns[2]">
+                    <th mat-header-cell *matHeaderCellDef>رقم الهوية</th>
+                    <td mat-cell *matCellDef="let element"> <span appContractType>{{element.natId}}</span></td>
+                </ng-container>
+
+
+                <ng-container [matColumnDef]="displayedColumns[3]">
+                    <th mat-header-cell *matHeaderCellDef>البريد الالكتروني</th>
+                    <td mat-cell *matCellDef="let element"> <span appContractType>{{element.email}}</span></td>
+                </ng-container>
+
+
+                <ng-container [matColumnDef]="displayedColumns[4]">
+                    <th mat-header-cell *matHeaderCellDef>الدور</th>
+                    <td mat-cell *matCellDef="let element"> <span appContractType>{{element.role}}</span></td>
+                </ng-container>
+
+
+                <ng-container [matColumnDef]="displayedColumns[5]">
+                    <th mat-header-cell *matHeaderCellDef>الجنسية</th>
+                    <td mat-cell *matCellDef="let element"> <span appContractType>{{element.countryCode}}</span></td>
+                </ng-container>
+
+
+                <ng-container [matColumnDef]="displayedColumns[6]">
+                    <th mat-header-cell *matHeaderCellDef>الاجراءات</th>
+                    <td mat-cell *matCellDef="let element" class="d-flex gap-3"> 
+                        <a class="btn btn-icon px-2 py-1 "><i class="fa-solid fa-pen-to-square"></i></a> 
+                        <a class="btn btn-icon px-2 py-1"><i class="fa-solid fa-trash"></i></a></td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+    </section>
 </section>
