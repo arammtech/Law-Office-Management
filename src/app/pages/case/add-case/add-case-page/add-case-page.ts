@@ -9,7 +9,6 @@ import {
 import { CommonModule, JsonPipe } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { CaseService } from '../../services/case-service';
-import { ErrorResponse } from '../../../../../core/models/error-response';
 import { ActivatedRoute } from '@angular/router';
 import { AddClientComponent } from '../dialogs/add-client/add-client-dialog';
 import { IAddCaseForm, ICourt, IemployeeName, IExistingClientForm, INewClientForm } from '../../../../../core/models/requests';
@@ -54,14 +53,12 @@ export class AddCaseComponent implements OnInit {
 
   private handelCourtTypes() {
     this.courts = this.activatedRoute.snapshot.data['court'] as ICourt[];
-    console.log('court resolver');
   }
 
   private handelEmployeeNames() {
     this.employeeNames = this.activatedRoute.snapshot.data[
       'employeeNames'
     ] as IemployeeName[];
-    console.log('empolyeenames resolver');
   }
 
   search(natId: string) {
@@ -72,7 +69,6 @@ export class AddCaseComponent implements OnInit {
     } else {
       this.caseService.getClientByNatId(natId).subscribe({
         next: (res) => {
-          //will be handeled throw the adappter
           const existingClient = this.fb.group<IExistingClientForm>({
             Id: this.fb.control(res.id),
             natId: this.fb.control(res.person.value.natId!),
@@ -92,9 +88,8 @@ export class AddCaseComponent implements OnInit {
             .subscribe((result: FormGroup<INewClientForm>) => {
               if (result) {
                 if (result instanceof FormGroup) {
-                  console.log('abudlaziz');
+                  this.addCaseForm?.controls.newClients?.push(result);
                 }
-                this.addCaseForm?.controls.newClients?.push(result);
               }
             });
         },
@@ -132,16 +127,14 @@ export class AddCaseComponent implements OnInit {
   submit(isDraft: boolean) {
     if (this.addCaseForm.invalid) {
       this.showErrors = true;
-      this.toasterService.error('تأكد من ملء جميع الحقول', 'حسنا');
+      this.toasterService.error('تأكد من ملء جميع الحقول');
     } else {
       this.caseService.add(this.addCaseForm, isDraft).subscribe({
         next: (res) => {
-          this.toasterService.success('تمت إضافة القضية بنجاح', 'حسنا');
-          console.log(res);
+          this.toasterService.success('تمت إضافة القضية بنجاح');
         },
         error: (res) => {
-          this.toasterService.error('خطا في اضافة القضية', 'حسنا');
-          console.log(res as ErrorResponse);
+          this.toasterService.error('خطا في اضافة القضية');
         },
       });
     }

@@ -16,7 +16,6 @@ export class AuthManagement {
   baseURL = environmentDev.baseURL;
 
   login(natId: string, password: string): Observable<any> {
-    console.log('the id', natId, 'the password is: ', password);
     return this.http
       .post<LoginResponse>(`${this.baseURL}/auth/login`, {
         username: natId,

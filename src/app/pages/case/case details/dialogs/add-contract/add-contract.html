@@ -4,7 +4,7 @@
     <mat-dialog-content class="row d-flex g-3">
         <div class="col-md-6">
             <label class="form-label">مرفق العقد</label>
-            <input type="file" formControlName="contractAttachment" placeholder="لم يتم اختيار الملف"
+            <input type="file" (change)="onFileChange($event)" formControlName="contractAttachment" placeholder="لم يتم اختيار الملف" 
                 [class.border-error]="(contractForm.controls.contractAttachment.touched && contractForm.controls.contractAttachment.invalid)" class="form-control"/>
             <div class="errors" *ngIf="contractForm.controls.contractAttachment.touched"
                 animate.enter="error-animation">
@@ -62,6 +62,6 @@
         </div>
     </mat-dialog-content>
     <mat-dialog-actions>
-        <input type="submit" value="رفع العقد" class="btn bg-sub">
+        <input type="submit" value="رفع العقد" class="btn bg-sub w-fill">
     </mat-dialog-actions>
 </form>

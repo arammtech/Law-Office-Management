@@ -15,6 +15,7 @@ export interface IAddCaseForm {
 
 export interface ICaseForm {
   subject: FormControl<string>;
+  clientRequests: FormControl<string>
   partiesToTheCase: FormControl<number>;
   estimatedTime: FormControl<Date>;
   courtType: FormControl<string>;
@@ -69,4 +70,15 @@ export interface INewEmployee {
   email: FormControl<string>;
   role: FormControl<string>;
 
+}
+
+
+export interface IAddContract {
+  contractType: FormControl<number>;
+  totalPrice: FormControl<number>;
+  downAmount: FormControl<number>;
+  assigned: FormControl<boolean>;
+  contractAttachment: FormControl<File[] | null>;
+  issueDate: FormControl<string>;
+  expirationDate: FormControl<string>;
 }

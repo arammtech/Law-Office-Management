@@ -28,7 +28,7 @@ export const routes: Routes = [
     canActivate: [authGuard],
     loadComponent: () => import('././layouts/user-layout/user-layout').then((c) => c.UserLayout),
     children: [
-      { path: '', redirectTo: 'cases-list', pathMatch: 'full' },
+      { path: '', redirectTo: 'employees', pathMatch: 'full' },
       { path: 'home', component: App },
       {
         path: 'add-case',
@@ -39,14 +39,6 @@ export const routes: Routes = [
         },
       },
       { path: 'employees', component: MangeEmployeePage },
-      {
-        path: 'cases-list',
-        component: CasesListPage,
-        resolve: {
-          court: courtResolverResolver,
-        },
-      },
-
       {
         path: 'case-details/:caseId',
         component: CaseDetailsPage,
@@ -77,6 +69,13 @@ export const routes: Routes = [
             component: CaseAttachments,
           },
         ],
+      },
+      {
+        path: 'cases-list',
+        component: CasesListPage,
+        resolve: {
+          court: courtResolverResolver,
+        },
       },
     ],
   },

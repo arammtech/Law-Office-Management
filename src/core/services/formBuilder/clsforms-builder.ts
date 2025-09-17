@@ -1,11 +1,10 @@
 import { FormGroup, Validators, NonNullableFormBuilder } from '@angular/forms';
 import { IAddAttachmetnForm } from '../../../app/pages/case/case details/dialogs/add-attachment/add-attachment';
 import { Injectable } from '@angular/core';
-import { IAddContract } from '../../../app/pages/case/case details/dialogs/add-contract/add-contract';
 import { IAddPOAForm } from '../../../app/pages/case/case details/dialogs/add-poa/add-poa';
 import { featureValidator } from '../../../shared/validators/Date/feature-date-validator';
 import { minAgeValidator } from '../../../shared/validators/minuimum-date.validator';
-import { ICaseForm, INewClientForm, IExistingClientForm, INewPersonForm, IAddCaseForm, INewEmployee } from '../../models/requests';
+import { ICaseForm, INewClientForm, IExistingClientForm, INewPersonForm, IAddCaseForm, INewEmployee, IAddContract } from '../../models/requests';
 
 @Injectable({
   providedIn: 'root',
@@ -22,6 +21,7 @@ export class clsFormsBuilder {
   createCaseForm(): FormGroup<ICaseForm> {
     return this.fb.group({
       subject: this.fb.control('', Validators.required),
+      clientRequests: this.fb.control('', Validators.required),
       partiesToTheCase: this.fb.control(1, {
         validators: [Validators.required],
       }),
@@ -100,7 +100,7 @@ export class clsFormsBuilder {
       downAmount: this.fb.control(0, Validators.min(0)),
       expirationDate: this.fb.control('', Validators.required),
       issueDate: this.fb.control('', Validators.required),
-      contractAttachment: this.fb.control('', {
+      contractAttachment: this.fb.control<File[] | null>(null, {
         validators: [Validators.required],
       }),
     });

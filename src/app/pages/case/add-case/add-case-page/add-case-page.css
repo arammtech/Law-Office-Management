@@ -13,6 +13,9 @@ h3 {
     font-weight: 500;
 }
 
+.parties-container > .row {
+    gap: 1rem;
+}
 
 .parties-container {
     margin-bottom: 1rem;

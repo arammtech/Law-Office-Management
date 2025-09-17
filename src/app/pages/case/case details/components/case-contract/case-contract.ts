@@ -38,6 +38,7 @@ export class CaseContract implements OnInit {
     this.dialogof.open(AddContract, {
       height: '325x',
       minWidth: '600px',
+      data: {caseId:this.caseId}
     });
     // .afterClosed()
     // .subscribe((result: FormGroup<INewClientForm>) => {

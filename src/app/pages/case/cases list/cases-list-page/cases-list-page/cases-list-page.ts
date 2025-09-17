@@ -68,12 +68,10 @@ export class CasesListPage implements OnInit {
     //   },
     // });
     this.selectedCourt = court;
-    console.log('entered on court chagne');
   }
 
   yearChanged(year: string) {
     this.selectedYear = year;
-    console.log(this.selectedYear);
     // this.updateTableData(this.courtId, this.year);
     // console.log('entered year change');
   }
@@ -85,11 +83,9 @@ export class CasesListPage implements OnInit {
   }
 
   updateTableData(courtId: string, year: string) {
-    console.log(`court: ${courtId} and the year is ${year}`);
     this.caseService.getCasesList(courtId, year).subscribe({
       next: (data) => {
         this.casesList = data;
-        console.log(data);
       },
     });
   }
