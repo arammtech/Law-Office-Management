@@ -1,0 +1,30 @@
+<section class="section">
+    <header class="d-myflex my-justi">
+        <h3>الجلسات</h3>
+        <button (click)="openAddSession()" class="btn bg-sub">إضافة جلسة</button>
+    </header>
+    <div class="table-responsive">
+
+        <table mat-table [dataSource]="sessions" class="mat-elevation-z8 table">
+            
+            <ng-container [matColumnDef]="displayedColumns[0]">
+                <th mat-header-cell *matHeaderCellDef>#</th>
+                <td mat-cell *matCellDef="let i = index"> {{i + 1}} </td>
+            </ng-container>
+            
+            <ng-container [matColumnDef]="displayedColumns[1]">
+                <th mat-header-cell *matHeaderCellDef>تاريخ الجلسة</th>
+                <td mat-cell *matCellDef="let element"> {{element.date}} </td>
+            </ng-container>
+            
+            <ng-container [matColumnDef]="displayedColumns[2]">
+                <th mat-header-cell *matHeaderCellDef>الموظف الموكل</th>
+                <td mat-cell *matCellDef="let element"> {{element.lawyer}} </td>
+            </ng-container>
+
+            
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+</section>

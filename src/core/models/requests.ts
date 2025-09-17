@@ -82,3 +82,17 @@ export interface IAddContract {
   issueDate: FormControl<string>;
   expirationDate: FormControl<string>;
 }
+
+
+
+
+export interface IAddSessionForm {
+  date: FormControl<Date>;
+  tasks: FormControl<string>;
+  layerId: FormControl<string>;
+}
+
+export interface ISessionsRaw {
+  date: string;
+  lawyer: string;
+}

@@ -4,7 +4,16 @@ import { Injectable } from '@angular/core';
 import { IAddPOAForm } from '../../../app/pages/case/case details/dialogs/add-poa/add-poa';
 import { featureValidator } from '../../../shared/validators/Date/feature-date-validator';
 import { minAgeValidator } from '../../../shared/validators/minuimum-date.validator';
-import { ICaseForm, INewClientForm, IExistingClientForm, INewPersonForm, IAddCaseForm, INewEmployee, IAddContract } from '../../models/requests';
+import {
+  ICaseForm,
+  INewClientForm,
+  IExistingClientForm,
+  INewPersonForm,
+  IAddCaseForm,
+  INewEmployee,
+  IAddContract,
+  IAddSessionForm,
+} from '../../models/requests';
 
 @Injectable({
   providedIn: 'root',
@@ -70,10 +79,7 @@ export class clsFormsBuilder {
         validators: [Validators.required, minAgeValidator(18)],
       }),
       phone: this.fb.control<string>(obj?.phone || '', {
-        validators: [
-          Validators.required,
-          Validators.pattern(/^05\d{8}$/)
-        ],
+        validators: [Validators.required, Validators.pattern(/^05\d{8}$/)],
       }),
       address: this.fb.control(obj?.address || '', {
         validators: [Validators.required, Validators.minLength(10)],
@@ -116,6 +122,14 @@ export class clsFormsBuilder {
         validators: [Validators.required],
       }),
       poaAttachment: this.fb.control(''),
+    });
+  }
+
+  createAddSessionForm(): FormGroup<IAddSessionForm> {
+    return this.fb.group({
+      date: this.fb.control(new Date(), Validators.required),
+      layerId: this.fb.control('', Validators.required),
+      tasks: this.fb.control('', Validators.required),
     });
   }
 }
