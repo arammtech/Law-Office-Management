@@ -13,7 +13,7 @@
                 <i class="fa-solid fa-sheet-plastic"></i>
                 القضايا المستلمة
             </a>
-            <a [routerLink]='["cases-list", "10cf69e8-7f6c-4178-9af4-e0a54414aa0d"]' routerLinkActive="bg-accent" class="btn">
+            <a [routerLink]='["cafdsases-list"]' routerLinkActive="bg-accent" class="btn">
                 <i class="fa-solid fa-gavel"></i> القضايا حسب الصكوك
             </a>
             <a  [routerLink]='["draft-cases"]' routerLinkActive="bg-accent" class="btn">
@@ -25,7 +25,7 @@
             </a>
         </ul>
         <div class="logout">
-            <a href="#" class="btn bg-main">تسجيب الخروج</a>
+            <a (click)="logout()" class="btn bg-main">تسجيب الخروج</a>
         </div>
     </nav>
     <main class="col-10">

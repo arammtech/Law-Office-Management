@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { environmentDev } from '../../../environments/environment.development';
 import { Injectable } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { catchError, map, Observable, tap, throwError } from 'rxjs';
 import { SessionManagement } from '../session/session-management';
 import { loggedUser } from '../session/models/cls-user';
 
@@ -20,19 +20,28 @@ export class AuthManagement {
       .post<LoginResponse>(`${this.baseURL}/auth/login`, {
         username: natId,
         password: password,
-      })
+      },
+      {
+        withCredentials: true
+      }
+    )
       .pipe(
-        tap((responses) => {
+        map((responses) => {
           if (responses) {
+            console.log('in the response', responses);
             const myLoggedUser: loggedUser = {
               id: responses.user.userId,
-              expiration: responses.tokenResponse.expiresOn,
+              expiration: responses.refreshTokenExpiration,
               isTempPassword: responses.user.isUsingTempPassword,
               username: responses.user.username,
               role: responses.user.roles[0],
             };
             this.sessionService.setSession(myLoggedUser);
           }
+        }),
+        catchError((error) => {
+          console.error('Error in login pipe:', error);
+          return throwError(() => error);
         })
       );
   }
@@ -47,8 +56,11 @@ export class AuthManagement {
   refreshToken(): Observable<loggedUser> {
     return this.http.post<loggedUser>(
       `${this.baseURL}/auth/token/refresh-token`,
-      null
-    );
+      {},
+      {
+        withCredentials: true
+      }
+    ).pipe(); // handel the returned expiration token time
   }
 }
 
@@ -85,9 +97,5 @@ interface LoginResponse {
       }
     ];
   };
-  tokenResponse: {
-    accessToken:string;
-    refreshToken: string;
-    expiresOn: Date;
-  };
+  refreshTokenExpiration:Date;
 }

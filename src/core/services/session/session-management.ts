@@ -21,7 +21,7 @@ export class SessionManagement {
     localStorage.removeItem(this.sessionKey);
   }
   // Check if the user is authenticated
-  isAuthenticated(): boolean {
+  isAuthenticated(): boolean {  
     return !!this.getSession();
   }
 }

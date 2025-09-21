@@ -136,3 +136,13 @@ export interface ICourtDetaills {
   description: string;
   years: string[];
 }
+
+
+export interface IEmployeeRow {
+  id: string;
+  name: string;
+  natId: string;
+  countryCode: string;
+  role: string;
+  email: string;
+}

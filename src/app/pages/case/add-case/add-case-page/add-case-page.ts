@@ -11,7 +11,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { CaseService } from '../../services/case-service';
 import { ActivatedRoute } from '@angular/router';
 import { AddClientComponent } from '../dialogs/add-client/add-client-dialog';
-import { IAddCaseForm, ICourt, IemployeeName, IExistingClientForm, INewClientForm } from '../../../../../core/models/requests';
+import {
+  IAddCaseForm,
+  ICourt,
+  IemployeeName,
+  IExistingClientForm,
+  INewClientForm,
+} from '../../../../../core/models/requests';
 import { clsFormsBuilder } from '../../../../../core/services/formBuilder/clsforms-builder';
 import { ToasterService } from '../../../../../core/services/toaster-service';
 
@@ -85,12 +91,14 @@ export class AddCaseComponent implements OnInit {
               data: { NatId: natId },
             })
             .afterClosed()
-            .subscribe((result: FormGroup<INewClientForm>) => {
-              if (result) {
-                if (result instanceof FormGroup) {
-                  this.addCaseForm?.controls.newClients?.push(result);
+            .subscribe({
+              next: (result: FormGroup<INewClientForm>) => {
+                if (result) {
+                  if (result instanceof FormGroup) {
+                    this.addCaseForm?.controls.newClients?.push(result);
+                  }
                 }
-              }
+              },
             });
         },
       });
