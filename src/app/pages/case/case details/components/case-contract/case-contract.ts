@@ -3,12 +3,12 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { AddContract } from '../../dialogs/add-contract/add-contract';
+import { AddContractDialog } from '../../dialogs/add-contract/add-contract';
 import { ContractType } from '../../directives/contract-type';
 import { CaseService } from '../../../services/case-service';
 import { ActivatedRoute } from '@angular/router';
 import { ClsTableUtil } from '../../../../../../shared/util/table/cls-table-util';
-import { EmptyTable } from "../../../../../../shared/components/empty-table/empty-table/empty-table";
+import { EmptyTable } from '../../../../../../shared/components/empty-table/empty-table/empty-table';
 
 @Component({
   selector: 'app-case-contract',
@@ -19,7 +19,13 @@ import { EmptyTable } from "../../../../../../shared/components/empty-table/empt
       useValue: ClsTableUtil.getArabicPaginatorIntl(),
     },
   ],
-  imports: [MatTableModule, ContractType, MatPaginator, MatSortModule, EmptyTable],
+  imports: [
+    MatTableModule,
+    ContractType,
+    MatPaginator,
+    MatSortModule,
+    EmptyTable,
+  ],
   templateUrl: './case-contract.html',
   styleUrl: './case-contract.css',
 })
@@ -79,7 +85,7 @@ export class CaseContract implements OnInit, AfterViewInit {
   };
 
   openAddContract() {
-    this.dialogof.open(AddContract, {
+    this.dialogof.open(AddContractDialog, {
       height: '325x',
       minWidth: '600px',
       data: { caseId: this.caseId },

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddEmployeeComponent } from './add-employee-component';
+import { DialogHeaderComponent } from './dialog-header-component';
 
-describe('AddEmployeeComponent', () => {
-  let component: AddEmployeeComponent;
-  let fixture: ComponentFixture<AddEmployeeComponent>;
+describe('DialogHeaderComponent', () => {
+  let component: DialogHeaderComponent;
+  let fixture: ComponentFixture<DialogHeaderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AddEmployeeComponent]
+      imports: [DialogHeaderComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AddEmployeeComponent);
+    fixture = TestBed.createComponent(DialogHeaderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,0 +1,117 @@
+<app-dialog-header-component title="إضافة موظف جديد" (onClose)="dialogRef.close()"></app-dialog-header-component>
+<mat-dialog-content>
+    <form [formGroup]="employeeForm" id="employeeForm" (ngSubmit)="submit()">
+        <div formGroupName="person" class="d-flex row g-3">
+            <div class="col-md-6">
+                <label class="form-label">الاسم الرباعي </label>
+                <input type="text" placeholder="أدخل الاسم الرباعي" formControlName="name"
+                    [class.border-error]="(employeeForm.controls.person.controls.name.touched && employeeForm.controls.person.controls.name.invalid) || showErrors"
+                    class="form-control">
+                <div *ngIf="employeeForm.controls.person.controls.name?.touched || showErrors" class="errors"
+                    animate.enter="error-animation">
+                    <p *ngIf="employeeForm.controls.person.controls.name?.errors?.['required']">هاذا الحقل مطلوب</p>
+                    <p *ngIf="employeeForm.controls.person.controls.name?.errors?.['minlength']">يجب ان يحتوي الاسم على
+                        3
+                        حروف
+                        او اكثر</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">رقم الهوية</label>
+                <input type="text" placeholder="أدخل رقم الهوية" formControlName="natId"
+                    [class.border-error]="(employeeForm.controls.person.controls.natId.touched && employeeForm.controls.person.controls.natId.invalid) || showErrors"
+                    class="form-control">
+                <div *ngIf="employeeForm.controls.person.controls.natId?.touched || showErrors" class="errors"
+                    animate.enter="error-animation">
+                    <p *ngIf="employeeForm.controls.person.controls.natId?.errors?.['required']">هاذا الحقل مطلوب</p>
+                    <p *ngIf="employeeForm.controls.person.controls.natId?.errors?.['pattern']">يجب ان يحتوي رقم الهوية
+                        على
+                        10 خانات</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">الجنسية</label>
+                <select formControlName="countryCode"
+                    [class.border-error]="(employeeForm.controls.person.controls.countryCode.touched && employeeForm.controls.person.controls.countryCode.invalid) || showErrors"
+                    class="form-select">
+                    <option value="SA">السعودية</option>
+                    <option value="SA">مصر</option>
+                    <option value="SA">سوريا</option>
+                </select>
+                <div *ngIf="employeeForm.controls.person.controls?.countryCode?.touched || showErrors" class=" errors"
+                    animate.enter="error-animation">
+                    <p *ngIf="employeeForm.controls.person.controls?.countryCode?.errors?.['required']">هاذا الحقل مطلوب
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">تاريخ الميلاد</label>
+                <input type="date" formControlName="birthDate"
+                    [class.border-error]="(employeeForm.controls.person.controls.birthDate.touched && employeeForm.controls.person.controls.birthDate.invalid) || showErrors"
+                    class="form-control">
+                <div *ngIf="employeeForm.controls.person.controls?.birthDate?.touched || showErrors" class=" errors"
+                    animate.enter="error-animation">
+                    <p *ngIf="employeeForm.controls.person.controls?.birthDate?.errors?.['required']">هاذا الحقل مطلوب
+                    </p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">رقم الجوال</label>
+                <input type="text" formControlName="phone"
+                    [class.border-error]="(employeeForm.controls.person.controls.phone.touched && employeeForm.controls.person.controls.phone.invalid) || showErrors"
+                    class="form-control">
+                <div *ngIf="employeeForm.controls.person.controls?.phone?.touched || showErrors" class=" errors"
+                    animate.enter="error-animation">
+                    <p *ngIf="employeeForm.controls.person.controls?.phone?.errors?.['required']">هاذا الحقل مطلوب</p>
+                    <p *ngIf="employeeForm.controls.person.controls?.phone?.errors?.['pattern']">رقم الهاتف يتكون من 10
+                        خانات
+                        ويبدا 05</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">العنوان</label>
+                <input type="text" formControlName="address"
+                    [class.border-error]="(employeeForm.controls.person.controls.address.touched && employeeForm.controls.person.controls.address.invalid) || showErrors"
+                    class="form-control">
+                <div *ngIf="employeeForm.controls.person.controls.address.touched || showErrors" class="errors"
+                    animate.enter="error-animation">
+                    <p *ngIf="employeeForm.controls.person.controls.address?.errors?.['required']">هاذا الحقل مطلوب</p>
+                    <p *ngIf="employeeForm.controls.person.controls.address.errors?.['minlength']">يجب ان يكون الحقل
+                        اكثر
+                        من
+                        10 حروف</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <label class="form-label">البريد الالكتروني</label>
+            <input type="text" formControlName="email"
+                [class.border-error]="(employeeForm.controls.email.touched && employeeForm.controls.email.invalid) || showErrors"
+                class="form-control">
+            <div *ngIf="employeeForm.controls.email?.touched || showErrors" class="errors"
+                animate.enter="error-animation">
+                <p *ngIf="employeeForm?.controls?.email?.errors?.['required']">هاذا الحقل مطلوب</p>
+                <p *ngIf="employeeForm?.controls?.email?.errors?.['email']">تأكد من كتابة ايميل صحيح</p>
+            </div>
+        </div>
+        <div class="col-md-12 mb-2">
+            <label class="form-label">الدور</label>
+            <select formControlName="role"
+                [class.border-error]="(employeeForm.controls.role.touched && employeeForm.controls.role.invalid) || showErrors"
+                class="form-select">
+                <option value="1">مدير عام</option>
+                <option value="2">مدير تنفيذي</option>
+                <option value="3">مستشار</option>
+                <option value="4">محامي</option>
+            </select>
+            <div *ngIf="employeeForm.controls.role?.touched || showErrors" class="errors"
+                animate.enter="error-animation">
+                <p *ngIf="employeeForm?.controls?.role?.errors?.['required']">هاذا الحقل مطلوب</p>
+            </div>
+        </div>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions class="btn-group row g-3" role="group">
+    <button class="btn bg-main col-sm-12" type="submit" form="employeeForm">حفظ العميل</button>
+    <button class="btn bg-accent col-sm-12" type="button" mat-dialog-close>إلغاء</button>
+</mat-dialog-actions>

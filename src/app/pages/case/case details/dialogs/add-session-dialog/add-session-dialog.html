@@ -1,11 +1,11 @@
-<form [formGroup]="sessionForm" (ngSubmit)="submit()">
-    <a class="btn-del" mat-dialog-close><i class="fa-solid fa-xmark"></i></a>
-
-    <mat-dialog-content class="row d-flex g-3">
+<app-dialog-header-component title="إضافة جلسة جديدة" (onClose)="dialogRef.close()"></app-dialog-header-component>
+<mat-dialog-content>
+    <form [formGroup]="sessionForm" (ngSubmit)="submit()" class="row d-flex g-3">
         <div class="col-md-6">
             <label class="form-label">تاريخ الجلسة</label>
             <input type="date" formControlName="date"
-                [class.border-error]="(sessionForm.controls.date.touched && sessionForm.controls.date.invalid)" class="form-control"/>
+                [class.border-error]="(sessionForm.controls.date.touched && sessionForm.controls.date.invalid)"
+                class="form-control" />
             <div class="errors" *ngIf="sessionForm.controls.date.touched" animate.enter="error-animation">
                 <p *ngIf="sessionForm.controls.date?.errors?.['required']">هذا الحقل مطلوب</p>
             </div>
@@ -13,9 +13,10 @@
         <div class="col-md-6">
             <label class="form-label">الموظف الموكل</label>
             <select type="date" formControlName="layerId"
-                [class.border-error]="(sessionForm.controls.layerId.touched && sessionForm.controls.layerId.invalid)" class="form-select">
+                [class.border-error]="(sessionForm.controls.layerId.touched && sessionForm.controls.layerId.invalid)"
+                class="form-select">
                 @for(em of employees; track em.id) {
-                    <option [value]="em.id">{{em.name}}</option>
+                <option [value]="em.id">{{em.name}}</option>
                 }
             </select>
             <div *ngIf="sessionForm.controls.layerId.touched" class="errors" animate.enter="error-animation">
@@ -25,13 +26,14 @@
         <div class="col-12">
             <label class="form-label">مهام المحامي</label>
             <textarea formControlName="tasks"
-                [class.border-error]="(sessionForm.controls.tasks.touched && sessionForm.controls.tasks.invalid)" class="form-control"></textarea>
+                [class.border-error]="(sessionForm.controls.tasks.touched && sessionForm.controls.tasks.invalid)"
+                class="form-control"></textarea>
             <div class="errors" *ngIf="sessionForm.controls.tasks.touched" animate.enter="error-animation">
                 <p *ngIf="sessionForm.controls.tasks?.errors?.['required']">هذا الحقل مطلوب</p>
             </div>
         </div>
-    </mat-dialog-content>
-    <mat-dialog-actions>
-        <input type="submit" value="حفظ الجلسة" class="btn bg-sub w-fill">
-    </mat-dialog-actions>
-</form>
+    </form>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <input type="submit" value="حفظ الجلسة" class="btn bg-sub w-fill">
+</mat-dialog-actions>

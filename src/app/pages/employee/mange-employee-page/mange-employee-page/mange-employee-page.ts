@@ -1,7 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { PageHeaderComponent } from '../../../../../shared/components/page header/page-header-component/page-header-component';
 import { MatDialog } from '@angular/material/dialog';
-import { AddEmployeeComponent } from '../../components/add-employee/add-employee-component/add-employee-component';
+import { AddEmployeeComponent } from '../../dialogs/add-employee-component';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import {
   MatPaginator,
@@ -13,7 +13,8 @@ import { Sort, MatSortModule, MatSort } from '@angular/material/sort';
 import { IEmployeeRow } from '../../../../../core/models/requests';
 import { ClsHelpers } from '../../../../../shared/util/helpers/cls-helpers';
 import { ClsTableUtil } from '../../../../../shared/util/table/cls-table-util';
-import { EmptyTable } from "../../../../../shared/components/empty-table/empty-table/empty-table";
+import { EmptyTable } from '../../../../../shared/components/empty-table/empty-table/empty-table';
+import { ScrollStrategyOptions } from '@angular/cdk/overlay';
 @Component({
   selector: 'app-mange-employee-page',
   imports: [
@@ -21,8 +22,8 @@ import { EmptyTable } from "../../../../../shared/components/empty-table/empty-t
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    EmptyTable
-],
+    EmptyTable,
+  ],
   providers: [
     {
       provide: MatPaginatorIntl,
@@ -35,7 +36,7 @@ import { EmptyTable } from "../../../../../shared/components/empty-table/empty-t
 export class MangeEmployeePage {
   sortedData: IEmployeeRow[] = [];
   currentPage: number = 0;
-  
+
   element: IEmployeeRow[] = [
     {
       id: '1',
@@ -903,7 +904,7 @@ export class MangeEmployeePage {
     },
   ];
   employees = new MatTableDataSource<IEmployeeRow>(this.element);
-  
+
   @ViewChild(MatPaginator) paginator: MatPaginator = {} as MatPaginator;
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
 
@@ -931,7 +932,7 @@ export class MangeEmployeePage {
   }
   addEmployee() {
     this.dialogof.open(AddEmployeeComponent, {
-      height: '550px',
+      height: '450px',
       minWidth: '400px',
     });
   }

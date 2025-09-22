@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddPoa } from './add-poa';
+import { AddPoaDialog } from './add-poa';
 
-describe('AddPoa', () => {
-  let component: AddPoa;
-  let fixture: ComponentFixture<AddPoa>;
+describe('AddPoaDialog', () => {
+  let component: AddPoaDialog;
+  let fixture: ComponentFixture<AddPoaDialog>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AddPoa]
+      imports: [AddPoaDialog]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AddPoa);
+    fixture = TestBed.createComponent(AddPoaDialog);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

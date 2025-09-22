@@ -3,9 +3,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
-import { AddPoa } from '../../dialogs/add-poa/add-poa';
+import { AddPoaDialog } from '../../dialogs/add-poa/add-poa';
 import { ClsTableUtil } from '../../../../../../shared/util/table/cls-table-util';
-import { EmptyTable } from "../../../../../../shared/components/empty-table/empty-table/empty-table";
+import { EmptyTable } from '../../../../../../shared/components/empty-table/empty-table/empty-table';
 
 @Component({
   selector: 'app-case-poa',
@@ -59,7 +59,7 @@ export class CasePoa implements AfterViewInit {
   }
 
   openAddPOA(): void {
-    this.dialogof.open(AddPoa, {
+    this.dialogof.open(AddPoaDialog, {
       height: '325x',
       minWidth: '600px',
     });

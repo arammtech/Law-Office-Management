@@ -10,10 +10,10 @@ import {
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
-import { AddAttachment } from '../../dialogs/add-attachment/add-attachment';
+import { AddAttachmentDialog } from '../../dialogs/add-attachment/add-attachment';
 import { ClsTableUtil } from '../../../../../../shared/util/table/cls-table-util';
 import { ClsHelpers } from '../../../../../../shared/util/helpers/cls-helpers';
-import { EmptyTable } from "../../../../../../shared/components/empty-table/empty-table/empty-table";
+import { EmptyTable } from '../../../../../../shared/components/empty-table/empty-table/empty-table';
 
 export interface IAttachmentRow {
   id?: string;
@@ -33,8 +33,8 @@ export interface IAttachmentRow {
     MatSortModule,
     FormsModule,
     DatePipe,
-    EmptyTable
-],
+    EmptyTable,
+  ],
   providers: [
     {
       provide: MatPaginatorIntl,
@@ -46,7 +46,7 @@ export interface IAttachmentRow {
 })
 export class CaseAttachments implements OnInit, AfterViewInit {
   // ViewChild references for pagination and sorting
-  @ViewChild(MatPaginator) paginator : MatPaginator = {} as MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator = {} as MatPaginator;
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
 
   // Component properties
@@ -58,11 +58,11 @@ export class CaseAttachments implements OnInit, AfterViewInit {
 
   // Updated column definitions to match enhanced template
   displayedColumns: string[] = [
-    'index',      // #
-    'name',       // اسم المرفق
+    'index', // #
+    'name', // اسم المرفق
     'rasiedDate', // تاريخ رفع المرفق
-    'raisedBy',   // الموظف
-    'actions'     // الإجراءات
+    'raisedBy', // الموظف
+    'actions', // الإجراءات
   ];
 
   constructor(
@@ -95,51 +95,51 @@ export class CaseAttachments implements OnInit, AfterViewInit {
 
   private initializeAttachments(): void {
     this.attachments = [
-      { 
+      {
         id: '1',
-        name: 'عقد الإيجار الأساسي', 
-        raisedBy: 'عبدالعزيز أحمد', 
+        name: 'عقد الإيجار الأساسي',
+        raisedBy: 'عبدالعزيز أحمد',
         rasiedDate: '2024-12-15',
         fileSize: '2.5 MB',
         fileType: 'PDF',
-        filePath: '/uploads/contract1.pdf'
+        filePath: '/uploads/contract1.pdf',
       },
-      { 
+      {
         id: '2',
-        name: 'تقرير الخبرة القانونية', 
-        raisedBy: 'فاطمة محمد', 
+        name: 'تقرير الخبرة القانونية',
+        raisedBy: 'فاطمة محمد',
         rasiedDate: '2024-12-10',
         fileSize: '1.8 MB',
         fileType: 'PDF',
-        filePath: '/uploads/report1.pdf'
+        filePath: '/uploads/report1.pdf',
       },
-      { 
+      {
         id: '3',
-        name: 'صور المستندات المطلوبة', 
-        raisedBy: 'خالد سالم', 
+        name: 'صور المستندات المطلوبة',
+        raisedBy: 'خالد سالم',
         rasiedDate: '2024-12-08',
         fileSize: '5.2 MB',
         fileType: 'ZIP',
-        filePath: '/uploads/documents.zip'
+        filePath: '/uploads/documents.zip',
       },
-      { 
+      {
         id: '4',
-        name: 'مراسلات المحكمة', 
-        raisedBy: 'نورا علي', 
+        name: 'مراسلات المحكمة',
+        raisedBy: 'نورا علي',
         rasiedDate: '2024-12-05',
         fileSize: '800 KB',
         fileType: 'PDF',
-        filePath: '/uploads/court_letters.pdf'
+        filePath: '/uploads/court_letters.pdf',
       },
-      { 
+      {
         id: '5',
-        name: 'شهادات الشهود', 
-        raisedBy: 'عبدالعزيز أحمد', 
+        name: 'شهادات الشهود',
+        raisedBy: 'عبدالعزيز أحمد',
         rasiedDate: '2024-12-03',
         fileSize: '1.2 MB',
         fileType: 'PDF',
-        filePath: '/uploads/witness_statements.pdf'
-      }
+        filePath: '/uploads/witness_statements.pdf',
+      },
     ];
   }
 
@@ -199,7 +199,7 @@ export class CaseAttachments implements OnInit, AfterViewInit {
     console.log('Downloading attachment:', attachment);
     // Implement download logic here
     // Example: window.open(attachment.filePath, '_blank');
-    
+
     // Create a temporary download link
     const link = document.createElement('a');
     link.href = attachment.filePath || '#';
@@ -221,16 +221,18 @@ export class CaseAttachments implements OnInit, AfterViewInit {
 
   deleteAttachment(attachment: IAttachmentRow): void {
     console.log('Deleting attachment:', attachment);
-    
+
     if (confirm(`هل أنت متأكد من حذف المرفق "${attachment.name}"؟`)) {
       // Remove from data source
       const currentData = this.attachmentsDataSource.data;
-      const updatedData = currentData.filter(item => item.id !== attachment.id);
+      const updatedData = currentData.filter(
+        (item) => item.id !== attachment.id
+      );
       this.attachmentsDataSource.data = updatedData;
-      
+
       // Update the original array as well
       this.attachments = updatedData;
-      
+
       console.log('Attachment deleted successfully');
       // Here you would typically call an API to delete from server
       // this.attachmentService.deleteAttachment(attachment.id)
@@ -238,17 +240,16 @@ export class CaseAttachments implements OnInit, AfterViewInit {
   }
 
   openAddAttachment(): void {
-    const dialogRef = this.dialogof.open(AddAttachment, {
-      height: '400px',
-      minWidth: '600px',
-      maxWidth: '800px',
+    const dialogRef = this.dialogof.open(AddAttachmentDialog, {
+      height: '300px',
+      width: '900px',
       disableClose: true,
       data: {
-        title: 'إضافة مرفق جديد'
-      }
+        title: 'إضافة مرفق جديد',
+      },
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result) => {
       if (result) {
         // Add the new attachment to the data source
         const newAttachment: IAttachmentRow = {
@@ -258,7 +259,7 @@ export class CaseAttachments implements OnInit, AfterViewInit {
           rasiedDate: new Date().toISOString().split('T')[0],
           fileSize: result.fileSize || 'غير معروف',
           fileType: result.fileType || 'غير معروف',
-          filePath: result.filePath || ''
+          filePath: result.filePath || '',
         };
 
         // Add to both arrays
@@ -285,23 +286,25 @@ export class CaseAttachments implements OnInit, AfterViewInit {
   }
 
   getUniqueEmployees(): string[] {
-    const employees = this.attachments.map(att => att.raisedBy).filter(Boolean);
+    const employees = this.attachments
+      .map((att) => att.raisedBy)
+      .filter(Boolean);
     return [...new Set(employees)].sort();
   }
 
   // Get file type icon class
   getFileTypeIcon(fileType: string): string {
     const iconMap: { [key: string]: string } = {
-      'PDF': 'fa-file-pdf text-danger',
-      'DOC': 'fa-file-word text-primary',
-      'DOCX': 'fa-file-word text-primary',
-      'XLS': 'fa-file-excel text-success',
-      'XLSX': 'fa-file-excel text-success',
-      'PNG': 'fa-file-image text-info',
-      'JPG': 'fa-file-image text-info',
-      'JPEG': 'fa-file-image text-info',
-      'ZIP': 'fa-file-archive text-warning',
-      'RAR': 'fa-file-archive text-warning',
+      PDF: 'fa-file-pdf text-danger',
+      DOC: 'fa-file-word text-primary',
+      DOCX: 'fa-file-word text-primary',
+      XLS: 'fa-file-excel text-success',
+      XLSX: 'fa-file-excel text-success',
+      PNG: 'fa-file-image text-info',
+      JPG: 'fa-file-image text-info',
+      JPEG: 'fa-file-image text-info',
+      ZIP: 'fa-file-archive text-warning',
+      RAR: 'fa-file-archive text-warning',
     };
 
     return iconMap[fileType?.toUpperCase()] || 'fa-file text-muted';
@@ -309,14 +312,14 @@ export class CaseAttachments implements OnInit, AfterViewInit {
 
   // Export functionality
   exportAttachmentsList(): void {
-    const dataToExport = this.attachmentsDataSource.filteredData.map(att => ({
+    const dataToExport = this.attachmentsDataSource.filteredData.map((att) => ({
       'اسم المرفق': att.name,
       'تاريخ الرفع': att.rasiedDate,
       'رفع بواسطة': att.raisedBy,
       'نوع الملف': att.fileType,
-      'حجم الملف': att.fileSize
+      'حجم الملف': att.fileSize,
     }));
-    
+
     console.log('Exporting attachments list:', dataToExport);
     // Implement CSV export logic here
   }

@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "start:ssl": "ng serve --ssl --ssl-cert ./localhost.crt --ssl-key ./localhost.key --open"
   },
   "prettier": {
     "overrides": [

@@ -20,6 +20,7 @@ import { Country, CountrySelectComponent } from '@wlucha/ng-country-select';
 import { ToasterService } from '../../../../../../core/services/toaster-service';
 import { INewClientForm } from '../../../../../../core/models/requests';
 import { clsFormsBuilder } from '../../../../../../core/services/formBuilder/clsforms-builder';
+import { DialogHeaderComponent } from "../../../../../../shared/components/dialog-header/dialog-header-component/dialog-header-component";
 
 @Component({
   selector: 'app-add-client-component',
@@ -32,7 +33,8 @@ import { clsFormsBuilder } from '../../../../../../core/services/formBuilder/cls
     NgxIntlTelInputModule,
     NgFor,
     CountrySelectComponent,
-  ],
+    DialogHeaderComponent
+],
   templateUrl: './add-client-dialog.html',
   styleUrl: './add-client-dialog.css',
 })
@@ -42,7 +44,7 @@ export class AddClientComponent implements OnInit {
   counties:any;
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private dialogRef: MatDialogRef<AddClientComponent>,
+    public dialogRef: MatDialogRef<AddClientComponent>,
     private formBuilder: clsFormsBuilder,
     private toastService: ToasterService,
     private fb: NonNullableFormBuilder
