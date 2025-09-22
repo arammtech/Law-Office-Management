@@ -20,6 +20,7 @@ import {
 } from '../../../../../../core/models/requests';
 import { ClsHelpers } from '../../../../../../shared/util/helpers/cls-helpers';
 import { ClsTableUtil } from '../../../../../../shared/util/table/cls-table-util';
+import { EmptyTable } from "../../../../../../shared/components/empty-table/empty-table/empty-table";
 
 @Component({
   selector: 'app-cases-list-page',
@@ -32,7 +33,8 @@ import { ClsTableUtil } from '../../../../../../shared/util/table/cls-table-util
     RouterLink,
     CaseStatus,
     NgClass,
-  ],
+    EmptyTable
+],
   providers: [
     {
       provide: MatPaginatorIntl,
