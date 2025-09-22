@@ -2,19 +2,6 @@
     height: 100vh;
 }
 
-.mat-mdc-table {
-    background-color: var(--secondary);
-}
-
-.mat-mdc-header-cell {
-    color: hsl(0, 0%, 86%);
-}
-
-.mat-mdc-row:hover {
-    background-color: red;
-
-}
-
 .tb-container {
     height: 500px;
 }

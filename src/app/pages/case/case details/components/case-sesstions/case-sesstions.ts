@@ -1,36 +1,73 @@
-import { Component } from '@angular/core';
-import { MatTableModule } from '@angular/material/table';
-import { AddSessionDialog } from '../../dialogs/add-session-dialog/add-session-dialog';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
+import { AddSessionDialog } from '../../dialogs/add-session-dialog/add-session-dialog';
 import { ISessionsRaw } from '../../../../../../core/models/requests';
+import { ClsTableUtil } from '../../../../../../shared/util/table/cls-table-util';
 
 @Component({
   selector: 'app-case-sesstions',
-  imports: [MatTableModule],
+  standalone: true,
+  providers: [
+    {
+      provide: MatPaginatorIntl,
+      useValue: ClsTableUtil.getArabicPaginatorIntl(),
+    },
+  ],
+  imports: [MatTableModule, MatPaginator, MatSortModule],
   templateUrl: './case-sesstions.html',
   styleUrl: './case-sesstions.css',
 })
-export class CaseSesstions {
-  displayedColumns: string[] = ['possion', 'sessionDate', 'assiseindLawyer'];
-  sessions: ISessionsRaw[] = [
-    { date: new Date('2025-01-02').toDateString(), lawyer: 'عبدالعزيز حسن' },
-    { date: new Date('2025-01-02').toDateString(), lawyer: 'عبدالعزيز حسن' },
-    { date: new Date('2025-01-02').toDateString(), lawyer: 'عبدالعزيز حسن' },
-    { date: new Date('2025-01-02').toDateString(), lawyer: 'عبدالعزيز حسن' },
-    { date: new Date('2025-01-02').toDateString(), lawyer: 'عبدالعزيز حسن' },
-    { date: new Date('2025-01-02').toDateString(), lawyer: 'عبدالعزيز حسن' },
-  ];
+export class CaseSesstions implements AfterViewInit {
+  displayedColumns: string[] = ['index', 'date', 'lawyer'];
+  sessionsDataSource = new MatTableDataSource<ISessionsRaw>();
+  currentPage = 0;
 
-  /**
-   *
-   */
-  constructor(private dialogof: MatDialog) {}
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
-  openAddSession() {
+  constructor(private dialogof: MatDialog) {
+    const initialSessions: ISessionsRaw[] = [
+      { date: new Date('2025-01-02').toDateString(), lawyer: 'عبدالعزيز حسن' },
+      { date: new Date('2025-01-02').toDateString(), lawyer: 'عبدالعزيز حسن' },
+      { date: new Date('2025-01-02').toDateString(), lawyer: 'عبدالعزيز حسن' },
+      { date: new Date('2025-01-02').toDateString(), lawyer: 'عبدالعزيز حسن' },
+      { date: new Date('2025-01-02').toDateString(), lawyer: 'عبدالعزيز حسن' },
+      { date: new Date('2025-01-02').toDateString(), lawyer: 'عبدالعزيز حسن' },
+    ];
+    this.sessionsDataSource.data = initialSessions;
+  }
+
+  ngAfterViewInit(): void {
+    this.sessionsDataSource.paginator = this.paginator;
+    this.sessionsDataSource.sort = this.sort;
+  }
+
+  filterSessions(event: Event): void {
+    const value = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.sessionsDataSource.filter = value;
+  }
+
+  handlePage(event: any): void {
+    this.currentPage = event.pageIndex;
+  }
+
+  openAddSession(): void {
     this.dialogof.open(AddSessionDialog, {
       height: '325x',
       minWidth: '600px',
     });
   }
-}
 
+  helper = {
+    getCurrentRowNumber: (
+      index: number,
+      pageIndex: number,
+      pageSize: number
+    ): number => {
+      return index + 1 + pageIndex * pageSize;
+    },
+  };
+}

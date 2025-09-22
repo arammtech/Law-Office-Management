@@ -1,32 +1,78 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
+import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { AddPoa } from '../../dialogs/add-poa/add-poa';
+import { ClsTableUtil } from '../../../../../../shared/util/table/cls-table-util';
 
 @Component({
   selector: 'app-case-poa',
-  imports: [MatTableModule],
+  standalone: true,
+  providers: [
+    {
+      provide: MatPaginatorIntl,
+      useValue: ClsTableUtil.getArabicPaginatorIntl(),
+    },
+  ],
+  imports: [MatTableModule, MatPaginator, MatSortModule],
   templateUrl: './case-poa.html',
   styleUrl: './case-poa.css',
 })
-export class CasePoa {
-  POAs: IPOARow[] = [
-    { authorizedBy: 'عبدالعزيز', POAnumber: '4545', POAissueDate: '2025' },
-    { authorizedBy: 'عبدالعزيز', POAnumber: '4545', POAissueDate: '2025' },
-    { authorizedBy: 'عبدالعزيز', POAnumber: '4545', POAissueDate: '2025' },
-    { authorizedBy: 'عبدالعزيز', POAnumber: '4545', POAissueDate: '2025' },
-    { authorizedBy: 'عبدالعزيز', POAnumber: '4545', POAissueDate: '2025' },
+export class CasePoa implements AfterViewInit {
+  displayedColumns: string[] = [
+    'index',
+    'POAnumber',
+    'POAissueDate',
+    'authorizedBy',
   ];
+  POAsDataSource = new MatTableDataSource<IPOARow>();
+  currentPage = 0;
 
-  displayedColumns: string[] = ['poaNumber', 'poaIssueDate', 'authrizedBy'];
-  constructor(private dialogof: MatDialog) {}
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
 
-  openAddPOA() {
+  constructor(private dialogof: MatDialog) {
+    const initialData: IPOARow[] = [
+      { authorizedBy: 'عبدالعزيز', POAnumber: '4545', POAissueDate: '2025' },
+      { authorizedBy: 'عبدالعزيز', POAnumber: '4545', POAissueDate: '2025' },
+      { authorizedBy: 'عبدالعزيز', POAnumber: '4545', POAissueDate: '2025' },
+      { authorizedBy: 'عبدالعزيز', POAnumber: '4545', POAissueDate: '2025' },
+      { authorizedBy: 'عبدالعزيز', POAnumber: '4545', POAissueDate: '2025' },
+    ];
+    this.POAsDataSource.data = initialData;
+  }
+
+  ngAfterViewInit(): void {
+    this.POAsDataSource.paginator = this.paginator;
+    this.POAsDataSource.sort = this.sort;
+  }
+
+  filterPOAs(event: Event): void {
+    const value = (event.target as HTMLInputElement).value.trim().toLowerCase();
+    this.POAsDataSource.filter = value;
+  }
+
+  handlePage(event: any): void {
+    this.currentPage = event.pageIndex;
+  }
+
+  openAddPOA(): void {
     this.dialogof.open(AddPoa, {
       height: '325x',
       minWidth: '600px',
     });
   }
+
+  helper = {
+    getCurrentRowNumber: (
+      index: number,
+      pageIndex: number,
+      pageSize: number
+    ): number => {
+      return index + 1 + pageIndex * pageSize;
+    },
+  };
 }
 
 export interface IPOARow {

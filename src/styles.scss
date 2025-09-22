@@ -20,7 +20,7 @@
   /* Gold Accent #C9A227 */
   --accent: #eaecefff;
   --accent-foreground: rgba(5, 3, 3, 0.792);
-
+  
   --txt: rgba(191, 191, 191, 0.621);
 }
 
@@ -28,14 +28,29 @@ mat-paginator {
   float: right;
 }
 
+.mat-mdc-table {
+  background-color: var(--secondary);
+} 
+.mat-mdc-table thead {
+  background-color: #ececec !important;
+}
+
+
+.mat-mdc-header-cell {
+  color: var(--secondary-foreground);
+}
+
+/* More stylish hover effect */
+.mat-mdc-row {
+  transition: all 0.3s ease;
+}
+
+.mat-mdc-row:hover {
+  // transform: translateY(-1px);
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
 
 // Customize the entire app. Change :root to your selector if you want to scope the styles.
-:root {
-  @include mat.table-overrides((
-    background-color: var(--primary),
-    header-headline-color: red,
-  ));
-}
 
 input,
 textarea {

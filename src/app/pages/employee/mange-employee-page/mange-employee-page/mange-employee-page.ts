@@ -11,6 +11,8 @@ import {
 } from '@angular/material/paginator';
 import { Sort, MatSortModule, MatSort } from '@angular/material/sort';
 import { IEmployeeRow } from '../../../../../core/models/requests';
+import { ClsHelpers } from '../../../../../shared/util/helpers/cls-helpers';
+import { ClsTableUtil } from '../../../../../shared/util/table/cls-table-util';
 @Component({
   selector: 'app-mange-employee-page',
   imports: [
@@ -20,17 +22,18 @@ import { IEmployeeRow } from '../../../../../core/models/requests';
     MatSortModule,
   ],
   providers: [
-    { provide: MatPaginatorIntl, useValue: getArabicPaginatorIntl() },
+    {
+      provide: MatPaginatorIntl,
+      useValue: ClsTableUtil.getArabicPaginatorIntl(),
+    },
   ],
   templateUrl: './mange-employee-page.html',
   styleUrl: './mange-employee-page.css',
 })
 export class MangeEmployeePage {
-  filter($event: any) {
-    this.employees.filter = $event.target.value;
-  }
   sortedData: IEmployeeRow[] = [];
   currentPage: number = 0;
+  
   element: IEmployeeRow[] = [
     {
       id: '1',
@@ -897,16 +900,11 @@ export class MangeEmployeePage {
       email: 'fahad.consult@lawfirm.sa',
     },
   ];
-
   employees = new MatTableDataSource<IEmployeeRow>(this.element);
-
+  
   @ViewChild(MatPaginator) paginator: MatPaginator = {} as MatPaginator;
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
 
-  ngAfterViewInit() {
-    this.employees.paginator = this.paginator;
-    this.employees.sort = this.sort;
-  }
   displayedColumns: string[] = [
     'positon',
     'name',
@@ -916,32 +914,23 @@ export class MangeEmployeePage {
     'countryCode',
     'actions',
   ];
-  constructor(private dialogof: MatDialog) {}
+  constructor(private dialogof: MatDialog, public helper: ClsHelpers) {}
 
+  ngAfterViewInit() {
+    this.employees.paginator = this.paginator;
+    this.employees.sort = this.sort;
+  }
+
+  handelPage($event: PageEvent) {
+    console.log($event);
+  }
+  filter($event: any) {
+    this.employees.filter = $event.target.value;
+  }
   addEmployee() {
     this.dialogof.open(AddEmployeeComponent, {
       height: '550px',
       minWidth: '400px',
     });
   }
-
-  handelPage($event: PageEvent) {
-    console.log($event);
-  }
-}
-
-export function getArabicPaginatorIntl(): MatPaginatorIntl {
-  const paginatorIntl = new MatPaginatorIntl();
-  paginatorIntl.itemsPerPageLabel = 'عدد العناصر في الصفحة';
-  paginatorIntl.nextPageLabel = 'الصفحة التالية';
-  paginatorIntl.previousPageLabel = 'الصفحة السابقة';
-  paginatorIntl.firstPageLabel = 'الصفحة الأولى';
-  paginatorIntl.lastPageLabel = 'الصفحة الأخيرة';
-  paginatorIntl.getRangeLabel = (page, pageSize, length) => {
-    if (length === 0 || pageSize === 0) return `0 من ${length}`;
-    const start = page * pageSize;
-    const end = Math.min(start + pageSize, length);
-    return `${start + 1} - ${end} من ${length}`;
-  };
-  return paginatorIntl;
 }

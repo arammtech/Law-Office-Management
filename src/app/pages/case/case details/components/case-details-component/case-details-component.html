@@ -18,38 +18,63 @@
         </div>
     </section>
 </section>
-
 <section class="section">
-    <header>
-        <h3>اطراف القضية</h3>
-    </header>
+  <header><h3>اطراف القضية</h3></header>
 
-    <div class="table-responsive">
-
-        <table mat-table [dataSource]="case.caseParites" class="mat-elevation-z8 table">
-            
-            <ng-container [matColumnDef]="displayedColumns[0]">
-                <th mat-header-cell *matHeaderCellDef> اسم العميل</th>
-                <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-            </ng-container>
-
-            <ng-container [matColumnDef]="displayedColumns[1]">
-                <th mat-header-cell *matHeaderCellDef> رقم الهوية </th>
-                <td mat-cell *matCellDef="let element"> {{element.natId}} </td>
-            </ng-container>
-
-            <ng-container [matColumnDef]="displayedColumns[2]">
-                <th mat-header-cell *matHeaderCellDef> رقم الهاتف </th>
-                <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
-            </ng-container>
-
-            <ng-container [matColumnDef]="displayedColumns[3]">
-                <th mat-header-cell *matHeaderCellDef> الجنسية </th>
-                <td mat-cell *matCellDef="let element"> السعودية </td>
-            </ng-container>
-            
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
+  <div class="row justify-content-between mb-3">
+    <!-- Filter Input -->
+    <div class="col-4 mb-2">
+      <input type="text" placeholder="ابحث في الأطراف..." (keyup)="filterParties($event)" class="form-control">
     </div>
+  </div>
+
+  <div class="table-responsive tb-container">
+    <table matSort mat-table [dataSource]="partiesDataSource" class="mat-elevation-z8 table">
+
+      <!-- Index Column -->
+      <ng-container [matColumnDef]="displayedColumns[0]">
+        <th mat-header-cell *matHeaderCellDef>#</th>
+        <td mat-cell *matCellDef="let i = index">
+          {{ helper.getCurrentRowNumber(i, paginator?.pageIndex || 0, paginator?.pageSize || 20) }}
+        </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container [matColumnDef]="displayedColumns[1]">
+        <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[1]">اسم العميل</th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <!-- National ID Column -->
+      <ng-container [matColumnDef]="displayedColumns[2]">
+        <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[2]">رقم الهوية</th>
+        <td mat-cell *matCellDef="let element"> {{element.natId}} </td>
+      </ng-container>
+
+      <!-- Phone Column -->
+      <ng-container [matColumnDef]="displayedColumns[3]">
+        <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[3]">رقم الهاتف</th>
+        <td mat-cell *matCellDef="let element"> {{element.phoneNumber}} </td>
+      </ng-container>
+
+      <!-- Nationality Column -->
+      <ng-container [matColumnDef]="displayedColumns[4]">
+        <th mat-header-cell *matHeaderCellDef>الجنسية</th>
+        <td mat-cell *matCellDef="let element"> السعودية </td>
+      </ng-container>
+
+      <!-- Header and Row Definitions -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <!-- Pagination -->
+    <mat-paginator
+      [pageSizeOptions]="[10, 20, 30, 40, 50]"
+      (page)="handlePage($event)"
+      [pageIndex]="currentPage"
+      [length]="partiesDataSource.filteredData.length"
+      pageSize="20">
+    </mat-paginator>
+  </div>
 </section>

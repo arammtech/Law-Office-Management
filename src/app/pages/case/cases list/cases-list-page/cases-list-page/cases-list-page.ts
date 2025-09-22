@@ -1,85 +1,220 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { PageHeaderComponent } from '../../../../../../shared/components/page header/page-header-component/page-header-component';
 import { ActivatedRoute, RouterLink, RouterLinkActive } from '@angular/router';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
+import {
+  MatPaginator,
+  MatPaginatorModule,
+  MatPaginatorIntl,
+  PageEvent,
+} from '@angular/material/paginator';
+import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { CaseService } from '../../../services/case-service';
 import { FormsModule, NgModel } from '@angular/forms';
 import { CaseStatus } from '../../directives/case-status/case-status';
 import { NgClass } from '@angular/common';
-import { ICourtDetaills, ICaseRow, ICasesList } from '../../../../../../core/models/requests';
-
+import {
+  ICourtDetaills,
+  ICaseRow,
+  ICasesList,
+} from '../../../../../../core/models/requests';
+import { ClsHelpers } from '../../../../../../shared/util/helpers/cls-helpers';
+import { ClsTableUtil } from '../../../../../../shared/util/table/cls-table-util';
 
 @Component({
   selector: 'app-cases-list-page',
   imports: [
     PageHeaderComponent,
     MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
     FormsModule,
     RouterLink,
     CaseStatus,
     NgClass,
   ],
+  providers: [
+    {
+      provide: MatPaginatorIntl,
+      useValue: ClsTableUtil.getArabicPaginatorIntl(),
+    },
+  ],
   templateUrl: './cases-list-page.html',
   styleUrl: './cases-list-page.css',
 })
-export class CasesListPage implements OnInit {
-  setActiveButton(code: number) {
-    this.activeButton = code
-  }
-  activeButton:number = 100;
+export class CasesListPage implements OnInit, AfterViewInit {
+  // ViewChild references for pagination and sorting
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+
+  // Component properties
+  activeButton: number = 100;
+  currentPage: number = 0;
   courts!: ICourtDetaills[];
   tableRowsData!: ICaseRow[];
   casesList!: ICasesList<ICaseRow>;
   selectedYear!: string;
   selectedCourt!: ICourtDetaills;
+
+  // Enhanced data source for table functionality
+  casesDataSource = new MatTableDataSource<ICaseRow>([]);
+
+  // Updated column definitions to match your template
   displayedColumns: string[] = [
-    'position',
-    'name',
-    'weight',
-    'symbol',
-    'التفاصيل ',
+    'position', // Index column
+    'fileNumber', // رقم الملف
+    'clientName', // اسم العميل
+    'caseNumber', // رقم القضية
+    'status', // حالة القضية
+    'details', // التفاصيل
   ];
+
   constructor(
     private activatedRoute: ActivatedRoute,
-    private caseService: CaseService
+    private caseService: CaseService,
+    public helper: ClsHelpers // Added helper for index calculation
   ) {}
 
   ngOnInit(): void {
+    this.initializeComponent();
+  }
+
+  ngAfterViewInit(): void {
+    // Connect paginator and sort to data source
+    this.casesDataSource.paginator = this.paginator;
+    this.casesDataSource.sort = this.sort;
+
+    // Configure custom filter predicate for Arabic text
+    this.casesDataSource.filterPredicate = (data: ICaseRow, filter: string) => {
+      const filterValue = filter.trim().toLowerCase();
+      return (
+        data.fileNumber?.toString().toLowerCase().includes(filterValue) ||
+        data.clientName?.toLowerCase().includes(filterValue) ||
+        data.caseNumber?.toString().toLowerCase().includes(filterValue) ||
+        data.status?.toLowerCase().includes(filterValue)
+      );
+    };
+  }
+
+  private initializeComponent(): void {
     this.courts = this.activatedRoute.snapshot.data[
       'court'
     ] as ICourtDetaills[];
-    this.selectedCourt = this.courts[0];
-    this.selectedYear = this.selectedCourt?.years[0];
-    this.updateTableData(this.selectedCourt.courtTypeId, this.selectedYear);
+
+    if (this.courts && this.courts.length > 0) {
+      this.selectedCourt = this.courts[0];
+      this.selectedYear = this.selectedCourt?.years[0];
+      this.setActiveButton(this.selectedCourt.code);
+      this.updateTableData(this.selectedCourt.courtTypeId, this.selectedYear);
+    }
   }
 
-  onCourtChange(court: ICourtDetaills) {
-    // this.caseService.getYearsForCourt(courtId).subscribe({
-    //   next: (years) => {
-    //     this.years = years;
-    //     this.courtChanged(courtId);
-    //   },
-    // });
+  setActiveButton(code: number): void {
+    this.activeButton = code;
+  }
+
+  onCourtChange(court: ICourtDetaills): void {
     this.selectedCourt = court;
+    this.selectedYear = court.years[0]; // Reset to first year of selected court
+    this.updateTableData(court.courtTypeId, this.selectedYear);
   }
 
-  yearChanged(year: string) {
+  yearChanged(year: string): void {
     this.selectedYear = year;
-    // this.updateTableData(this.courtId, this.year);
-    // console.log('entered year change');
   }
 
-  courtChanged(courtId: string) {
-    // this.courtId = courtId;
-    // this.updateTableData(this.courtId, this.year);
-    // console.log('entered court change');
-  }
-
-  updateTableData(courtId: string, year: string) {
+  updateTableData(courtId: string, year: string): void {
     this.caseService.getCasesList(courtId, year).subscribe({
-      next: (data) => {
+      next: (data: ICasesList<ICaseRow>) => {
         this.casesList = data;
+
+        // Update the data source with new data
+        if (data?.items && Array.isArray(data.items)) {
+          this.casesDataSource.data = data.items;
+        } else {
+          this.casesDataSource.data = [];
+        }
+
+        // Reset to first page when data changes
+        if (this.paginator) {
+          this.paginator.firstPage();
+        }
+      },
+      error: (error) => {
+        console.error('Error loading cases:', error);
+        this.casesDataSource.data = [];
       },
     });
+  }
+
+  // Filter function for search
+  filter(event: any): void {
+    const filterValue = event.target.value?.trim() || '';
+    this.casesDataSource.filter = filterValue;
+
+    // Reset to first page when filtering
+    if (this.casesDataSource.paginator) {
+      this.casesDataSource.paginator.firstPage();
+    }
+  }
+
+  // Handle pagination changes
+  handlePage(event: PageEvent): void {
+    this.currentPage = event.pageIndex;
+    console.log('Page changed:', event);
+  }
+
+  // Handle sort changes
+  handleSort(sortState: Sort): void {
+    console.log('Sort changed:', sortState);
+  }
+
+  // Utility methods
+  getTotalCases(): number {
+    return this.casesDataSource?.data?.length || 0;
+  }
+
+  getFilteredCases(): number {
+    return this.casesDataSource?.filteredData?.length || 0;
+  }
+
+  hasData(): boolean {
+    return this.getTotalCases() > 0;
+  }
+
+  isLoading(): boolean {
+    // Add loading state if needed
+    return false;
+  }
+
+  // Export functionality (optional)
+  exportData(): void {
+    const dataToExport = this.casesDataSource.filteredData;
+    console.log('Exporting data:', dataToExport);
+    // Implement your export logic here
+  }
+
+  // Refresh data
+  refreshData(): void {
+    if (this.selectedCourt && this.selectedYear) {
+      this.updateTableData(this.selectedCourt.courtTypeId, this.selectedYear);
+    }
+  }
+
+  // Clear filters
+  clearFilter(): void {
+    this.casesDataSource.filter = '';
+  }
+
+  // Get case status color class (optional helper)
+  getStatusClass(status: string): string {
+    const statusMap: { [key: string]: string } = {
+      active: 'text-success',
+      pending: 'text-warning',
+      closed: 'text-danger',
+      completed: 'text-info',
+    };
+
+    return statusMap[status?.toLowerCase()] || 'text-muted';
   }
 }
