@@ -7,6 +7,10 @@ import { Component, Input } from '@angular/core';
   styleUrl: './empty-table.css',
 })
 export class EmptyTable {
-  @Input() title: string = '';
-  @Input() msg: string = '';
+  @Input({
+    required: true
+  }) title: string = '';
+  @Input({
+    required: true
+  }) msg: string = '';
 }

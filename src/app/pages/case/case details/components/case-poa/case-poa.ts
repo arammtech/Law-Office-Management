@@ -5,6 +5,7 @@ import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { AddPoa } from '../../dialogs/add-poa/add-poa';
 import { ClsTableUtil } from '../../../../../../shared/util/table/cls-table-util';
+import { EmptyTable } from "../../../../../../shared/components/empty-table/empty-table/empty-table";
 
 @Component({
   selector: 'app-case-poa',
@@ -15,7 +16,7 @@ import { ClsTableUtil } from '../../../../../../shared/util/table/cls-table-util
       useValue: ClsTableUtil.getArabicPaginatorIntl(),
     },
   ],
-  imports: [MatTableModule, MatPaginator, MatSortModule],
+  imports: [MatTableModule, MatPaginator, MatSortModule, EmptyTable],
   templateUrl: './case-poa.html',
   styleUrl: './case-poa.css',
 })

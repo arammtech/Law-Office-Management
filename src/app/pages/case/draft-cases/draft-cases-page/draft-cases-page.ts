@@ -12,6 +12,7 @@ import { PageHeaderComponent } from '../../../../../shared/components/page heade
 import { ICasesList, IDraftCaseRow } from '../../../../../core/models/requests';
 import { ClsHelpers } from '../../../../../shared/util/helpers/cls-helpers';
 import { ClsTableUtil } from '../../../../../shared/util/table/cls-table-util';
+import { EmptyTable } from "../../../../../shared/components/empty-table/empty-table/empty-table";
 
 @Component({
   selector: 'app-draft-cases-page',
@@ -21,7 +22,8 @@ import { ClsTableUtil } from '../../../../../shared/util/table/cls-table-util';
     MatPaginatorModule,
     MatSortModule,
     FormsModule,
-  ],
+    EmptyTable
+],
   providers: [
     {
       provide: MatPaginatorIntl,

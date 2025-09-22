@@ -11,6 +11,7 @@
     </div>
   </div>
 
+  @if (contractsDataSource.data?.length) {
   <div class="table-responsive tb-container">
     <table matSort mat-table [dataSource]="contractsDataSource" class="mat-elevation-z8 table">
 
@@ -40,12 +41,12 @@
     </table>
 
     <!-- Pagination -->
-    <mat-paginator
-      [pageSizeOptions]="[10, 20, 30, 40, 50]"
-      (page)="handlePage($event)"
-      [pageIndex]="currentPage"
-      [length]="contractsDataSource.filteredData.length"
-      pageSize="20">
+    <mat-paginator [pageSizeOptions]="[10, 20, 30, 40, 50]" (page)="handlePage($event)" [pageIndex]="currentPage"
+      [length]="contractsDataSource.filteredData.length" pageSize="20">
     </mat-paginator>
   </div>
+  } @else {
+  <app-empty-table title="لاتوجد عقود مسجلة بعد في هذه القضية"
+    msg="لاتوجد عقود مسجلة بعد, يمكنك اضافة واحدة"></app-empty-table>
+  }
 </section>

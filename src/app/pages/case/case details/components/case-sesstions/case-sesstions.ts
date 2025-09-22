@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddSessionDialog } from '../../dialogs/add-session-dialog/add-session-dialog';
 import { ISessionsRaw } from '../../../../../../core/models/requests';
 import { ClsTableUtil } from '../../../../../../shared/util/table/cls-table-util';
+import { EmptyTable } from "../../../../../../shared/components/empty-table/empty-table/empty-table";
 
 @Component({
   selector: 'app-case-sesstions',
@@ -16,7 +17,7 @@ import { ClsTableUtil } from '../../../../../../shared/util/table/cls-table-util
       useValue: ClsTableUtil.getArabicPaginatorIntl(),
     },
   ],
-  imports: [MatTableModule, MatPaginator, MatSortModule],
+  imports: [MatTableModule, MatPaginator, MatSortModule, EmptyTable],
   templateUrl: './case-sesstions.html',
   styleUrl: './case-sesstions.css',
 })

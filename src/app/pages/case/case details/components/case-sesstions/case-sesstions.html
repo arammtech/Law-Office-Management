@@ -11,6 +11,7 @@
     </div>
   </div>
 
+  @if(sessionsDataSource?.data?.length) {
   <div class="table-responsive tb-container">
     <table matSort mat-table [dataSource]="sessionsDataSource" class="mat-elevation-z8 table">
 
@@ -40,12 +41,11 @@
     </table>
 
     <!-- Pagination -->
-    <mat-paginator
-      [pageSizeOptions]="[10, 20, 30, 40, 50]"
-      (page)="handlePage($event)"
-      [pageIndex]="currentPage"
-      [length]="sessionsDataSource.filteredData.length"
-      pageSize="20">
+    <mat-paginator [pageSizeOptions]="[10, 20, 30, 40, 50]" (page)="handlePage($event)" [pageIndex]="currentPage"
+      [length]="sessionsDataSource.filteredData.length" pageSize="20">
     </mat-paginator>
   </div>
+  } @else {
+    <app-empty-table title="لاتوجد جلسات مضافة بعد" msg="لاتوجد جلسات لهذه القضية"></app-empty-table>
+  }
 </section>

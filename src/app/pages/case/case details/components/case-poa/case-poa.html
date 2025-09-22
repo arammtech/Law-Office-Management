@@ -11,6 +11,7 @@
     </div>
   </div>
 
+  @if (POAsDataSource?.data?.length) {
   <div class="table-responsive tb-container">
     <table matSort mat-table [dataSource]="POAsDataSource" class="mat-elevation-z8 table">
 
@@ -46,12 +47,11 @@
     </table>
 
     <!-- Pagination -->
-    <mat-paginator
-      [pageSizeOptions]="[10, 20, 30, 40, 50]"
-      (page)="handlePage($event)"
-      [pageIndex]="currentPage"
-      [length]="POAsDataSource.filteredData.length"
-      pageSize="20">
+    <mat-paginator [pageSizeOptions]="[10, 20, 30, 40, 50]" (page)="handlePage($event)" [pageIndex]="currentPage"
+      [length]="POAsDataSource.filteredData.length" pageSize="20">
     </mat-paginator>
   </div>
+  } @else {
+  <app-empty-table title="لاتوجد وكالات بعد" msg="لاتوجد وكالات مسجلة بعد يرجى تسجيل واحدة"></app-empty-table>
+  }
 </section>

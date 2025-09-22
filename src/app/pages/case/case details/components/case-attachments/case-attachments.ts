@@ -13,6 +13,7 @@ import { DatePipe } from '@angular/common';
 import { AddAttachment } from '../../dialogs/add-attachment/add-attachment';
 import { ClsTableUtil } from '../../../../../../shared/util/table/cls-table-util';
 import { ClsHelpers } from '../../../../../../shared/util/helpers/cls-helpers';
+import { EmptyTable } from "../../../../../../shared/components/empty-table/empty-table/empty-table";
 
 export interface IAttachmentRow {
   id?: string;
@@ -32,7 +33,8 @@ export interface IAttachmentRow {
     MatSortModule,
     FormsModule,
     DatePipe,
-  ],
+    EmptyTable
+],
   providers: [
     {
       provide: MatPaginatorIntl,

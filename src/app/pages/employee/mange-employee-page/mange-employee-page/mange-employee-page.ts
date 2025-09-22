@@ -13,6 +13,7 @@ import { Sort, MatSortModule, MatSort } from '@angular/material/sort';
 import { IEmployeeRow } from '../../../../../core/models/requests';
 import { ClsHelpers } from '../../../../../shared/util/helpers/cls-helpers';
 import { ClsTableUtil } from '../../../../../shared/util/table/cls-table-util';
+import { EmptyTable } from "../../../../../shared/components/empty-table/empty-table/empty-table";
 @Component({
   selector: 'app-mange-employee-page',
   imports: [
@@ -20,7 +21,8 @@ import { ClsTableUtil } from '../../../../../shared/util/table/cls-table-util';
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-  ],
+    EmptyTable
+],
   providers: [
     {
       provide: MatPaginatorIntl,
