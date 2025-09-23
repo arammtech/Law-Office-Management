@@ -9,6 +9,7 @@ import {
   ICaseRow,
   IListDTO,
   IContractRow,
+  ISessionsRow,
 } from '../../models/requests';
 import {
   ICseGeneralDetails,
@@ -17,7 +18,7 @@ import {
 import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
-export class Addapter {
+export class Adapter {
   /**
    *
    */
@@ -238,6 +239,15 @@ export class Addapter {
       fileNumber: row.fileNumber,
       employeeName: row.createdByName,
       createdDate: row.createdDate,
+    };
+  }
+
+  getSessionsByCaseIdAdapter(row: any): ISessionsRow {
+    return {
+      sessionDate: new Date(row.sessionDate),
+      assignedEmployeeName: String(row.assignedEmployeeName),
+      createdByEmployeeName: String(row.createdByEmployeeName),
+      createdDate: new Date(row.createdDate),
     };
   }
 }

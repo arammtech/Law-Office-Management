@@ -87,9 +87,11 @@ export interface IAddSessionForm {
   layerId: FormControl<string>;
 }
 
-export interface ISessionsRaw {
-  date: string;
-  lawyer: string;
+export interface ISessionsRow {
+  sessionDate: Date;
+  assignedEmployeeName: string;
+  createdByEmployeeName: string;
+  createdDate: Date;
 }
 
 export interface IListDTO<T> {

@@ -14,7 +14,7 @@ import { CasePoa } from './pages/case/case details/components/case-poa/case-poa'
 import { CaseAttachments } from './pages/case/case details/components/case-attachments/case-attachments';
 import { App } from './app';
 import { authGuard } from '../core/guards/authGuard/auth-guard';
-import { CaseSesstions } from './pages/case/case details/components/case-sesstions/case-sesstions';
+import { CaseSessions } from './pages/case/case details/components/case-sesstions/case-sesstions';
 import { DraftCasesPage } from './pages/case/draft-cases/draft-cases-page/draft-cases-page';
 
 export const routes: Routes = [
@@ -74,7 +74,7 @@ export const routes: Routes = [
 
           {
             path: `sessions`,
-            component: CaseSesstions,
+            component: CaseSessions,
           },
         ],
       },

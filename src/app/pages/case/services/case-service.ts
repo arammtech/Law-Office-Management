@@ -14,14 +14,14 @@ import {
   IemployeeName,
   IContractRow,
 } from '../../../../core/models/requests';
-import { Addapter } from '../../../../core/services/addapter/addapter';
+import { Adapter } from '../../../../core/services/addapter/addapter';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CaseService {
   baseURL = environmentDev.baseURL;
-  constructor(private http: HttpClient, private adapter: Addapter) {}
+  constructor(private http: HttpClient, private adapter: Adapter) {}
 
   add(
     createCaseModel: FormGroup<IAddCaseForm>,
