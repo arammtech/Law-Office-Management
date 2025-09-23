@@ -15,6 +15,7 @@ import {
   IContractRow,
 } from '../../../../core/models/requests';
 import { Adapter } from '../../../../core/services/addapter/addapter';
+import { enCaseStatus } from '../../../../shared/enums/case-status';
 
 @Injectable({
   providedIn: 'root',
@@ -53,6 +54,12 @@ export class CaseService {
       .pipe(
         map((data) => data.map((ele) => this.adapter.fromEmployeeNamesAPI(ele)))
       );
+  }
+
+  updateCaseStatus(caseId: string, status: enCaseStatus): Observable<void> {
+    return this.http
+      .put<any[]>(`${this.baseURL}/cases/${caseId}/status`, { status })
+      .pipe(map(() => {}));
   }
 
   getCasesList(

@@ -7,7 +7,7 @@
     </section>
 
     <section class="section">
-        @if (draftCases?.items?.length) {
+        @if (draftCasesDataSource?.data?.length) {
         <h3 class="col-md-10">القضايا المسودة</h3>
         <div class="row justify-content-between">
             <!-- Enhanced Search Section -->
@@ -16,7 +16,6 @@
                     class="form-control">
             </div>
         </div>
-
         <!-- Enhanced Table with Sort, Filter & Pagination -->
         <div class="table-responsive tb-container">
             <table matSort mat-table [dataSource]="draftCasesDataSource" class="mat-elevation-z8 table">
@@ -29,41 +28,62 @@
                     </td>
                 </ng-container>
 
-                <!-- Status Column with Sort -->
+                <!-- File Number Column with Sort -->
                 <ng-container [matColumnDef]="displayedColumns[1]">
-                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[1]">الحالة</th>
-                    <td mat-cell *matCellDef="let element">
-                        <span>{{element.stats}}</span>
-                    </td>
+                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[1]">رقم الملف</th>
+                    <td mat-cell *matCellDef="let element">{{element.fileNumber}}</td>
                 </ng-container>
 
-                <!-- Court Name Column with Sort -->
+                <!-- Case Number Column with Sort -->
                 <ng-container [matColumnDef]="displayedColumns[2]">
-                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[2]">المحكمة</th>
+                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[3]">رقم القضية</th>
+                    <td mat-cell *matCellDef="let element">{{element.caseNumber}}</td>
+                </ng-container>
+
+                <!-- Case Status Column with Sort -->
+                <ng-container [matColumnDef]="displayedColumns[3]">
+                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[4]">حالة القضية</th>
                     <td mat-cell *matCellDef="let element">
-                        <span>{{element.courtName}}</span>
+                        <span appCaseStatus>{{element.status}}</span>
                     </td>
                 </ng-container>
 
-                <!-- Subject Column with Sort -->
-                <ng-container [matColumnDef]="displayedColumns[3]">
-                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[3]">الموضوع</th>
-                    <td mat-cell *matCellDef="let element">
-                        <span>{{element.subject}}</span>
-                    </td>
+                <!-- Court Type Column -->
+                <ng-container [matColumnDef]="displayedColumns[4]">
+                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[5]">اسم المحكمة</th>
+                    <td mat-cell *matCellDef="let element">{{element.courtTypeName}}</td>
                 </ng-container>
+
+                <!-- Created Date Column -->
+                <ng-container [matColumnDef]="displayedColumns[5]">
+                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[6]">تاريخ الإنشاء</th>
+                    <td mat-cell *matCellDef="let element">{{element.createdDate | date:'dd/MM/yyyy'}}</td>
+                </ng-container>
+
+                <!-- Employee Name Column -->
+                <ng-container [matColumnDef]="displayedColumns[6]">
+                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[7]">اسم الموظف</th>
+                    <td mat-cell *matCellDef="let element">{{element.employeeName}}</td>
+                </ng-container>
+
+                <!-- Case Subject Column -->
+                <ng-container [matColumnDef]="displayedColumns[7]">
+                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[8]">موضوع القضية</th>
+                    <td mat-cell *matCellDef="let element">{{element.caseSubject}}</td>
+                </ng-container>
+
 
                 <!-- Actions Column -->
-                <ng-container [matColumnDef]="displayedColumns[4]">
+                <ng-container [matColumnDef]="displayedColumns[8]">
                     <th mat-header-cell *matHeaderCellDef>الاجراءات</th>
                     <td mat-cell *matCellDef="let element" class="d-flex gap-3">
                         <a class="btn btn-icon px-2 py-1" (click)="approveDraftCase(element)">
                             <i class="fa-solid fa-check"></i>
                         </a>
-                        <a class="btn btn-icon px-2 py-1" (click)="deleteDraftCase(element)">
-                            <i class="fa-solid fa-trash"></i>
+                        <a class="btn btn-icon px-2 py-1" (click)="cancelDraftCase(element)">
+                            <i class="fa-solid fa-xmark"></i>
                         </a>
-                        <a class="btn btn-icon px-2 py-1" (click)="deleteDraftCase(element)">
+                        <a class="btn btn-icon px-2 py-1" (click)="cancelDraftCase(element)">
                             <i class="fa-solid fa-eye"></i>
                         </a>
                     </td>
@@ -79,7 +99,6 @@
                 [pageIndex]="currentPage" [length]="draftCasesDataSource.filteredData.length" pageSize="20">
             </mat-paginator>
         </div>
-
         } @else {
         <app-empty-table title="لا توجد قضايا مسودة"
             msg="لا توجد قضايا مسودة مطابقة للمعايير المحددة"></app-empty-table>

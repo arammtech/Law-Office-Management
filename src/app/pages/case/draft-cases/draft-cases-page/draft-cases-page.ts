@@ -9,10 +9,18 @@ import {
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { FormsModule } from '@angular/forms';
 import { PageHeaderComponent } from '../../../../../shared/components/page header/page-header-component/page-header-component';
-import { IListDTO, IDraftCaseRow } from '../../../../../core/models/requests';
+import {
+  IListDTO,
+  IDraftCaseRow,
+  ICaseRow,
+} from '../../../../../core/models/requests';
 import { ClsHelpers } from '../../../../../shared/util/helpers/cls-helpers';
 import { ClsTableUtil } from '../../../../../shared/util/table/cls-table-util';
 import { EmptyTable } from '../../../../../shared/components/empty-table/empty-table/empty-table';
+import { DatePipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
+import { CaseService } from '../../services/case-service';
+import { enCaseStatus } from '../../../../../shared/enums/case-status';
 
 @Component({
   selector: 'app-draft-cases-page',
@@ -23,6 +31,8 @@ import { EmptyTable } from '../../../../../shared/components/empty-table/empty-t
     MatSortModule,
     FormsModule,
     EmptyTable,
+    DatePipe,
+    RouterLink,
   ],
   providers: [
     {
@@ -40,24 +50,77 @@ export class DraftCasesPage implements OnInit, AfterViewInit {
 
   // Component properties
   currentPage: number = 0;
-  draftCases!: IListDTO<IDraftCaseRow>;
+  draftCases: IListDTO<ICaseRow> = {} as IListDTO<ICaseRow>;
 
   // Enhanced data source for table functionality
-  draftCasesDataSource = new MatTableDataSource<IDraftCaseRow>([]);
+  draftCasesDataSource = new MatTableDataSource<ICaseRow>([]);
 
-  // Updated column definitions to match your template
   displayedColumns: string[] = [
-    'index', // #
-    'stats', // الحالة
-    'courtName', // المحكمة
-    'subject', // الموضوع
-    'actions', // الاجراءات
+    'index',
+    'fileNumber',
+    'caseNumber',
+    'status',
+    'courtTypeName',
+    'createdDate',
+    'employeeName',
+    'caseSubject',
+    'details',
   ];
 
-  constructor(
-    public helper: ClsHelpers // Added helper for index calculation and other utilities
-  ) {
-    this.initializeDraftCases();
+  constructor(public helper: ClsHelpers, private caseService: CaseService) {
+    this.draftCasesDataSource.data = [
+      {
+        caseId: 'CR-001',
+        employeeName: 'أحمد الزهراني',
+        caseSubject: 'نزاع عقاري',
+        courtTypeName: 'محكمة عامة',
+        status: 'مفتوحة',
+        caseNumber: 'CN-1001',
+        fileNumber: 'FN-2001',
+        createdDate: new Date('2025-08-01'),
+      },
+      {
+        caseId: 'CR-002',
+        employeeName: 'سارة العتيبي',
+        caseSubject: 'سرقة',
+        courtTypeName: 'محكمة جزائية',
+        status: 'مغلقة',
+        caseNumber: 'CN-1002',
+        fileNumber: 'FN-2002',
+        createdDate: new Date('2025-07-15'),
+      },
+      {
+        caseId: 'CR-003',
+        employeeName: 'خالد الحربي',
+        caseSubject: 'طلاق',
+        courtTypeName: 'محكمة أحوال شخصية',
+        status: 'معلقة',
+        caseNumber: 'CN-1003',
+        fileNumber: 'FN-2003',
+        createdDate: new Date('2025-06-20'),
+      },
+      {
+        caseId: 'CR-004',
+        employeeName: 'نورة القحطاني',
+        caseSubject: 'تجاري',
+        courtTypeName: 'محكمة تجارية',
+        status: 'مفتوحة',
+        caseNumber: 'CN-1004',
+        fileNumber: 'FN-2004',
+        createdDate: new Date('2025-09-10'),
+      },
+      {
+        caseId: 'CR-005',
+        employeeName: 'فهد السبيعي',
+        caseSubject: 'إرث',
+        courtTypeName: 'محكمة عامة',
+        status: 'مغلقة',
+        caseNumber: 'CN-1005',
+        fileNumber: 'FN-2005',
+        createdDate: new Date('2025-05-30'),
+      },
+    ];
+    this.draftCases.items = this.draftCasesDataSource.data;
   }
 
   ngOnInit(): void {
@@ -68,53 +131,19 @@ export class DraftCasesPage implements OnInit, AfterViewInit {
     // Connect paginator and sort to data source
     this.draftCasesDataSource.paginator = this.paginator;
     this.draftCasesDataSource.sort = this.sort;
-
-    // Configure custom filter predicate for Arabic text
-    this.draftCasesDataSource.filterPredicate = (
-      data: IDraftCaseRow,
-      filter: string
-    ) => {
-      const filterValue = filter.trim().toLowerCase();
-      return (
-        data.courtName?.toLowerCase().includes(filterValue) ||
-        data.stats?.toLowerCase().includes(filterValue) ||
-        data.subject?.toLowerCase().includes(filterValue) ||
-        data.caseId?.toString().toLowerCase().includes(filterValue)
-      );
-    };
-  }
-
-  private initializeDraftCases(): void {
-    this.draftCases = {} as IListDTO<IDraftCaseRow>;
-    this.draftCases.items = [
-      { courtName: 'التجارية', caseId: '1', stats: 'مسودة', subject: 'ارض' },
-      { courtName: 'التجارية', caseId: '2', stats: 'مسودة', subject: 'ارض' },
-      { courtName: 'الجزائية', caseId: '3', stats: 'معلقة', subject: 'عقار' },
-      { courtName: 'المدنية', caseId: '4', stats: 'مسودة', subject: 'تجارية' },
-      { courtName: 'التجارية', caseId: '5', stats: 'مسودة', subject: 'ارض' },
-      {
-        courtName: 'الأحوال الشخصية',
-        caseId: '6',
-        stats: 'قيد المراجعة',
-        subject: 'نفقة',
-      },
-      { courtName: 'العمالية', caseId: '7', stats: 'مسودة', subject: 'تعويض' },
-      { courtName: 'التجارية', caseId: '8', stats: 'معلقة', subject: 'دين' },
-    ];
   }
 
   private loadDraftCases(): void {
     // Update the data source with draft cases data
-    if (this.draftCases?.items && Array.isArray(this.draftCases.items)) {
-      this.draftCasesDataSource.data = this.draftCases.items;
-    } else {
-      this.draftCasesDataSource.data = [];
-    }
-
-    // Reset to first page when data loads
-    if (this.paginator) {
-      this.paginator.firstPage();
-    }
+    // if (this.draftCases?.items && Array.isArray(this.draftCases.items)) {
+    //   this.draftCasesDataSource.data = this.draftCases.items;
+    // } else {
+    //   this.draftCasesDataSource.data = [];
+    // }
+    // // Reset to first page when data loads
+    // if (this.paginator) {
+    //   this.paginator.firstPage();
+    // }
   }
 
   // Filter function for search
@@ -141,37 +170,32 @@ export class DraftCasesPage implements OnInit, AfterViewInit {
 
   // Action methods for buttons
   approveDraftCase(draftCase: IDraftCaseRow): void {
-    console.log('Approving draft case:', draftCase);
-    // Implement approval logic here
-    // You might want to call a service method
-    // this.draftCaseService.approveDraftCase(draftCase.caseId)
-
-    // Update the status
-    const index = this.draftCasesDataSource.data.findIndex(
-      (item) => item.caseId === draftCase.caseId
-    );
-    if (index !== -1) {
-      this.draftCasesDataSource.data[index].stats = 'معتمدة';
-      // Trigger change detection
-      this.draftCasesDataSource._updateChangeSubscription();
-    }
+    this.caseService
+      .updateCaseStatus(draftCase.caseId, enCaseStatus.UnderReview)
+      .subscribe(() => {
+        // Update the status
+        const index = this.draftCasesDataSource.data.findIndex(
+          (item) => item.caseId === draftCase.caseId
+        );
+        if (index !== -1) {
+          this.draftCasesDataSource.data[index].status = 'معتمدة';
+          // Trigger change detection
+          this.draftCasesDataSource._updateChangeSubscription();
+        }
+      });
   }
 
-  deleteDraftCase(draftCase: IDraftCaseRow): void {
-    console.log('Deleting draft case:', draftCase);
-    // Implement deletion logic here
-    // You might want to show a confirmation dialog first
-
-    if (confirm('هل أنت متأكد من حذف هذه القضية المسودة؟')) {
-      // Remove from data source
-      const currentData = this.draftCasesDataSource.data;
-      const updatedData = currentData.filter(
-        (item) => item.caseId !== draftCase.caseId
-      );
-      this.draftCasesDataSource.data = updatedData;
-
-      // Update the original data as well
-      this.draftCases.items = updatedData;
+  cancelDraftCase(draftCase: IDraftCaseRow): void {
+    if (confirm('هل أنت متأكد من إلغاء هذه القضية')) {
+      this.caseService
+        .updateCaseStatus(draftCase.caseId, enCaseStatus.Cancelled)
+        .subscribe(() => {
+          // Remove from data source
+          this.draftCasesDataSource.data =
+            this.draftCasesDataSource.data.filter(
+              (c) => c.caseId != draftCase.caseId
+            );
+        });
     }
   }
 
