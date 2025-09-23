@@ -10,10 +10,4 @@ import { ActivatedRoute, RouterLink, RouterLinkActive, RouterOutlet } from '@ang
   styleUrl: './case-details-page.css',
 })
 export class CaseDetailsPage {
-  csesId!:string;
-  constructor(private route: ActivatedRoute) {
-    this.route.paramMap.subscribe(params => {
-    this.csesId = params.get('caseId')??'';
-  });
-  }
 }

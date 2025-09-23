@@ -89,6 +89,8 @@ export class Addapter {
               natId: client.nationalId,
               phoneNumber: client.phoneNumber,
               countryCode: client.countryCode,
+              address: client.address,
+              birthDate: client.birthdate,
             } as ICasesParties)
         )
       : [];
@@ -96,10 +98,16 @@ export class Addapter {
     return {
       caseId: data.caseId,
       caseNumber: data.caseNumber,
-      courtType: data.courtTypeName,
-      assignedLawyerName: data.assignedEmployeeName,
+      courtTypeName: data.courtTypeName,
+      assignedEmployeeName: data.assignedEmployeeName,
       status: data.status,
-      caseParites: parties,
+      caseSubject: data.caseSubject,
+      clientRequests: data.clientRequests,
+      employeeName: data.employeeName,
+      createdDate: data.createdAt,
+      estimatedDate: data.estimatedReviewDate,
+      layerOpinion: data.lawyerOpinion,
+      caseParities: parties,
     };
   }
 

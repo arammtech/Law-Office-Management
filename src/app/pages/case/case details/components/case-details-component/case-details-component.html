@@ -1,25 +1,58 @@
 <section class="section">
-    <header>
-        <h3>معلومات القضية</h3>
-    </header>
+  <header>
+    <h3>معلومات القضية</h3>
+  </header>
 
-    <section class="case-content d-myflex my-justi">
-        <div class="text">
-            <p><span class="title">رقم القضية:</span> <span class="content">{{case?.caseNumber || 'لايوجد رقم'}}</span></p>
-        </div>
-        <div class="text">
-            <p><span class="title">نوع المحكمة:</span> <span class="content">{{case.courtType}}</span></p>
-        </div>
-        <div class="text">
-            <p><span class="title">الموظف الموكل:</span> <span class="content">{{case.assignedLawyerName}}</span></p>
-        </div>
-        <div class="text">
-            <p><span class="title">الحالة:</span> <span appCaseStatus class="content">{{case.status}}</span></p>
-        </div>
-    </section>
+  <section class="case-content d-myflex my-justi gap-5">
+    <!-- General Info -->
+    <div class="text">
+      <p><span class="title">رقم القضية:</span> <span class="content">{{case?.caseNumber || 'لايوجد رقم'}}</span></p>
+    </div>
+    <div class="text">
+      <p><span class="title">نوع المحكمة:</span> <span class="content">{{case?.courtTypeName || 'غير محدد'}}</span></p>
+    </div>
+    <div class="text">
+      <p><span class="title">الموظف الموكل:</span> <span class="content">{{case?.assignedEmployeeName || 'غير محدد'}}</span></p>
+    </div>
+    <div class="text">
+      <p><span class="title">منشئ القضية:</span> <span class="content">{{case?.employeeName || 'غير معروف'}}</span></p>
+    </div>
+
+    <!-- Status & Subject -->
+    <div class="text">
+      <p><span class="title">الحالة:</span> <span appCaseStatus class="content">{{case?.status || 'غير محددة'}}</span>
+      </p>
+    </div>
+    <div class="text">
+      <p><span class="title">موضوع القضية:</span> <span class="content">{{case?.caseSubject || 'لا يوجد عنوان'}}</span>
+      </p>
+    </div>
+
+    <!-- Legal Context -->
+    <div class="text">
+      <p><span class="title">طلبات العميل:</span> <span class="content">{{case?.clientRequests || 'لا توجد طلبات'}}</span></p>
+    </div>
+    <div class="text">
+      <p><span class="title">رأي المحامي:</span> <span class="content">{{case?.layerOpinion || 'لم يتم الإدلاء بالرأي'}}</span></p>
+    </div>
+
+    <!-- Timeline -->
+    <div class="text">
+      <p><span class="title">تاريخ الإنشاء:</span> <span class="content">{{case?.createdDate || 2024-02-02 |
+          date:'dd/MM/yyyy'}}</span></p>
+    </div>
+    <div class="text">
+      <p><span class="title">التاريخ المتوقع:</span> <span class="content">{{case?.estimatedDate || 2024-02-02 |
+          date:'dd/MM/yyyy'}}</span></p>
+    </div>
+  </section>
+
 </section>
+
 <section class="section">
-  <header><h3>اطراف القضية</h3></header>
+  <header>
+    <h3>اطراف القضية</h3>
+  </header>
 
   <div class="row justify-content-between mb-3">
     <!-- Filter Input -->
@@ -59,8 +92,22 @@
 
       <!-- Nationality Column -->
       <ng-container [matColumnDef]="displayedColumns[4]">
+        <th mat-header-cell *matHeaderCellDef>تاريخ الميلاد</th>
+        <td mat-cell *matCellDef="let element"> {{element.birthDate || 2024-2-5 | date}} </td>
+      </ng-container>
+
+
+      <!-- Nationality Column -->
+      <ng-container [matColumnDef]="displayedColumns[5]">
         <th mat-header-cell *matHeaderCellDef>الجنسية</th>
         <td mat-cell *matCellDef="let element"> السعودية </td>
+      </ng-container>
+
+
+      <!-- Nationality Column -->
+      <ng-container [matColumnDef]="displayedColumns[6]">
+        <th mat-header-cell *matHeaderCellDef>العنوان</th>
+        <td mat-cell *matCellDef="let element"> {{element.address}} </td>
       </ng-container>
 
       <!-- Header and Row Definitions -->
@@ -69,12 +116,8 @@
     </table>
 
     <!-- Pagination -->
-    <mat-paginator
-      [pageSizeOptions]="[10, 20, 30, 40, 50]"
-      (page)="handlePage($event)"
-      [pageIndex]="currentPage"
-      [length]="partiesDataSource.filteredData.length"
-      pageSize="20">
+    <mat-paginator [pageSizeOptions]="[10, 20, 30, 40, 50]" (page)="handlePage($event)" [pageIndex]="currentPage"
+      [length]="partiesDataSource.filteredData.length" pageSize="20">
     </mat-paginator>
   </div>
 </section>
