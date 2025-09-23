@@ -16,7 +16,7 @@ import { DatePipe, NgClass } from '@angular/common';
 import {
   ICourtDetaills,
   ICaseRow,
-  ICasesList,
+  IListDTO,
 } from '../../../../../../core/models/requests';
 import { ClsHelpers } from '../../../../../../shared/util/helpers/cls-helpers';
 import { ClsTableUtil } from '../../../../../../shared/util/table/cls-table-util';
@@ -55,7 +55,7 @@ export class CasesListPage implements OnInit, AfterViewInit {
   currentPage: number = 0;
   courts!: ICourtDetaills[];
   tableRowsData!: ICaseRow[];
-  casesList!: ICasesList<ICaseRow>;
+  casesList!: IListDTO<ICaseRow>;
   selectedYear!: string;
   selectedCourt!: ICourtDetaills;
 
@@ -71,7 +71,7 @@ export class CasesListPage implements OnInit, AfterViewInit {
     'createdDate',
     'employeeName',
     'caseSubject',
-    'details'
+    'details',
   ];
 
   constructor(
@@ -119,7 +119,7 @@ export class CasesListPage implements OnInit, AfterViewInit {
 
   updateTableData(courtId: string, year: string): void {
     this.caseService.getCasesList(courtId, year).subscribe({
-      next: (data: ICasesList<ICaseRow>) => {
+      next: (data: IListDTO<ICaseRow>) => {
         this.casesList = data;
 
         // Update the data source with new data

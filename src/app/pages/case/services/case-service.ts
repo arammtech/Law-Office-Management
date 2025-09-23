@@ -4,15 +4,15 @@ import { environmentDev } from '../../../../environments/environment.development
 import { map, Observable, tap } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { ICseGeneralDetails } from '../case details/components/case-details-component/case-details-component';
-import { IContractRaw } from '../case details/components/case-contract/case-contract';
 import {
   IAddCaseForm,
   IAddContract,
   ICaseRow,
-  ICasesList,
+  IListDTO,
   IClientDetails,
   ICourtDetaills,
   IemployeeName,
+  IContractRow,
 } from '../../../../core/models/requests';
 import { Addapter } from '../../../../core/services/addapter/addapter';
 
@@ -21,13 +21,13 @@ import { Addapter } from '../../../../core/services/addapter/addapter';
 })
 export class CaseService {
   baseURL = environmentDev.baseURL;
-  constructor(private http: HttpClient, private addapter: Addapter) {}
+  constructor(private http: HttpClient, private adapter: Addapter) {}
 
   add(
     createCaseModel: FormGroup<IAddCaseForm>,
     isDraft: boolean
   ): Observable<string> {
-    const body = this.addapter.toAddCaseAPI(createCaseModel, isDraft);
+    const body = this.adapter.toAddCaseAPI(createCaseModel, isDraft);
     return this.http
       .post(`${this.baseURL}/cases`, body)
       .pipe(map((data) => data as string));
@@ -36,14 +36,14 @@ export class CaseService {
   getClientByNatId(natId: string): Observable<IClientDetails> {
     return this.http
       .get(`${this.baseURL}/clients/national-id/${natId}`)
-      .pipe(map((data) => this.addapter.fromClientDetailsAPI(data)));
+      .pipe(map((data) => this.adapter.fromClientDetailsAPI(data)));
   }
 
   getCourtSDetails(): Observable<ICourtDetaills[]> {
     return this.http
       .get<any[]>(`${this.baseURL}/court-types`)
       .pipe(
-        map((data) => data.map((ele) => this.addapter.fromCourtDetailsAPI(ele)))
+        map((data) => data.map((ele) => this.adapter.fromCourtDetailsAPI(ele)))
       );
   }
 
@@ -51,9 +51,7 @@ export class CaseService {
     return this.http
       .get<any[]>(`${this.baseURL}/employees/names`)
       .pipe(
-        map((data) =>
-          data.map((ele) => this.addapter.fromEmployeeNamesAPI(ele))
-        )
+        map((data) => data.map((ele) => this.adapter.fromEmployeeNamesAPI(ele)))
       );
   }
 
@@ -62,14 +60,15 @@ export class CaseService {
     year: string,
     pageNumber: number = 1,
     pageSize: number = 10
-  ): Observable<ICasesList<ICaseRow>> {
+  ): Observable<IListDTO<ICaseRow>> {
     return this.http
       .get<any>(
         `${this.baseURL}/cases/by-court-type/${courtId}/year/${year}?pageNumber=${pageNumber}&pageSize=${pageSize}`
       )
       .pipe(
-        tap((data) => console.log('receved data ', data)),
-        map((data) => this.addapter.caseListAdapter(data))
+        map((data) =>
+          this.adapter.getListDTOAdapter(data, this.adapter.caseListRowAdapter)
+        )
       );
   }
 
@@ -80,7 +79,7 @@ export class CaseService {
   getCaeDetails(caseId: string): Observable<ICseGeneralDetails> {
     return this.http
       .get<any>(`${this.baseURL}/cases/${caseId}`)
-      .pipe(map((res) => this.addapter.fromCaseDetailsAPI(res)));
+      .pipe(map((res) => this.adapter.fromCaseDetailsAPI(res)));
   }
 
   addContract(
@@ -89,13 +88,19 @@ export class CaseService {
   ): Observable<ICseGeneralDetails> {
     return this.http
       .get<any>(`${this.baseURL}/cases/${caseId}`)
-      .pipe(map((res) => this.addapter.fromCaseDetailsAPI(res)));
+      .pipe(map((res) => this.adapter.fromCaseDetailsAPI(res)));
   }
 
-  getCaseContracts(caseId: string): Observable<IContractRaw[]> {
-    console.log('i am the id', caseId);
+  getCaseContracts(caseId: string): Observable<IListDTO<IContractRow>> {
     return this.http
       .get<any>(`${this.baseURL}/cases/${caseId}/contracts`)
-      .pipe(map((res) => this.addapter.fromCaseContractsAPI(res)));
+      .pipe(
+        map((res) =>
+          this.adapter.getListDTOAdapter(
+            res,
+            this.adapter.getCaseContractRowAdapter
+          )
+        )
+      );
   }
 }

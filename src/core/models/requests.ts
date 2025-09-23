@@ -92,7 +92,7 @@ export interface ISessionsRaw {
   lawyer: string;
 }
 
-export interface ICasesList<T> {
+export interface IListDTO<T> {
   pageIndex: number;
   pageSize: number;
   totalItemsCount: number;
@@ -136,4 +136,19 @@ export interface IEmployeeRow {
   countryCode: string;
   role: string;
   email: string;
+}
+
+export interface IContractRow extends ICommonRow {
+  id: string;
+  contractNumber: string;
+  contractType: string;
+  totalAmount: string;
+  restAmount: string;
+  issueDate: string;
+  expirationDate: string;
+}
+
+export interface ICommonRow {
+  employeeNameCreatedIt: string;
+  createdDate: string;
 }

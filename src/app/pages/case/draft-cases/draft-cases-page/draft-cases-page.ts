@@ -9,10 +9,10 @@ import {
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { FormsModule } from '@angular/forms';
 import { PageHeaderComponent } from '../../../../../shared/components/page header/page-header-component/page-header-component';
-import { ICasesList, IDraftCaseRow } from '../../../../../core/models/requests';
+import { IListDTO, IDraftCaseRow } from '../../../../../core/models/requests';
 import { ClsHelpers } from '../../../../../shared/util/helpers/cls-helpers';
 import { ClsTableUtil } from '../../../../../shared/util/table/cls-table-util';
-import { EmptyTable } from "../../../../../shared/components/empty-table/empty-table/empty-table";
+import { EmptyTable } from '../../../../../shared/components/empty-table/empty-table/empty-table';
 
 @Component({
   selector: 'app-draft-cases-page',
@@ -22,8 +22,8 @@ import { EmptyTable } from "../../../../../shared/components/empty-table/empty-t
     MatPaginatorModule,
     MatSortModule,
     FormsModule,
-    EmptyTable
-],
+    EmptyTable,
+  ],
   providers: [
     {
       provide: MatPaginatorIntl,
@@ -31,7 +31,7 @@ import { EmptyTable } from "../../../../../shared/components/empty-table/empty-t
     },
   ],
   templateUrl: './draft-cases-page.html',
-  styleUrl: './draft-cases-page.css'
+  styleUrl: './draft-cases-page.css',
 })
 export class DraftCasesPage implements OnInit, AfterViewInit {
   // ViewChild references for pagination and sorting
@@ -40,18 +40,18 @@ export class DraftCasesPage implements OnInit, AfterViewInit {
 
   // Component properties
   currentPage: number = 0;
-  draftCases!: ICasesList<IDraftCaseRow>;
+  draftCases!: IListDTO<IDraftCaseRow>;
 
   // Enhanced data source for table functionality
   draftCasesDataSource = new MatTableDataSource<IDraftCaseRow>([]);
 
   // Updated column definitions to match your template
   displayedColumns: string[] = [
-    'index',     // # 
-    'stats',     // الحالة
+    'index', // #
+    'stats', // الحالة
     'courtName', // المحكمة
-    'subject',   // الموضوع
-    'actions'    // الاجراءات
+    'subject', // الموضوع
+    'actions', // الاجراءات
   ];
 
   constructor(
@@ -70,7 +70,10 @@ export class DraftCasesPage implements OnInit, AfterViewInit {
     this.draftCasesDataSource.sort = this.sort;
 
     // Configure custom filter predicate for Arabic text
-    this.draftCasesDataSource.filterPredicate = (data: IDraftCaseRow, filter: string) => {
+    this.draftCasesDataSource.filterPredicate = (
+      data: IDraftCaseRow,
+      filter: string
+    ) => {
       const filterValue = filter.trim().toLowerCase();
       return (
         data.courtName?.toLowerCase().includes(filterValue) ||
@@ -82,16 +85,21 @@ export class DraftCasesPage implements OnInit, AfterViewInit {
   }
 
   private initializeDraftCases(): void {
-    this.draftCases = {} as ICasesList<IDraftCaseRow>;
+    this.draftCases = {} as IListDTO<IDraftCaseRow>;
     this.draftCases.items = [
       { courtName: 'التجارية', caseId: '1', stats: 'مسودة', subject: 'ارض' },
       { courtName: 'التجارية', caseId: '2', stats: 'مسودة', subject: 'ارض' },
       { courtName: 'الجزائية', caseId: '3', stats: 'معلقة', subject: 'عقار' },
       { courtName: 'المدنية', caseId: '4', stats: 'مسودة', subject: 'تجارية' },
       { courtName: 'التجارية', caseId: '5', stats: 'مسودة', subject: 'ارض' },
-      { courtName: 'الأحوال الشخصية', caseId: '6', stats: 'قيد المراجعة', subject: 'نفقة' },
+      {
+        courtName: 'الأحوال الشخصية',
+        caseId: '6',
+        stats: 'قيد المراجعة',
+        subject: 'نفقة',
+      },
       { courtName: 'العمالية', caseId: '7', stats: 'مسودة', subject: 'تعويض' },
-      { courtName: 'التجارية', caseId: '8', stats: 'معلقة', subject: 'دين' }
+      { courtName: 'التجارية', caseId: '8', stats: 'معلقة', subject: 'دين' },
     ];
   }
 
@@ -137,9 +145,11 @@ export class DraftCasesPage implements OnInit, AfterViewInit {
     // Implement approval logic here
     // You might want to call a service method
     // this.draftCaseService.approveDraftCase(draftCase.caseId)
-    
+
     // Update the status
-    const index = this.draftCasesDataSource.data.findIndex(item => item.caseId === draftCase.caseId);
+    const index = this.draftCasesDataSource.data.findIndex(
+      (item) => item.caseId === draftCase.caseId
+    );
     if (index !== -1) {
       this.draftCasesDataSource.data[index].stats = 'معتمدة';
       // Trigger change detection
@@ -151,13 +161,15 @@ export class DraftCasesPage implements OnInit, AfterViewInit {
     console.log('Deleting draft case:', draftCase);
     // Implement deletion logic here
     // You might want to show a confirmation dialog first
-    
+
     if (confirm('هل أنت متأكد من حذف هذه القضية المسودة؟')) {
       // Remove from data source
       const currentData = this.draftCasesDataSource.data;
-      const updatedData = currentData.filter(item => item.caseId !== draftCase.caseId);
+      const updatedData = currentData.filter(
+        (item) => item.caseId !== draftCase.caseId
+      );
       this.draftCasesDataSource.data = updatedData;
-      
+
       // Update the original data as well
       this.draftCases.items = updatedData;
     }
@@ -201,11 +213,11 @@ export class DraftCasesPage implements OnInit, AfterViewInit {
   // Get status color class (optional helper)
   getStatusClass(status: string): string {
     const statusMap: { [key: string]: string } = {
-      'مسودة': 'text-warning',
-      'معلقة': 'text-info', 
-      'معتمدة': 'text-success',
+      مسودة: 'text-warning',
+      معلقة: 'text-info',
+      معتمدة: 'text-success',
       'قيد المراجعة': 'text-primary',
-      'مرفوضة': 'text-danger',
+      مرفوضة: 'text-danger',
     };
 
     return statusMap[status] || 'text-muted';
@@ -214,11 +226,11 @@ export class DraftCasesPage implements OnInit, AfterViewInit {
   // Get status badge class (optional helper)
   getStatusBadgeClass(status: string): string {
     const statusMap: { [key: string]: string } = {
-      'مسودة': 'badge bg-warning',
-      'معلقة': 'badge bg-info',
-      'معتمدة': 'badge bg-success',
+      مسودة: 'badge bg-warning',
+      معلقة: 'badge bg-info',
+      معتمدة: 'badge bg-success',
       'قيد المراجعة': 'badge bg-primary',
-      'مرفوضة': 'badge bg-danger',
+      مرفوضة: 'badge bg-danger',
     };
 
     return statusMap[status] || 'badge bg-secondary';

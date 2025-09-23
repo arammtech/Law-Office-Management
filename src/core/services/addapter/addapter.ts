@@ -7,9 +7,9 @@ import {
   IAddContract,
   ICourtDetaills,
   ICaseRow,
-  ICasesList,
+  IListDTO,
+  IContractRow,
 } from '../../models/requests';
-import { IContractRaw } from '../../../app/pages/case/case details/components/case-contract/case-contract';
 import {
   ICseGeneralDetails,
   ICasesParties,
@@ -70,14 +70,18 @@ export class Addapter {
     };
   }
 
-  fromCaseContractsAPI(res: any): IContractRaw[] {
-    return res.map(
-      (c: any) =>
-        ({
-          contractNumber: c.contractNumber,
-          contractType: c.contractType || 'محددة بمدة',
-        } as IContractRaw)
-    );
+  getCaseContractRowAdapter(res: any): IContractRow {
+    return {
+      id: res.id,
+      createdDate: res.createdDate,
+      employeeNameCreatedIt: res.employeeName,
+      expirationDate: res.expirationDate,
+      issueDate: res.issueDate,
+      restAmount: res.restAmount,
+      totalAmount: res.totalAmount,
+      contractNumber: res.contractNumber,
+      contractType: res.contractType,
+    };
   }
   fromCaseDetailsAPI(data: any): ICseGeneralDetails {
     const parties: ICasesParties[] = Array.isArray(data.clients)
@@ -209,7 +213,10 @@ export class Addapter {
     return form;
   }
 
-  caseListAdapter(data: any): ICasesList<ICaseRow> {
+  getListDTOAdapter<Type>(
+    data: any,
+    itemAdapter: (data: any) => Type
+  ): IListDTO<Type> {
     return {
       pageIndex: data.pageIndex,
       pageSize: data.pageSize,
@@ -218,20 +225,19 @@ export class Addapter {
       hasPreviousPage: data.hasPreviousPage,
       hasNextPage: data.hasNextPage,
       totalPages: data.totalPages,
-
-      items: data.items.map(
-        (row: any) =>
-          ({
-            caseId: row.caseId,
-            caseNumber: row.caseNumber,
-            caseSubject: row.caseSubject,
-            courtTypeName: row.courtTypeName,
-            status: row.status,
-            fileNumber: row.fileNumber,
-            employeeName: row.createdByName,
-            createdDate: row.createdDate,
-          } as ICaseRow)
-      ),
+      items: data.items.map((data: any) => itemAdapter(data)),
+    };
+  }
+  caseListRowAdapter(row: any): ICaseRow {
+    return {
+      caseId: row.caseId,
+      caseNumber: row.caseNumber,
+      caseSubject: row.caseSubject,
+      courtTypeName: row.courtTypeName,
+      status: row.status,
+      fileNumber: row.fileNumber,
+      employeeName: row.createdByName,
+      createdDate: row.createdDate,
     };
   }
 }
