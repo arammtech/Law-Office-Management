@@ -6,6 +6,8 @@ import {
   IAddCaseForm,
   IAddContract,
   ICourtDetaills,
+  ICaseRow,
+  ICasesList,
 } from '../../models/requests';
 import { IContractRaw } from '../../../app/pages/case/case details/components/case-contract/case-contract';
 import {
@@ -145,55 +147,83 @@ export class Addapter {
   toAddContractFormAPI(contractFrm: FormGroup<IAddContract>): FormData {
     const form = new FormData();
     if (contractFrm.valid) {
-
       if (contractFrm.value.contractType) {
         console.log(
           'i entered the contract type',
-        contractFrm.value.contractType
-      );
-      form.append('ContractType', contractFrm.value.contractType.toString());
-    }
-    if (contractFrm.value.expirationDate) {
-      console.log(
-        'i entered the expiration date',
-        contractFrm.value.expirationDate
-      );
-      form.append('ExpiresOn', contractFrm.value.expirationDate);
-    }
-    if (contractFrm.value.issueDate) {
-      console.log('i entered the issue date', contractFrm.value.expirationDate);
-      form.append('IssuedOn', contractFrm.value.issueDate);
-    }
-    // if (contractFrm.value.downAmount) {
-      console.log(
-        'i entered the downamount',
-        contractFrm.value.downAmount
-      );
+          contractFrm.value.contractType
+        );
+        form.append('ContractType', contractFrm.value.contractType.toString());
+      }
+      if (contractFrm.value.expirationDate) {
+        console.log(
+          'i entered the expiration date',
+          contractFrm.value.expirationDate
+        );
+        form.append('ExpiresOn', contractFrm.value.expirationDate);
+      }
+      if (contractFrm.value.issueDate) {
+        console.log(
+          'i entered the issue date',
+          contractFrm.value.expirationDate
+        );
+        form.append('IssuedOn', contractFrm.value.issueDate);
+      }
+      // if (contractFrm.value.downAmount) {
+      console.log('i entered the downamount', contractFrm.value.downAmount);
       // form.append('InitialPayment', contractFrm?.value?.downAmount);
-    // }
-    if (contractFrm.value.totalPrice) {
-       console.log('i entered the total price', contractFrm.value.totalPrice);
-      form.append('BaseAmount', contractFrm.value.totalPrice.toString());
-    }
-    if (contractFrm.value.assigned) {
-       console.log('i entered the assigned', contractFrm.value.assigned);
-       
-       form.append('ContractType', contractFrm.value.assigned.toString());
+      // }
+      if (contractFrm.value.totalPrice) {
+        console.log('i entered the total price', contractFrm.value.totalPrice);
+        form.append('BaseAmount', contractFrm.value.totalPrice.toString());
+      }
+      if (contractFrm.value.assigned) {
+        console.log('i entered the assigned', contractFrm.value.assigned);
+
+        form.append('ContractType', contractFrm.value.assigned.toString());
       }
       if (contractFrm.value.contractAttachment) {
-       console.log('i entered the attachments', contractFrm.value.contractAttachment.join(','));
-
-      for (let i = 0; i < contractFrm.value.contractAttachment.length; i++) {
-        form.append(
-          `ContractFiles[${i}]`,
-          contractFrm.value.contractAttachment[i]
+        console.log(
+          'i entered the attachments',
+          contractFrm.value.contractAttachment.join(',')
         );
+
+        for (let i = 0; i < contractFrm.value.contractAttachment.length; i++) {
+          form.append(
+            `ContractFiles[${i}]`,
+            contractFrm.value.contractAttachment[i]
+          );
+        }
       }
-    }
     }
     console.log('i am the request form', contractFrm);
 
     console.log('i am the form', form.values());
     return form;
+  }
+
+  caseListAdapter(data: any): ICasesList<ICaseRow> {
+    return {
+      pageIndex: data.pageIndex,
+      pageSize: data.pageSize,
+      totalItemsCount: data.totalItemsCount,
+      itemsCount: data.itemsCount,
+      hasPreviousPage: data.hasPreviousPage,
+      hasNextPage: data.hasNextPage,
+      totalPages: data.totalPages,
+
+      items: data.items.map(
+        (row: any) =>
+          ({
+            caseId: row.caseId,
+            caseNumber: row.caseNumber,
+            caseSubject: row.caseSubject,
+            courtTypeName: row.courtTypeName,
+            status: row.status,
+            fileNumber: row.fileNumber,
+            employeeName: row.createdByName,
+            createdDate: row.createdDate,
+          } as ICaseRow)
+      ),
+    };
   }
 }

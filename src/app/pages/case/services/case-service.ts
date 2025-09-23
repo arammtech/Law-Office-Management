@@ -1,11 +1,19 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environmentDev } from '../../../../environments/environment.development';
-import { map, Observable } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 import { FormGroup } from '@angular/forms';
 import { ICseGeneralDetails } from '../case details/components/case-details-component/case-details-component';
 import { IContractRaw } from '../case details/components/case-contract/case-contract';
-import { IAddCaseForm, IAddContract, ICaseRow, ICasesList, IClientDetails, ICourtDetaills, IemployeeName } from '../../../../core/models/requests';
+import {
+  IAddCaseForm,
+  IAddContract,
+  ICaseRow,
+  ICasesList,
+  IClientDetails,
+  ICourtDetaills,
+  IemployeeName,
+} from '../../../../core/models/requests';
 import { Addapter } from '../../../../core/services/addapter/addapter';
 
 @Injectable({
@@ -13,12 +21,7 @@ import { Addapter } from '../../../../core/services/addapter/addapter';
 })
 export class CaseService {
   baseURL = environmentDev.baseURL;
-  constructor(
-    private http: HttpClient,
-    private addapter: Addapter,
-  ) {}
-
-
+  constructor(private http: HttpClient, private addapter: Addapter) {}
 
   add(
     createCaseModel: FormGroup<IAddCaseForm>,
@@ -40,9 +43,7 @@ export class CaseService {
     return this.http
       .get<any[]>(`${this.baseURL}/court-types`)
       .pipe(
-        map((data) =>
-          data.map((ele) => this.addapter.fromCourtDetailsAPI(ele))
-        )
+        map((data) => data.map((ele) => this.addapter.fromCourtDetailsAPI(ele)))
       );
   }
 
@@ -66,7 +67,10 @@ export class CaseService {
       .get<any>(
         `${this.baseURL}/cases/by-court-type/${courtId}/year/${year}?pageNumber=${pageNumber}&pageSize=${pageSize}`
       )
-      .pipe(map((data) => data as ICasesList<ICaseRow>));
+      .pipe(
+        tap((data) => console.log('receved data ', data)),
+        map((data) => this.addapter.caseListAdapter(data))
+      );
   }
 
   getYearsForCourt(courtId: string): Observable<string[]> {
@@ -88,7 +92,6 @@ export class CaseService {
       .pipe(map((res) => this.addapter.fromCaseDetailsAPI(res)));
   }
 
-  
   getCaseContracts(caseId: string): Observable<IContractRaw[]> {
     console.log('i am the id', caseId);
     return this.http

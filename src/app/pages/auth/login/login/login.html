@@ -1,33 +1,38 @@
 <div class="body">
-        <form [formGroup]="credential" (ngSubmit)="login()" class="col-lg-3 col-md-6 col-sm-9">
+    <form [formGroup]="loginForm" (ngSubmit)="login()" class="col-lg-3 col-md-6 col-sm-9">
         <header>
-            <div class="icon">icon</div>
-            <div class="text">
-                <h3>نظام إدارة القضايا القانونية</h3>
-                <p>تسجيل الدخول للنظام</p>
-            </div>
+            <div class="icon d-flex justify-content-center"><img src="/lom.icon.png" width="100px" height="100px" alt=""></div>
+            <h4>تسجيل الدخول للنظام</h4>
         </header>
         <div class="content row g-3">
             <div class="col-md-12">
                 <label class="form-label">رقم الهوية</label>
-                <input type="text"  [class.border-error]="credential.controls.natId.invalid && credential.controls.natId.touched"
+                <input type="text" [class.border-error]="loginForm.controls.natId.invalid && showErrors"
                     formControlName="natId" required placeholder="أدخل رقم الهوية" class="form-control">
-                <div class="errors" *ngIf="credential.controls.natId.touched" animate.enter="error-animation">
-                    <p *ngIf="credential.controls.natId?.errors?.['required']">هذا الحقل مطلوب</p>
-                    <p *ngIf="credential.controls.natId?.errors?.['minlength']">يجب أن يكون على الأقل 3 أحرف</p>
+                @if (loginForm.controls.natId.invalid && showErrors) {
+                <div class="errors" animate.enter="error-animation">
+                    @if (loginForm.controls.natId?.errors?.['required']) {
+                    <p>هذا الحقل مطلوب</p>
+                    } @if(loginForm.controls.natId?.errors?.['minlength']) {
+                    <p>يجب أن يكون على الأقل 3 أحرف</p>
+                    }
                 </div>
+                }
             </div>
             <div class="col-md-12">
                 <label class="form-label">كلمة المرور</label>
                 <input type="password" formControlName="password"
-                    [class.border-error]="credential.controls.password.touched && credential.controls.password.invalid" required
-                    placeholder="أدخل كلمة المرور" class="form-control">
-                <div class="errors" *ngIf="credential.controls.password.touched" animate.enter="error-animation">
-                    <p *ngIf="credential.controls.password?.errors?.['required']">هذا الحقل مطلوب</p>
+                    [class.border-error]="loginForm.controls.password.invalid && showErrors"
+                    required placeholder="أدخل كلمة المرور" class="form-control">
+                @if (loginForm.controls.password.invalid && showErrors) {
+                <div class="errors" animate.enter="error-animation">
+                    @if (loginForm.controls.password?.errors?.['required']) {
+                    <p>هذا الحقل مطلوب</p>
+                    }
                 </div>
+                }
             </div>
         </div>
-        <input type="submit" [disabled]="credential.invalid" [class.disabled]="credential.invalid"
-            value="تسجيل الدخول" class="btn bg-main w-fill">
+        <input type="submit" value="تسجيل الدخول" class="btn bg-main w-fill">
     </form>
 </div>

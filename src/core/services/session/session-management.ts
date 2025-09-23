@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { loggedUser } from './models/cls-user';
+import { IrefreshToken, loggedUser } from './models/cls-user';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SessionManagement {
   private sessionKey = 'user_session';
-  
+
   // Set the session data in localStorage
   setSession(sessionData: loggedUser): void {
     localStorage.setItem(this.sessionKey, JSON.stringify(sessionData));
@@ -21,7 +21,40 @@ export class SessionManagement {
     localStorage.removeItem(this.sessionKey);
   }
   // Check if the user is authenticated
-  isAuthenticated(): boolean {  
+  isAuthenticated(): boolean {
     return !!this.getSession();
+  }
+
+  isAccessTokenExpired(): boolean {
+    const currentSession = this.getSession();
+    if (currentSession) {
+      return (
+        Number(currentSession.accessTokenExpirationDate) > Number(Date.now())
+      );
+    } else {
+      return false;
+    }
+  }
+
+  isRefreshTokenExpired(): boolean {
+    const currentSession = this.getSession();
+    if (currentSession) {
+      return (
+        Number(currentSession.refreshTokenExpirationDate) > Number(Date.now())
+      );
+    } else {
+      return false;
+    }
+  }
+
+  updateRefreshToken(refreshToken: IrefreshToken) {
+    const currentSession = this.getSession();
+    if (currentSession) {
+      currentSession.accessTokenExpirationDate =
+        refreshToken.accessTokenExpirationDate;
+      currentSession.refreshTokenExpirationDate =
+        refreshToken.refreshTokenExpirationDate;
+      this.setSession(currentSession);
+    }
   }
 }

@@ -53,28 +53,47 @@
                     <td mat-cell *matCellDef="let element">{{element.fileNumber}}</td>
                 </ng-container>
 
-                <!-- Client Name Column with Sort -->
-                <ng-container [matColumnDef]="displayedColumns[2]">
-                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[2]">اسم العميل</th>
-                    <td mat-cell *matCellDef="let element">{{element.clientName}}</td>
-                </ng-container>
-
                 <!-- Case Number Column with Sort -->
-                <ng-container [matColumnDef]="displayedColumns[3]">
+                <ng-container [matColumnDef]="displayedColumns[2]">
                     <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[3]">رقم القضية</th>
                     <td mat-cell *matCellDef="let element">{{element.caseNumber}}</td>
                 </ng-container>
 
                 <!-- Case Status Column with Sort -->
-                <ng-container [matColumnDef]="displayedColumns[4]">
+                <ng-container [matColumnDef]="displayedColumns[3]">
                     <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[4]">حالة القضية</th>
                     <td mat-cell *matCellDef="let element">
                         <span appCaseStatus>{{element.status}}</span>
                     </td>
                 </ng-container>
 
-                <!-- Actions Column -->
+                <!-- Court Type Column -->
+                <ng-container [matColumnDef]="displayedColumns[4]">
+                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[5]">اسم المحكمة</th>
+                    <td mat-cell *matCellDef="let element">{{element.courtTypeName}}</td>
+                </ng-container>
+
+                <!-- Created Date Column -->
                 <ng-container [matColumnDef]="displayedColumns[5]">
+                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[6]">تاريخ الإنشاء</th>
+                    <td mat-cell *matCellDef="let element">{{element.createdDate | date:'dd/MM/yyyy'}}</td>
+                </ng-container>
+
+                <!-- Employee Name Column -->
+                <ng-container [matColumnDef]="displayedColumns[6]">
+                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[7]">اسم الموظف</th>
+                    <td mat-cell *matCellDef="let element">{{element.employeeName}}</td>
+                </ng-container>
+
+                <!-- Case Subject Column -->
+                <ng-container [matColumnDef]="displayedColumns[7]">
+                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[8]">موضوع القضية</th>
+                    <td mat-cell *matCellDef="let element">{{element.caseSubject}}</td>
+                </ng-container>
+
+
+                <!-- Actions Column -->
+                <ng-container [matColumnDef]="displayedColumns[8]">
                     <th mat-header-cell *matHeaderCellDef>التفاصيل</th>
                     <td mat-cell *matCellDef="let element">
                         <a [routerLink]="['../case-details', element.caseId]" class="btn bg-main">

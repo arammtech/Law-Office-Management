@@ -12,7 +12,7 @@ import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { CaseService } from '../../../services/case-service';
 import { FormsModule, NgModel } from '@angular/forms';
 import { CaseStatus } from '../../directives/case-status/case-status';
-import { NgClass } from '@angular/common';
+import { DatePipe, NgClass } from '@angular/common';
 import {
   ICourtDetaills,
   ICaseRow,
@@ -20,7 +20,7 @@ import {
 } from '../../../../../../core/models/requests';
 import { ClsHelpers } from '../../../../../../shared/util/helpers/cls-helpers';
 import { ClsTableUtil } from '../../../../../../shared/util/table/cls-table-util';
-import { EmptyTable } from "../../../../../../shared/components/empty-table/empty-table/empty-table";
+import { EmptyTable } from '../../../../../../shared/components/empty-table/empty-table/empty-table';
 
 @Component({
   selector: 'app-cases-list-page',
@@ -33,8 +33,9 @@ import { EmptyTable } from "../../../../../../shared/components/empty-table/empt
     RouterLink,
     CaseStatus,
     NgClass,
-    EmptyTable
-],
+    EmptyTable,
+    DatePipe,
+  ],
   providers: [
     {
       provide: MatPaginatorIntl,
@@ -61,14 +62,16 @@ export class CasesListPage implements OnInit, AfterViewInit {
   // Enhanced data source for table functionality
   casesDataSource = new MatTableDataSource<ICaseRow>([]);
 
-  // Updated column definitions to match your template
   displayedColumns: string[] = [
-    'position', // Index column
-    'fileNumber', // رقم الملف
-    'clientName', // اسم العميل
-    'caseNumber', // رقم القضية
-    'status', // حالة القضية
-    'details', // التفاصيل
+    'index',
+    'fileNumber',
+    'caseNumber',
+    'status',
+    'courtTypeName',
+    'createdDate',
+    'employeeName',
+    'caseSubject',
+    'details'
   ];
 
   constructor(
@@ -85,17 +88,6 @@ export class CasesListPage implements OnInit, AfterViewInit {
     // Connect paginator and sort to data source
     this.casesDataSource.paginator = this.paginator;
     this.casesDataSource.sort = this.sort;
-
-    // Configure custom filter predicate for Arabic text
-    this.casesDataSource.filterPredicate = (data: ICaseRow, filter: string) => {
-      const filterValue = filter.trim().toLowerCase();
-      return (
-        data.fileNumber?.toString().toLowerCase().includes(filterValue) ||
-        data.clientName?.toLowerCase().includes(filterValue) ||
-        data.caseNumber?.toString().toLowerCase().includes(filterValue) ||
-        data.status?.toLowerCase().includes(filterValue)
-      );
-    };
   }
 
   private initializeComponent(): void {

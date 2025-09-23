@@ -1,7 +1,11 @@
-import { JsonPipe, NgIf, NgClass } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, NgModel, NonNullableFormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { trigger, transition, style, animate } from '@angular/animations';
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  NonNullableFormBuilder,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { AuthManagement } from '../../../../../core/services/auth/auth-management';
 import { Router } from '@angular/router';
 import { ToasterService } from '../../../../../core/services/toaster-service';
@@ -14,23 +18,40 @@ export interface loginCredtial {
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, NgIf, JsonPipe, ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class Login {
-  credential: FormGroup<loginCredtial>;
-  constructor(private authService: AuthManagement, private route:Router, private toastService:ToasterService, private fb:NonNullableFormBuilder) {
-    this.credential = this.fb.group({
+  loginForm: FormGroup<loginCredtial>;
+  showErrors: boolean = false;
+  constructor(
+    private authService: AuthManagement,
+    private route: Router,
+    private toastService: ToasterService,
+    private fb: NonNullableFormBuilder
+  ) {
+    this.loginForm = this.fb.group({
       natId: this.fb.control(''),
-      password: this.fb.control('')
-    }) 
-      
+      password: this.fb.control(''),
+    });
   }
   login() {
-    this.authService.login(this.credential.controls.natId.value.trim(), this.credential.controls.password.value.trim()).subscribe({
-      next: () => {this.route.navigate(['office']);},
-      error: () => {this.toastService.error('كلمة المرور او اسم المستخدم غير صحيحن');}
-    })
+    this.showErrors = true;
+    if (!this.loginForm.invalid) {
+      this.authService
+        .login(
+          this.loginForm.controls.natId.value.trim(),
+          this.loginForm.controls.password.value.trim()
+        )
+        .subscribe({
+          next: () => {
+            this.route.navigate(['office']);
+          },
+          error: () => {
+            this.toastService.error('كلمة المرور او اسم المستخدم غير صحيحن');
+          },
+        });
+    }
   }
 }

@@ -15,7 +15,7 @@ export interface IAddCaseForm {
 
 export interface ICaseForm {
   subject: FormControl<string>;
-  clientRequests: FormControl<string>
+  clientRequests: FormControl<string>;
   partiesToTheCase: FormControl<number>;
   estimatedTime: FormControl<Date>;
   courtType: FormControl<string>;
@@ -69,9 +69,7 @@ export interface INewEmployee {
   person: FormGroup<INewPersonForm>;
   email: FormControl<string>;
   role: FormControl<string>;
-
 }
-
 
 export interface IAddContract {
   contractType: FormControl<number>;
@@ -82,9 +80,6 @@ export interface IAddContract {
   issueDate: FormControl<string>;
   expirationDate: FormControl<string>;
 }
-
-
-
 
 export interface IAddSessionForm {
   date: FormControl<Date>;
@@ -97,7 +92,6 @@ export interface ISessionsRaw {
   lawyer: string;
 }
 
-
 export interface ICasesList<T> {
   pageIndex: number;
   pageSize: number;
@@ -109,25 +103,23 @@ export interface ICasesList<T> {
   items: T[];
 }
 
-
-
-export interface IDraftCaseRow {  
-    caseId: string;
-    stats: string;
-    courtName: string;
-    subject: string;
+export interface IDraftCaseRow {
+  caseId: string;
+  stats: string;
+  courtName: string;
+  subject: string;
 }
 
-
-
-export interface ICaseRow {  
-    caseId: string;
-    fileNumber: string;
-    clientName: string;
-    caseNumber: string;
-    status:string;
+export interface ICaseRow {
+  caseId: string;
+  employeeName: string;
+  caseSubject: string;
+  courtTypeName: string;
+  status: string;
+  caseNumber: string;
+  fileNumber: string;
+  createdDate: Date;
 }
-
 
 export interface ICourtDetaills {
   courtTypeId: string;
@@ -136,7 +128,6 @@ export interface ICourtDetaills {
   description: string;
   years: string[];
 }
-
 
 export interface IEmployeeRow {
   id: string;
