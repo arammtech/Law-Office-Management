@@ -3,11 +3,10 @@
     <form [formGroup]="contractForm" id="contractForm" (ngSubmit)="submit()" class="row d-flex g-3">
         <div class="col-md-6">
             <label class="form-label">مرفق العقد</label>
-
             <input type="file" (change)="onFileChange($event)" placeholder="لم يتم اختيار الملف"
-                [class.border-error]="contractForm.controls.contractAttachment.invalid && formSubmitted"
+                [class.border-error]="contractForm.controls.contractAttachment.invalid && contractForm.controls.contractAttachment.touched"
                 class="form-control" [accept]="['.pdf','.doc','.docx']" />
-            @if (contractForm.controls.contractAttachment.invalid && formSubmitted ||
+            @if (contractForm.controls.contractAttachment.invalid &&
             contractForm.controls.contractAttachment.touched) {
             <div class="errors" animate.enter="error-animation">
                 @if (contractForm.controls?.contractAttachment?.errors?.['required']) {

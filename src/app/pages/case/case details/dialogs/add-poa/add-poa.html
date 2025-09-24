@@ -31,12 +31,24 @@
         </div>
         <div class="col-md-6">
             <label class="form-label">مرفق الوكالة</label>
-            <input type="file" formControlName="poaAttachment"
+            <input type="file" (change)="onFileChange($event)"
                 [class.border-error]="(addPOAForm.controls.poaAttachment.touched && addPOAForm.controls.poaAttachment.invalid)"
                 class="form-control" />
-            <div class="errors" *ngIf="addPOAForm.controls.poaAttachment.touched" animate.enter="error-animation">
-                <p *ngIf="addPOAForm.controls.poaAttachment?.errors?.['required']">هذا الحقل مطلوب</p>
+            @if (addPOAForm.controls.poaAttachment.touched) {
+            <div class="errors" animate.enter="error-animation">
+                @if (addPOAForm.controls.poaAttachment?.errors?.['required']) {
+                <p>هذا الحقل مطلوب</p>
+                }
+
+                @if (addPOAForm.controls?.poaAttachment?.errors?.['extension']) {
+                <p>{{addPOAForm.controls?.poaAttachment?.errors?.['extension']?.message}}</p>
+                }
+
+                @else if (addPOAForm.controls?.poaAttachment?.errors?.['maxSize']) {
+                <p>{{addPOAForm.controls?.poaAttachment?.errors?.['maxSize']?.message}}</p>
+                }
             </div>
+            }
         </div>
     </form>
 </mat-dialog-content>

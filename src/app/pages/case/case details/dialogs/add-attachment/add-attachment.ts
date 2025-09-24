@@ -8,6 +8,7 @@ import {
   MatDialogRef,
 } from '@angular/material/dialog';
 import { DialogHeaderComponent } from '../../../../../../shared/components/dialog-header/dialog-header-component/dialog-header-component';
+import { IAddAttachmetnForm } from '../../../../../../core/models/requests';
 
 @Component({
   selector: 'app-add-attachment',
@@ -33,9 +34,23 @@ export class AddAttachmentDialog {
   submit() {
     throw new Error('Method not implemented.');
   }
-}
 
-export interface IAddAttachmetnForm {
-  name: FormControl<string>;
-  attachmentFile: FormControl<string>;
+    
+
+
+  onFileChange(event: Event) {
+    console.log('enetered the on file change evenet in the attachment');
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+        const file = input.files[0];
+      // Set the files in the form control
+      this.addAttachmentForm.controls.attachmentFile?.setValue(file);
+      // Mark the control as touched and update validity
+      this.addAttachmentForm.controls.attachmentFile?.markAsTouched();
+      this.addAttachmentForm.controls.attachmentFile?.updateValueAndValidity();
+    } else {
+      // Clear the form control if no files selected
+      this.addAttachmentForm.controls.attachmentFile?.setValue(null);
+    }
+  }
 }

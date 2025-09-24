@@ -10,6 +10,7 @@ import {
   IListDTO,
   IContractRow,
   ISessionsRow,
+  IAddPOAForm,
 } from '../../models/requests';
 import {
   ICseGeneralDetails,
@@ -170,25 +171,28 @@ export class Adapter {
     // Handle dates properly
 
     if (contractFrm.value.expirationDate) {
-      form.append(
-        'ExpiresOn',
-        String(contractFrm.value.expirationDate)
-      );
+      form.append('ExpiresOn', String(contractFrm.value.expirationDate));
     }
     if (contractFrm.value.issueDate) {
-      form.append(
-        'IssuedOn',
-        String(contractFrm.value.issueDate)
-      );
+      form.append('IssuedOn', String(contractFrm.value.issueDate));
     }
 
-    if (
-      contractFrm.value.contractAttachment &&
-      contractFrm.value.contractAttachment.length > 0
-    ) {
-      const file = contractFrm.value.contractAttachment[0];
+    if (contractFrm.value.contractAttachment) {
+      const file = contractFrm.value.contractAttachment;
       form.append('ContractFile', file);
     }
+    return form;
+  }
+
+  toAddPOAFormAPI(frmAddPoa: FormGroup<IAddPOAForm>): FormData {
+    const form = new FormData();
+
+    form.append('POANumber', String(frmAddPoa.value.poaNumber));
+    form.append('IssueDate', String(frmAddPoa.value.poaIssueDate));
+    form.append('IssuingAuthority', String(frmAddPoa.value.poaAuthrizedBy));
+    if (frmAddPoa.value.poaAttachment)
+      form.append('AttachmentFile', frmAddPoa.value.poaAttachment);
+
     return form;
   }
 

@@ -77,7 +77,7 @@ export interface frmAddContract {
   totalPrice: FormControl<number>;
   downAmount: FormControl<number>;
   assigned: FormControl<boolean>;
-  contractAttachment: FormControl<File[] | null>;
+  contractAttachment: FormControl<File | null>;
   issueDate: FormControl<string>;
   expirationDate: FormControl<string>;
 }
@@ -154,4 +154,17 @@ export interface IContractRow extends ICommonRow {
 export interface ICommonRow {
   employeeNameCreatedIt: string;
   createdDate: string;
+}
+
+export interface IAddPOAForm {
+  poaNumber: FormControl<string>;
+  poaIssueDate: FormControl<string>;
+  poaAuthrizedBy: FormControl<string>;
+  poaAttachment: FormControl<File | null>;
+}
+
+
+export interface IAddAttachmetnForm {
+  name: FormControl<string>;
+  attachmentFile: FormControl<File | null>;
 }

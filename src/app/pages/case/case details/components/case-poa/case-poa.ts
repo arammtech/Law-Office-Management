@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, MatPaginatorIntl } from '@angular/material/paginator';
@@ -6,6 +6,7 @@ import { MatSort, MatSortModule } from '@angular/material/sort';
 import { AddPoaDialog } from '../../dialogs/add-poa/add-poa';
 import { ClsTableUtil } from '../../../../../../shared/util/table/cls-table-util';
 import { EmptyTable } from '../../../../../../shared/components/empty-table/empty-table/empty-table';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-case-poa',
@@ -20,7 +21,7 @@ import { EmptyTable } from '../../../../../../shared/components/empty-table/empt
   templateUrl: './case-poa.html',
   styleUrl: './case-poa.css',
 })
-export class CasePoa implements AfterViewInit {
+export class CasePoa implements AfterViewInit, OnInit {
   displayedColumns: string[] = [
     'index',
     'POAnumber',
@@ -29,11 +30,14 @@ export class CasePoa implements AfterViewInit {
   ];
   POAsDataSource = new MatTableDataSource<IPOARow>();
   currentPage = 0;
-
+  caseId: string = '';
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(private dialogof: MatDialog) {
+  constructor(
+    private dialogof: MatDialog,
+    private activatedRoute: ActivatedRoute
+  ) {
     const initialData: IPOARow[] = [
       { authorizedBy: 'عبدالعزيز', POAnumber: '4545', POAissueDate: '2025' },
       { authorizedBy: 'عبدالعزيز', POAnumber: '4545', POAissueDate: '2025' },
@@ -42,6 +46,11 @@ export class CasePoa implements AfterViewInit {
       { authorizedBy: 'عبدالعزيز', POAnumber: '4545', POAissueDate: '2025' },
     ];
     this.POAsDataSource.data = initialData;
+  }
+  ngOnInit(): void {
+    this.activatedRoute.parent?.params.subscribe((params) => {
+      this.caseId = params['caseId'] || '';
+    });
   }
 
   ngAfterViewInit(): void {
@@ -62,6 +71,7 @@ export class CasePoa implements AfterViewInit {
     this.dialogof.open(AddPoaDialog, {
       height: '325x',
       minWidth: '600px',
+      data: { caseId: this.caseId },
     });
   }
 

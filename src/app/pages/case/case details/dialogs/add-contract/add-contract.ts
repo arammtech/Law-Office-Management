@@ -47,7 +47,7 @@ export class AddContractDialog {
   }
 
   submit() {
-    this.formSubmitted = true;
+    this.contractForm.markAllAsTouched();
 
     
     if (this.contractForm.invalid) {
@@ -69,9 +69,9 @@ export class AddContractDialog {
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files?.length) {
-      const files = Array.from(input.files);
+      const file = input.files[0];
       // Set the files in the form control
-      this.contractForm.controls.contractAttachment?.setValue(files);
+      this.contractForm.controls.contractAttachment?.setValue(file);
 
       // Mark the control as touched and update validity
       this.contractForm.controls.contractAttachment?.markAsTouched();

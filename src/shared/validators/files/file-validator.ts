@@ -1,5 +1,6 @@
 // validators/file.validator.ts
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { ErrorStateMatcher } from '@angular/material/core';
 
 export interface FileValidationConfig {
   maxSize?: number;
@@ -64,18 +65,29 @@ export class FileValidator {
     }
   ): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
-      const file = (
-        Array.isArray(control.value) ? control.value[0] : control.value
-      ) as File;
+      const value = control.value;
 
-      if (!file) return null;
+      // Handle null/undefined values
+      if (!value) return null;
+
+      let file: File;
+
+      // Handle both single file and array of files
+      if (Array.isArray(value)) {
+        if (value.length === 0) return null;
+        file = value[0]; // Take the first file
+      } else if (value instanceof File) {
+        file = value;
+      } else {
+        console.log('not a file');
+        return null;
+      }
 
       const errors: ValidationErrors = {};
 
       const fileErrors = this.validateSingleFile(file, config);
       Object.assign(errors, fileErrors);
 
-      console.log('file errors', errors?.['maxSize']);
       return Object.keys(errors).length > 0 ? errors : null;
     };
   }
