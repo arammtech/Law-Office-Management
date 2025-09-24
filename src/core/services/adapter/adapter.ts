@@ -11,6 +11,7 @@ import {
   IContractRow,
   ISessionsRow,
   IAddPOAForm,
+  IPOARow,
 } from '../../models/requests';
 import {
   ICseGeneralDetails,
@@ -84,6 +85,15 @@ export class Adapter {
       totalAmount: res.totalAmount,
       contractNumber: res.contractNumber,
       contractType: res.contractType,
+    };
+  }
+    getCasePOARowAdapter(res: any): IPOARow {
+    return {
+      number: res.poaNumber,
+      createdDate: res.createdDate,
+      creatorName: res.employeeCreatedByName,
+      publisherName: res.issuingAuthority,
+      issueDate: res.issueDate
     };
   }
   fromCaseDetailsAPI(data: any): ICseGeneralDetails {

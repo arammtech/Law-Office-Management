@@ -7,6 +7,9 @@ import { AddPoaDialog } from '../../dialogs/add-poa/add-poa';
 import { ClsTableUtil } from '../../../../../../shared/util/table/cls-table-util';
 import { EmptyTable } from '../../../../../../shared/components/empty-table/empty-table/empty-table';
 import { ActivatedRoute } from '@angular/router';
+import { IListDTO, IPOARow } from '../../../../../../core/models/requests';
+import { POAService } from '../../../../../../core/services/poa/poa-service';
+import { ClsHelpers } from '../../../../../../shared/util/helpers/cls-helpers';
 
 @Component({
   selector: 'app-case-poa',
@@ -24,11 +27,13 @@ import { ActivatedRoute } from '@angular/router';
 export class CasePoa implements AfterViewInit, OnInit {
   displayedColumns: string[] = [
     'index',
-    'POAnumber',
-    'POAissueDate',
-    'authorizedBy',
+    'number',
+    'publisherName',
+    'creatorName',
+    'createdDate',
   ];
   POAsDataSource = new MatTableDataSource<IPOARow>();
+  poas:IListDTO<IPOARow> = {} as IListDTO<IPOARow>
   currentPage = 0;
   caseId: string = '';
   @ViewChild(MatPaginator) paginator!: MatPaginator;
@@ -36,26 +41,32 @@ export class CasePoa implements AfterViewInit, OnInit {
 
   constructor(
     private dialogof: MatDialog,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    public helper: ClsHelpers,
+    private poaService: POAService
   ) {
-    const initialData: IPOARow[] = [
-      { authorizedBy: 'عبدالعزيز', POAnumber: '4545', POAissueDate: '2025' },
-      { authorizedBy: 'عبدالعزيز', POAnumber: '4545', POAissueDate: '2025' },
-      { authorizedBy: 'عبدالعزيز', POAnumber: '4545', POAissueDate: '2025' },
-      { authorizedBy: 'عبدالعزيز', POAnumber: '4545', POAissueDate: '2025' },
-      { authorizedBy: 'عبدالعزيز', POAnumber: '4545', POAissueDate: '2025' },
-    ];
+    const initialData: IPOARow[] = [];
     this.POAsDataSource.data = initialData;
   }
   ngOnInit(): void {
     this.activatedRoute.parent?.params.subscribe((params) => {
       this.caseId = params['caseId'] || '';
+      this.loadContracts();
     });
   }
 
   ngAfterViewInit(): void {
     this.POAsDataSource.paginator = this.paginator;
     this.POAsDataSource.sort = this.sort;
+  }
+
+  loadContracts(): void {
+    this.poaService.getCasePOAs(this.caseId).subscribe({
+      next: (res) => {
+        this.poas = res;
+        this.POAsDataSource.data = this.poas.items;
+      },
+    });
   }
 
   filterPOAs(event: Event): void {
@@ -74,20 +85,4 @@ export class CasePoa implements AfterViewInit, OnInit {
       data: { caseId: this.caseId },
     });
   }
-
-  helper = {
-    getCurrentRowNumber: (
-      index: number,
-      pageIndex: number,
-      pageSize: number
-    ): number => {
-      return index + 1 + pageIndex * pageSize;
-    },
-  };
-}
-
-export interface IPOARow {
-  POAnumber: string;
-  POAissueDate: string;
-  authorizedBy: string;
 }

@@ -168,3 +168,11 @@ export interface IAddAttachmetnForm {
   name: FormControl<string>;
   attachmentFile: FormControl<File | null>;
 }
+
+export interface IPOARow {
+  number: string;
+  issueDate: Date;
+  creatorName: string;
+  createdDate:Date;
+  publisherName:string;
+}
