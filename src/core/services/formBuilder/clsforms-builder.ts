@@ -5,15 +5,19 @@ import { IAddPOAForm } from '../../../app/pages/case/case details/dialogs/add-po
 import { featureValidator } from '../../../shared/validators/Date/feature-date-validator';
 import { minAgeValidator } from '../../../shared/validators/minuimum-date.validator';
 import {
-  ICaseForm,
+  frmAddNewCase,
   INewClientForm,
   IExistingClientForm,
   INewPersonForm,
   IAddCaseForm,
   INewEmployee,
-  IAddContract,
+  frmAddContract,
   IAddSessionForm,
 } from '../../models/requests';
+import { ClsHelpers } from '../../../shared/util/helpers/cls-helpers';
+import { enContractType } from '../../../shared/enums/contract-types';
+import { contractDateValidator } from '../../../shared/validators/Date/contract-dates-validator';
+import { FileValidator } from '../../../shared/validators/files/file-validator';
 
 @Injectable({
   providedIn: 'root',
@@ -25,18 +29,21 @@ export class clsFormsBuilder {
       attachmentFile: this.fb.control(''),
     });
   }
-  constructor(private fb: NonNullableFormBuilder) {}
+  constructor(private fb: NonNullableFormBuilder, private helper: ClsHelpers) {}
 
-  createCaseForm(): FormGroup<ICaseForm> {
+  createCaseForm(): FormGroup<frmAddNewCase> {
     return this.fb.group({
       subject: this.fb.control('', Validators.required),
       clientRequests: this.fb.control('', Validators.required),
       partiesToTheCase: this.fb.control(1, {
         validators: [Validators.required],
       }),
-      estimatedTime: this.fb.control(new Date(), {
-        validators: [Validators.required, featureValidator],
-      }),
+      estimatedTime: this.fb.control(
+        this.helper.formatDateForInput(new Date()),
+        {
+          validators: [Validators.required, featureValidator],
+        }
+      ),
       courtType: this.fb.control(''),
       assignedOfficer: this.fb.control(''),
       caseNumber: this.fb.control(''),
@@ -98,18 +105,24 @@ export class clsFormsBuilder {
     });
   }
 
-  createAddContractForm(): FormGroup<IAddContract> {
+  createAddContractForm(): FormGroup<frmAddContract> {
     return this.fb.group({
       assigned: this.fb.control(false),
-      contractType: this.fb.control(1),
+      contractType: this.fb.control(enContractType.FixedTerm),
       totalPrice: this.fb.control(0, Validators.min(0)),
       downAmount: this.fb.control(0, Validators.min(0)),
-      expirationDate: this.fb.control('', Validators.required),
-      issueDate: this.fb.control('', Validators.required),
+      expirationDate: this.fb.control(
+        this.helper.formatDateForInput(new Date()),
+        Validators.required
+      ),
+      issueDate: this.fb.control(
+        this.helper.formatDateForInput(new Date()),
+        Validators.required
+      ),
       contractAttachment: this.fb.control<File[] | null>(null, {
-        validators: [Validators.required],
+        validators: [Validators.required, FileValidator.validate()],
       }),
-    });
+    }, {validators: [contractDateValidator()]});
   }
 
   createAddPOAForm(): FormGroup<IAddPOAForm> {

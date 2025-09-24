@@ -6,7 +6,7 @@ import { FormGroup } from '@angular/forms';
 import { ICseGeneralDetails } from '../case details/components/case-details-component/case-details-component';
 import {
   IAddCaseForm,
-  IAddContract,
+  frmAddContract,
   ICaseRow,
   IListDTO,
   IClientDetails,
@@ -14,8 +14,8 @@ import {
   IemployeeName,
   IContractRow,
 } from '../../../../core/models/requests';
-import { Adapter } from '../../../../core/services/addapter/addapter';
 import { enCaseStatus } from '../../../../shared/enums/case-status';
+import { Adapter } from '../../../../core/services/adapter/adapter';
 
 @Injectable({
   providedIn: 'root',
@@ -91,7 +91,7 @@ export class CaseService {
 
   addContract(
     caseId: string,
-    addContractForm: FormGroup<IAddContract>
+    addContractForm: FormGroup<frmAddContract>
   ): Observable<ICseGeneralDetails> {
     return this.http
       .get<any>(`${this.baseURL}/cases/${caseId}`)
@@ -99,15 +99,14 @@ export class CaseService {
   }
 
   getCaseContracts(caseId: string): Observable<IListDTO<IContractRow>> {
-    return this.http
-      .get<any>(`${this.baseURL}/cases/${caseId}/contracts`)
-      .pipe(
-        map((res) =>
-          this.adapter.getListDTOAdapter(
-            res,
-            this.adapter.getCaseContractRowAdapter
-          )
-        )
-      );
+    return this.http.get<any>(`${this.baseURL}/cases/${caseId}/contracts`).pipe(
+      map((res) => {
+        console.log(res);
+        return this.adapter.getListDTOAdapter<IContractRow>(
+          res,
+          this.adapter.getCaseContractRowAdapter
+        );
+      })
+    );
   }
 }

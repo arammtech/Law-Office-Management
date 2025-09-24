@@ -9,7 +9,7 @@
             <button (click)="updateTableData(court.courtTypeId, selectedYear)" (click)="onCourtChange(court)"
                 class="btn col-sm-12 col-lg-1 " [ngClass]="{'bg-sub': activeButton === court.code}"
                 (click)="setActiveButton(court.code)">
-                {{ court.code }}
+                {{ court.name }}
             </button>
             }
         </div>

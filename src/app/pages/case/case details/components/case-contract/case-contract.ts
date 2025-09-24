@@ -71,12 +71,12 @@ export class CaseContract implements OnInit, AfterViewInit {
   }
 
   loadContracts(): void {
-    this.caseService.getCaseContracts(this.caseId).subscribe({
-      next: (res) => {
-        this.contracts = res;
-        this.contractsDataSource.data = this.contracts.items;
-      },
-    });
+    // this.caseService.getCaseContracts(this.caseId).subscribe({
+    //   next: (res) => {
+    //     this.contracts = res;
+    //     this.contractsDataSource.data = this.contracts.items;
+    //   },
+    // });
     this.contractsDataSource.data = [
       {
         id: 'C-001',

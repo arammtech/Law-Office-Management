@@ -1,4 +1,5 @@
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
+import { enContractType } from '../../shared/enums/contract-types';
 
 export interface ICourt {
   courtTypeId: string;
@@ -8,16 +9,16 @@ export interface ICourt {
 }
 
 export interface IAddCaseForm {
-  case: FormGroup<ICaseForm>;
+  case: FormGroup<frmAddNewCase>;
   existingClients: FormArray<FormGroup<IExistingClientForm>>;
   newClients: FormArray<FormGroup<INewClientForm>>;
 }
 
-export interface ICaseForm {
+export interface frmAddNewCase {
   subject: FormControl<string>;
   clientRequests: FormControl<string>;
   partiesToTheCase: FormControl<number>;
-  estimatedTime: FormControl<Date>;
+  estimatedTime: FormControl<string>;
   courtType: FormControl<string>;
   assignedOfficer: FormControl<string>;
   caseNumber: FormControl<string>;
@@ -71,8 +72,8 @@ export interface INewEmployee {
   role: FormControl<string>;
 }
 
-export interface IAddContract {
-  contractType: FormControl<number>;
+export interface frmAddContract {
+  contractType: FormControl<enContractType>;
   totalPrice: FormControl<number>;
   downAmount: FormControl<number>;
   assigned: FormControl<boolean>;

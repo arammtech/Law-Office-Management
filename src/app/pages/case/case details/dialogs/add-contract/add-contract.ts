@@ -5,7 +5,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { JsonPipe, NgIf } from '@angular/common';
+import { DatePipe, JsonPipe, NgIf } from '@angular/common';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
@@ -13,54 +13,72 @@ import {
 } from '@angular/material/dialog';
 import { ToasterService } from '../../../../../../core/services/toaster-service';
 import { clsFormsBuilder } from '../../../../../../core/services/formBuilder/clsforms-builder';
-import { IAddContract } from '../../../../../../core/models/requests';
+import { frmAddContract } from '../../../../../../core/models/requests';
 import { ContractService } from '../../../../../../core/services/contract/contract-service';
 import { DialogHeaderComponent } from '../../../../../../shared/components/dialog-header/dialog-header-component/dialog-header-component';
+import { datesValidator } from '../../../../../../shared/validators/Date/dates-validators';
+import { enContractType } from '../../../../../../shared/enums/contract-types';
 
 @Component({
   selector: 'app-add-contract',
   imports: [
-    NgIf,
     JsonPipe,
     ReactiveFormsModule,
     MatDialogModule,
     DialogHeaderComponent,
+    DatePipe,
   ],
   templateUrl: './add-contract.html',
   styleUrl: './add-contract.css',
 })
 export class AddContractDialog {
-  contractForm: FormGroup<IAddContract>;
+  contractForm: FormGroup<frmAddContract>;
+  formSubmitted: boolean = false;
 
   constructor(
     private formBuilder: clsFormsBuilder,
     private toastService: ToasterService,
     private contractService: ContractService,
     @Inject(MAT_DIALOG_DATA) private data: any,
-    public dialogRef: MatDialogRef<AddContractDialog>
+    public dialogRef: MatDialogRef<AddContractDialog>,
+    public dateValidator: datesValidator
   ) {
     this.contractForm = this.formBuilder.createAddContractForm();
   }
 
   submit() {
-    if (this.contractForm.invalid) this.toastService.error('خطا في الحقول');
-    else {
+    this.formSubmitted = true;
+
+    
+    if (this.contractForm.invalid) {
+      return;
+    } else {
       this.contractService.add(this.contractForm, this.data.caseId).subscribe({
-        next: () => {
-          this.toastService.success('تم إضافة القضية بنجاح');
-          this.dialogRef.close();
+        next: (response) => {
+          this.toastService.success('تم إضافة العقد بنجاح');
+          this.dialogRef.close(true);
         },
         error: (error) => {
-          console.log('i am in the error', error);
+          console.log('Error details:', error);
           this.toastService.error('حدث خطا في اضافة العقد');
-          this.dialogRef.close();
         },
       });
     }
   }
 
-  onFileChange(event: any) {
-    const myFile: File = event?.target?.files[0] as File;
-    console.log('the file: ', myFile);
+  onFileChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+      const files = Array.from(input.files);
+      // Set the files in the form control
+      this.contractForm.controls.contractAttachment?.setValue(files);
+
+      // Mark the control as touched and update validity
+      this.contractForm.controls.contractAttachment?.markAsTouched();
+      this.contractForm.controls.contractAttachment?.updateValueAndValidity();
+    } else {
+      // Clear the form control if no files selected
+      this.contractForm.controls.contractAttachment?.setValue(null);
+    }
   }
 }

@@ -1,66 +1,99 @@
 <app-dialog-header-component title="إضافة عقد جديد" (onClose)="dialogRef.close()"></app-dialog-header-component>
 <mat-dialog-content>
-    <form [formGroup]="contractForm" id="contractForm" (ngSubmit)="submit()"  class="row d-flex g-3">
+    <form [formGroup]="contractForm" id="contractForm" (ngSubmit)="submit()" class="row d-flex g-3">
         <div class="col-md-6">
             <label class="form-label">مرفق العقد</label>
-            <input type="file" (change)="onFileChange($event)" formControlName="contractAttachment"
-                placeholder="لم يتم اختيار الملف"
-                [class.border-error]="(contractForm.controls.contractAttachment.touched && contractForm.controls.contractAttachment.invalid)"
-                class="form-control" />
-            <div class="errors" *ngIf="contractForm.controls.contractAttachment.touched"
-                animate.enter="error-animation">
-                <p *ngIf="contractForm.controls?.contractAttachment?.errors?.['required']">هذا الحقل مطلوب</p>
+
+            <input type="file" (change)="onFileChange($event)" placeholder="لم يتم اختيار الملف"
+                [class.border-error]="contractForm.controls.contractAttachment.invalid && formSubmitted"
+                class="form-control" [accept]="['.pdf','.doc','.docx']" />
+            @if (contractForm.controls.contractAttachment.invalid && formSubmitted ||
+            contractForm.controls.contractAttachment.touched) {
+            <div class="errors" animate.enter="error-animation">
+                @if (contractForm.controls?.contractAttachment?.errors?.['required']) {
+                <p>هذا الحقل مطلوب</p>
+                }
+
+                @if (contractForm.controls?.contractAttachment?.errors?.['extension']) {
+                <p>{{contractForm.controls?.contractAttachment?.errors?.['extension']?.message}}</p>
+                }
+
+                @else if (contractForm.controls?.contractAttachment?.errors?.['maxSize']) {
+                <p>{{contractForm.controls?.contractAttachment?.errors?.['maxSize']?.message}}</p>
+                }
             </div>
+            }
         </div>
         <div class="col-md-6">
             <label>نوع العقد</label>
             <select formControlName="contractType" class="form-control">
-                <option value="1">غير محدد بمدة</option>
-                <option value="2">محدد بمدة</option>
+                <option value="1">محدد بمدة</option>
+                <option value="2">غير محدد بمدة</option>
             </select>
         </div>
-        @if (contractForm.value.contractType == 2) {
+        @if (contractForm.value.contractType == 1) {
         <div class="col-md-6">
             <label class="form-label">تاريخ البداية</label>
             <input type="date" formControlName="issueDate"
-                [class.border-error]="(contractForm.controls.issueDate.touched && contractForm.controls.issueDate.invalid)"
+                [class.border-error]="contractForm.errors?.['issueDateRequired'] && formSubmitted"
                 class="form-control" />
-            <div *ngIf="contractForm.controls?.issueDate?.touched" class="errors" animate.enter="error-animation">
-                <p *ngIf="contractForm.controls?.issueDate?.errors?.['required']">هاذا الحقل مطلوب</p>
+            @if (contractForm.controls?.issueDate?.invalid && formSubmitted) {
+            <div class="errors" animate.enter="error-animation">
+                @if (contractForm?.errors?.['issueDateRequired']) {
+                <p>هاذا الحقل مطلوب</p>
+                }
             </div>
+            }
         </div>
+
         <div class="col-md-6">
             <label class="form-label">تاريخ النهاية</label>
             <input type="date" formControlName="expirationDate"
-                [class.border-error]="(contractForm.controls.expirationDate.touched && contractForm.controls.expirationDate.invalid)"
+                [class.border-error]="contractForm.errors?.['expirationDateRequired'] && formSubmitted"
                 class="form-control" />
-            <div *ngIf="contractForm.controls?.expirationDate?.touched" class="errors" animate.enter="error-animation">
-                <p *ngIf="contractForm.controls?.expirationDate?.errors?.['required']">هاذا الحقل مطلوب</p>
+            @if (contractForm.controls?.expirationDate?.invalid ||
+            formSubmitted) {
+            <div class="errors" animate.enter="error-animation">
+                @if (contractForm?.errors?.['expirationDateRequired']) {
+                <p>هاذا الحقل مطلوب</p>
+                }
+                @if (contractForm?.errors?.['invalidDateRange']) {
+                <p>يجب ان يكون التاريخ بعد
+                    {{contractForm.value.issueDate}}</p>
+                }
             </div>
+            }
         </div>
         }
         <div class="col-md-6">
             <label class="form-label">قيمة العقد</label>
             <input type="number" formControlName="totalPrice"
-                [class.border-error]="(contractForm.controls.totalPrice.touched && contractForm.controls.totalPrice.invalid)"
-                class="form-control" />
-            <div *ngIf="contractForm.controls?.totalPrice?.touched" class="errors" animate.enter="error-animation">
-                <p *ngIf="contractForm.controls?.totalPrice?.errors?.['min']">ادخل قيمة صالحة</p>
+                [class.border-error]="contractForm.controls.totalPrice.invalid && formSubmitted" class="form-control" />
+            @if (contractForm.controls?.totalPrice?.invalid && formSubmitted) {
+            <div class="errors" animate.enter="error-animation">
+                @if (contractForm.controls?.totalPrice?.errors?.['min']) {
+                <p>ادخل قيمة صالحة</p>
+                }
             </div>
+            }
         </div>
+
         <div class="col-md-6">
             <label class="form-label">مقدم العقد</label>
             <input type="number" formControlName="downAmount"
-                [class.border-error]="(contractForm.controls.downAmount.touched && contractForm.controls.downAmount.invalid)"
-                class="form-control" />
-            <div *ngIf="contractForm.controls?.downAmount?.touched" class="errors" animate.enter="error-animation">
-                <p *ngIf="contractForm.controls?.downAmount?.errors?.['min']">ادخل قيمة صالحة</p>
-
-                @if(contractForm.controls.downAmount.value > contractForm.controls.totalPrice.value) {
-                <p>المقدم يجب ان يكون في حدود القيمة</p>
+                [class.border-error]="contractForm.controls.downAmount.invalid && formSubmitted" class="form-control" />
+            @if (contractForm.controls?.downAmount?.invalid && formSubmitted || contractForm.controls?.downAmount?.touched) {
+            <div class="errors" animate.enter="error-animation">
+                @if (contractForm.controls?.downAmount?.errors?.['min']) {
+                <p>ادخل قيمة صالحة</p>
+                }
+                @if (contractForm.errors?.['downAmountExceeded'] ) {
+                <p>العربون يجب ان يكون في حدود القيمة</p>
                 }
             </div>
+            }
         </div>
+
         <div class="col-md-6 assigned">
             <label class="form-check-label">موقع ؟</label>
             <input type="checkbox" formControlName="assigned" class="form-check-input">

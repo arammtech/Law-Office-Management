@@ -4,7 +4,7 @@ import {
   IClientDetails,
   IemployeeName,
   IAddCaseForm,
-  IAddContract,
+  frmAddContract,
   ICourtDetaills,
   ICaseRow,
   IListDTO,
@@ -72,6 +72,7 @@ export class Adapter {
   }
 
   getCaseContractRowAdapter(res: any): IContractRow {
+    console.log('in the contract adapter', res);
     return {
       id: res.id,
       createdDate: res.createdDate,
@@ -157,67 +158,45 @@ export class Adapter {
     console.log(body);
     return body;
   }
-  toAddContractFormAPI(contractFrm: FormGroup<IAddContract>): FormData {
+  toAddContractFormAPI(contractFrm: FormGroup<frmAddContract>): FormData {
     const form = new FormData();
-    if (contractFrm.valid) {
-      if (contractFrm.value.contractType) {
-        console.log(
-          'i entered the contract type',
-          contractFrm.value.contractType
-        );
-        form.append('ContractType', contractFrm.value.contractType.toString());
-      }
-      if (contractFrm.value.expirationDate) {
-        console.log(
-          'i entered the expiration date',
-          contractFrm.value.expirationDate
-        );
-        form.append('ExpiresOn', contractFrm.value.expirationDate);
-      }
-      if (contractFrm.value.issueDate) {
-        console.log(
-          'i entered the issue date',
-          contractFrm.value.expirationDate
-        );
-        form.append('IssuedOn', contractFrm.value.issueDate);
-      }
-      // if (contractFrm.value.downAmount) {
-      console.log('i entered the downamount', contractFrm.value.downAmount);
-      // form.append('InitialPayment', contractFrm?.value?.downAmount);
-      // }
-      if (contractFrm.value.totalPrice) {
-        console.log('i entered the total price', contractFrm.value.totalPrice);
-        form.append('BaseAmount', contractFrm.value.totalPrice.toString());
-      }
-      if (contractFrm.value.assigned) {
-        console.log('i entered the assigned', contractFrm.value.assigned);
 
-        form.append('ContractType', contractFrm.value.assigned.toString());
-      }
-      if (contractFrm.value.contractAttachment) {
-        console.log(
-          'i entered the attachments',
-          contractFrm.value.contractAttachment.join(',')
-        );
+    // Add basic fields with proper conversion
+    form.append('ContractType', String(contractFrm.value.contractType));
+    form.append('InitialPayment', String(contractFrm.value?.downAmount));
+    form.append('BaseAmount', String(contractFrm.value.totalPrice));
+    form.append('IsAssigned', String(contractFrm.value.assigned));
 
-        for (let i = 0; i < contractFrm.value.contractAttachment.length; i++) {
-          form.append(
-            `ContractFiles[${i}]`,
-            contractFrm.value.contractAttachment[i]
-          );
-        }
-      }
+    // Handle dates properly
+
+    if (contractFrm.value.expirationDate) {
+      form.append(
+        'ExpiresOn',
+        String(contractFrm.value.expirationDate)
+      );
     }
-    console.log('i am the request form', contractFrm);
+    if (contractFrm.value.issueDate) {
+      form.append(
+        'IssuedOn',
+        String(contractFrm.value.issueDate)
+      );
+    }
 
-    console.log('i am the form', form.values());
+    if (
+      contractFrm.value.contractAttachment &&
+      contractFrm.value.contractAttachment.length > 0
+    ) {
+      const file = contractFrm.value.contractAttachment[0];
+      form.append('ContractFile', file);
+    }
     return form;
   }
 
   getListDTOAdapter<Type>(
     data: any,
-    itemAdapter: (data: any) => Type
+    itemAdapter: (row: any) => Type
   ): IListDTO<Type> {
+    console.log('in the adapter', data);
     return {
       pageIndex: data.pageIndex,
       pageSize: data.pageSize,
@@ -226,7 +205,7 @@ export class Adapter {
       hasPreviousPage: data.hasPreviousPage,
       hasNextPage: data.hasNextPage,
       totalPages: data.totalPages,
-      items: data.items.map((data: any) => itemAdapter(data)),
+      items: data.items.map((row: any) => itemAdapter(row)),
     };
   }
   caseListRowAdapter(row: any): ICaseRow {

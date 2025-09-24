@@ -1,21 +1,21 @@
 import { Injectable } from '@angular/core';
 import { environmentDev } from '../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
-import { Adapter } from '../addapter/addapter';
+
 import { FormGroup } from '@angular/forms';
 import { map } from 'rxjs';
-import { IAddContract } from '../../models/requests';
+import { frmAddContract } from '../../models/requests';
+import { Adapter } from '../adapter/adapter';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ContractService {
   baseURL = environmentDev.baseURL;
-  constructor(private http: HttpClient, private addapter: Adapter) {}
+  constructor(private http: HttpClient, private adapter: Adapter) {}
 
-  add(contractFrm: FormGroup<IAddContract>, caseId: string) {
-    const formdate = this.addapter.toAddContractFormAPI(contractFrm);
-    console.log('i tried in the service', formdate);
+  add(contractFrm: FormGroup<frmAddContract>, caseId: string) {
+    const formdate = this.adapter.toAddContractFormAPI(contractFrm);
     return this.http
       .post(`${this.baseURL}/cases/${caseId}/contracts`, formdate)
       .pipe(map((data) => data as string));
