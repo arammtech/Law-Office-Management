@@ -41,12 +41,12 @@ export class AddPoaDialog extends frmApp {
     if (!this.addPOAForm.invalid) {
       this.poaService.add(this.addPOAForm, this.data?.caseId).subscribe({
         next: (response) => {
-          this.toastService.success('تم إضافة العقد بنجاح');
+          this.toastService.success('تم إضافة الوكالة بنجاح');
           this.dialogRef.close(true);
         },
         error: (error) => {
           console.log('Error details:', error);
-          this.toastService.error('حدث خطا في اضافة العقد');
+          this.toastService.error('حدث خطا في اضافة الوكالة');
         },
       })
     }

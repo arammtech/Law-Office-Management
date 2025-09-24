@@ -12,19 +12,45 @@ import {
   ISessionsRow,
   IAddPOAForm,
   IPOARow,
+  IAddAttachmetnForm,
 } from '../../models/requests';
 import {
   ICseGeneralDetails,
   ICasesParties,
 } from '../../../app/pages/case/case details/components/case-details-component/case-details-component';
 import { Injectable } from '@angular/core';
+import { IAttachmentRow } from '../../../app/pages/case/case details/components/case-attachments/case-attachments';
 
 @Injectable({ providedIn: 'root' })
 export class Adapter {
+  constructor(private fb: NonNullableFormBuilder) {}
+
+  getCaseAttachmentRowAdapter(row: any): IAttachmentRow {
+    return {
+      id: row?.id ?? '',
+      name: row?.name ?? '',
+      rasiedDate: row?.rasiedDate ?? '',
+      raisedBy: row?.raisedBy ?? '',
+      fileSize: row?.fileSize ?? '',
+      fileType: row?.fileType ?? '',
+      filePath: row?.filePath ?? '',
+    };
+  }
+
+  toAddAttachmentFormAPI(frmAddAttachment: FormGroup<IAddAttachmetnForm>) {
+    const formData = new FormData();
+    const { name, attachmentFile } = frmAddAttachment.controls;
+
+    formData.append('name', name.value);
+    if (attachmentFile.value) {
+      formData.append('file', attachmentFile.value);
+    }
+
+    return formData;
+  }
   /**
    *
    */
-  constructor(private fb: NonNullableFormBuilder) {}
   toAddClientAPI(model: INewClientForm): any {
     return {
       kind: 'new',
@@ -87,13 +113,13 @@ export class Adapter {
       contractType: res.contractType,
     };
   }
-    getCasePOARowAdapter(res: any): IPOARow {
+  getCasePOARowAdapter(res: any): IPOARow {
     return {
       number: res.poaNumber,
       createdDate: res.createdDate,
       creatorName: res.employeeCreatedByName,
       publisherName: res.issuingAuthority,
-      issueDate: res.issueDate
+      issueDate: res.issueDate,
     };
   }
   fromCaseDetailsAPI(data: any): ICseGeneralDetails {

@@ -14,6 +14,7 @@ import { AddAttachmentDialog } from '../../dialogs/add-attachment/add-attachment
 import { ClsTableUtil } from '../../../../../../shared/util/table/cls-table-util';
 import { ClsHelpers } from '../../../../../../shared/util/helpers/cls-helpers';
 import { EmptyTable } from '../../../../../../shared/components/empty-table/empty-table/empty-table';
+import { ActivatedRoute } from '@angular/router';
 
 export interface IAttachmentRow {
   id?: string;
@@ -52,7 +53,7 @@ export class CaseAttachments implements OnInit, AfterViewInit {
   // Component properties
   currentPage: number = 0;
   attachments: IAttachmentRow[] = [];
-
+  caseId: string = '';
   // Enhanced data source for table functionality
   attachmentsDataSource = new MatTableDataSource<IAttachmentRow>([]);
 
@@ -67,13 +68,17 @@ export class CaseAttachments implements OnInit, AfterViewInit {
 
   constructor(
     private dialogof: MatDialog,
-    public helper: ClsHelpers // Added helper for utilities
+    public helper: ClsHelpers,
+    private activatedRoute: ActivatedRoute
   ) {
     this.initializeAttachments();
   }
 
   ngOnInit(): void {
-    this.loadAttachments();
+    this.activatedRoute.parent?.params.subscribe((params) => {
+      this.caseId = params['caseId'] || '';
+      this.loadAttachments();
+    });
   }
 
   ngAfterViewInit(): void {
@@ -245,7 +250,7 @@ export class CaseAttachments implements OnInit, AfterViewInit {
       width: '900px',
       disableClose: true,
       data: {
-        title: 'إضافة مرفق جديد',
+        caseId: this.caseId,
       },
     });
 
