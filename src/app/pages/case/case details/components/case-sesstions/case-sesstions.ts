@@ -44,43 +44,10 @@ export class CaseSessions implements AfterViewInit, OnInit {
   ngOnInit(): void {
     this.activatedRoute.parent?.params.subscribe((params) => {
       this.caseId = params['caseId'] || '';
-      // this.loadSessions();
+      this.loadSessions();
     });
 
-    this.sessionsDataSource.data = [
-      {
-        sessionDate: new Date('2025-09-01'),
-        assignedEmployeeName: 'أحمد الزهراني',
-        createdByEmployeeName: 'سارة العتيبي',
-        createdDate: new Date('2025-08-25'),
-      },
-      {
-        sessionDate: new Date('2025-09-10'),
-        assignedEmployeeName: 'نورة القحطاني',
-        createdByEmployeeName: 'خالد الحربي',
-        createdDate: new Date('2025-09-01'),
-      },
-      {
-        sessionDate: new Date('2025-09-15'),
-        assignedEmployeeName: 'فهد السبيعي',
-        createdByEmployeeName: 'أحمد الزهراني',
-        createdDate: new Date('2025-09-05'),
-      },
-      {
-        sessionDate: new Date('2025-09-20'),
-        assignedEmployeeName: 'سارة العتيبي',
-        createdByEmployeeName: 'نورة القحطاني',
-        createdDate: new Date('2025-09-10'),
-      },
-      {
-        sessionDate: new Date('2025-09-25'),
-        assignedEmployeeName: 'خالد الحربي',
-        createdByEmployeeName: 'فهد السبيعي',
-        createdDate: new Date('2025-09-15'),
-      },
-    ];
-
-    console.log('i am the data of the sessions', this.sessionsDataSource.data);
+    this.sessionsDataSource.data = [];
   }
 
   ngAfterViewInit(): void {

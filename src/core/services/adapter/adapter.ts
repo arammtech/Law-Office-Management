@@ -264,10 +264,10 @@ export class Adapter {
 
   getSessionsByCaseIdAdapter(row: any): ISessionsRow {
     return {
-      sessionDate: new Date(row.sessionDate),
+      sessionDate: new Date(row.scheduledAt),
       assignedEmployeeName: String(row.assignedEmployeeName),
-      createdByEmployeeName: String(row.createdByEmployeeName),
-      createdDate: new Date(row.createdDate),
+      createdByEmployeeName: String(row.assignedEmployeeName),
+      createdDate: new Date(row.scheduledAt),
     };
   }
 
