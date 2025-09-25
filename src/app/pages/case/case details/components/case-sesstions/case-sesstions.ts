@@ -101,6 +101,7 @@ export class CaseSessions implements AfterViewInit, OnInit {
     this.dialogof.open(AddSessionDialog, {
       height: '325x',
       minWidth: '600px',
+      data: {caseId: this.caseId}
     });
   }
 

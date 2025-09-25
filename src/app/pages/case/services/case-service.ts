@@ -48,13 +48,7 @@ export class CaseService {
       );
   }
 
-  getEmpoloyeeNames(): Observable<IemployeeName[]> {
-    return this.http
-      .get<any[]>(`${this.baseURL}/employees/names`)
-      .pipe(
-        map((data) => data.map((ele) => this.adapter.fromEmployeeNamesAPI(ele)))
-      );
-  }
+
 
   updateCaseStatus(caseId: string, status: enCaseStatus): Observable<void> {
     return this.http

@@ -150,7 +150,7 @@ export class clsFormsBuilder {
 
   createAddSessionForm(): FormGroup<IAddSessionForm> {
     return this.fb.group({
-      date: this.fb.control(new Date(), Validators.required),
+      date: this.fb.control(this.helper.formatDateForInput(new Date()), {validators:[Validators.required, featureValidator]}),
       layerId: this.fb.control('', Validators.required),
       tasks: this.fb.control('', Validators.required),
     });

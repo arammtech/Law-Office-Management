@@ -13,6 +13,7 @@ import {
   IAddPOAForm,
   IPOARow,
   IAddAttachmetnForm,
+  IAddSessionForm,
 } from '../../models/requests';
 import {
   ICseGeneralDetails,
@@ -267,6 +268,14 @@ export class Adapter {
       assignedEmployeeName: String(row.assignedEmployeeName),
       createdByEmployeeName: String(row.createdByEmployeeName),
       createdDate: new Date(row.createdDate),
+    };
+  }
+
+  createSessionAdapter(data: FormGroup<IAddSessionForm>): any {
+    return {
+      assignedEmployeeId: data.value.layerId,
+      scheduledAt: data.value.date,
+      assignedTasks: data.value.tasks,
     };
   }
 }

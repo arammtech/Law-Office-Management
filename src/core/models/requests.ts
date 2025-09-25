@@ -83,7 +83,7 @@ export interface frmAddContract {
 }
 
 export interface IAddSessionForm {
-  date: FormControl<Date>;
+  date: FormControl<string>;
   tasks: FormControl<string>;
   layerId: FormControl<string>;
 }
