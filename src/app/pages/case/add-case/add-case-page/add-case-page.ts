@@ -35,7 +35,7 @@ import { ToasterService } from '../../../../../core/services/toaster-service';
   styleUrl: './add-case-page.css',
 })
 export class AddCaseComponent implements OnInit {
-  showErrors: boolean = false;
+  showNatBoxErrors: boolean = false;
   natId: string;
   addCaseForm: FormGroup<IAddCaseForm>;
   courts!: ICourt[];
@@ -67,10 +67,14 @@ export class AddCaseComponent implements OnInit {
     ] as IemployeeName[];
   }
 
-  search(natId: string) {
+  search(natId: string, invalid: boolean) {
+    this.showNatBoxErrors = true;
+    if (invalid) {
+      return;
+    }
     const isExsit: boolean = this.isClientExsit(natId);
     if (isExsit) {
-      this.toasterService.error('العميل بالفعل مضاف في القضية', 'حسنا');
+      this.toasterService.error('العميل بالفعل مضاف في القضية');
       return;
     } else {
       this.caseService.getClientByNatId(natId).subscribe({
@@ -81,7 +85,8 @@ export class AddCaseComponent implements OnInit {
           });
 
           this.addCaseForm.value.existingClients?.push(existingClient?.value);
-          return;
+          this.natId = '';
+          this.showNatBoxErrors = false;
         },
         error: (error) => {
           this.dialogof
@@ -96,6 +101,8 @@ export class AddCaseComponent implements OnInit {
                 if (result) {
                   if (result instanceof FormGroup) {
                     this.addCaseForm?.controls.newClients?.push(result);
+                    this.natId = '';
+                    this.showNatBoxErrors = false;
                   }
                 }
               },
@@ -121,27 +128,27 @@ export class AddCaseComponent implements OnInit {
       );
   }
 
-  deleteNewClient(natId: string) {
-    this.addCaseForm.value.newClients =
-      this.addCaseForm.value.newClients?.filter(
-        (x) => x.person?.natId != natId
-      );
+  deleteNewClient(idx: number) {
+    this.addCaseForm.value.newClients?.splice(idx, 1);
   }
-  deleteExistingClient(natId: string) {
-    this.addCaseForm.value.existingClients =
-      this.addCaseForm.value.existingClients?.filter((x) => x.natId != natId);
+  deleteExistingClient(idx: number) {
+    this.addCaseForm.value.existingClients?.splice(idx, 1);
   }
 
   submit(isDraft: boolean) {
-    if (this.addCaseForm.invalid) {
-      this.showErrors = true;
-      this.toasterService.error('تأكد من ملء جميع الحقول');
-    } else {
+    this.addCaseForm.markAllAsTouched();
+    if (!(this.addCaseForm.value.existingClients?.length || this.addCaseForm.value.newClients?.length))
+      this.toasterService.error('يجب ان يكون هناك عميل واحد على الاقل');
+    
+    else if (!this.addCaseForm.invalid) {
       this.caseService.add(this.addCaseForm, isDraft).subscribe({
         next: (res) => {
           this.toasterService.success('تمت إضافة القضية بنجاح');
+          this.addCaseForm.reset();
+          this.addCaseForm.markAsUntouched();
         },
-        error: (res) => {
+        error: (err) => {
+          console.log('error during adding case', err);
           this.toasterService.error('خطا في اضافة القضية');
         },
       });

@@ -18,9 +18,12 @@ import {
 } from 'ngx-intl-tel-input';
 import { Country, CountrySelectComponent } from '@wlucha/ng-country-select';
 import { ToasterService } from '../../../../../../core/services/toaster-service';
-import { INewClientForm } from '../../../../../../core/models/requests';
+import { ICounty, INewClientForm } from '../../../../../../core/models/requests';
 import { clsFormsBuilder } from '../../../../../../core/services/formBuilder/clsforms-builder';
-import { DialogHeaderComponent } from "../../../../../../shared/components/dialog-header/dialog-header-component/dialog-header-component";
+import { DialogHeaderComponent } from '../../../../../../shared/components/dialog-header/dialog-header-component/dialog-header-component';
+import { ClsHelpers } from '../../../../../../shared/util/helpers/cls-helpers';
+import { EmployeeService } from '../../../../employee/services/employee-service';
+import { ClientService } from '../../../../../../core/services/client/client-service';
 
 @Component({
   selector: 'app-add-client-component',
@@ -33,21 +36,22 @@ import { DialogHeaderComponent } from "../../../../../../shared/components/dialo
     NgxIntlTelInputModule,
     NgFor,
     CountrySelectComponent,
-    DialogHeaderComponent
-],
+    DialogHeaderComponent,
+  ],
   templateUrl: './add-client-dialog.html',
   styleUrl: './add-client-dialog.css',
 })
 export class AddClientComponent implements OnInit {
   clientForm: FormGroup<INewClientForm>;
-  showErrors: boolean = false;
-  counties:any;
+  counties!: ICounty[];
   constructor(
+    private helper: ClsHelpers,
     @Inject(MAT_DIALOG_DATA) public data: any,
     public dialogRef: MatDialogRef<AddClientComponent>,
     private formBuilder: clsFormsBuilder,
     private toastService: ToasterService,
-    private fb: NonNullableFormBuilder
+    private fb: NonNullableFormBuilder,
+    private clientService: ClientService
   ) {
     this.clientForm = this.formBuilder.createNewClientForm();
   }
@@ -57,35 +61,13 @@ export class AddClientComponent implements OnInit {
       this.clientForm.controls.person.get('natId')?.setValue(this.data.NatId);
     }
 
-    this.loadCountries();
+    this.counties = this.helper.loadCountries();
   }
 
   submit() {
-    if (this.clientForm.invalid) {
-      this.showErrors = true;
-      this.toastService.error('يرجى ملئ الحقول المطلوب');
-    } else {
+    this.clientForm.markAllAsTouched();
+    if (!this.clientForm.invalid) {
       this.dialogRef.close(this.clientForm);
     }
-  }
-
-  loadCountries() {
-    this.counties = [
-      { alpha2: 'SA', translations: { ar: 'السعودية' } },
-      { alpha2: 'EG', translations: { ar: 'مصر' } },
-      { alpha2: 'AE', translations: { ar: 'الإمارات' } },
-      { alpha2: 'JO', translations: { ar: 'الأردن' } },
-      { alpha2: 'IQ', translations: { ar: 'العراق' } },
-      { alpha2: 'MA', translations: { ar: 'المغرب' } },
-      { alpha2: 'DZ', translations: { ar: 'الجزائر' } },
-      { alpha2: 'TN', translations: { ar: 'تونس' } },
-      { alpha2: 'LB', translations: { ar: 'لبنان' } },
-      { alpha2: 'SY', translations: { ar: 'سوريا' } },
-      { alpha2: 'YE', translations: { ar: 'اليمن' } },
-      { alpha2: 'OM', translations: { ar: 'عُمان' } },
-      { alpha2: 'KW', translations: { ar: 'الكويت' } },
-      { alpha2: 'QA', translations: { ar: 'قطر' } },
-      { alpha2: 'BH', translations: { ar: 'البحرين' } },
-    ];
   }
 }

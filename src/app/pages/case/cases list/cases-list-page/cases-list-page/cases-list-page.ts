@@ -109,7 +109,7 @@ export class CasesListPage implements OnInit, AfterViewInit {
 
   onCourtChange(court: ICourtDetaills): void {
     this.selectedCourt = court;
-    this.selectedYear = court.years[0]; // Reset to first year of selected court
+    this.selectedYear = court.years[0]; 
     this.updateTableData(court.courtTypeId, this.selectedYear);
   }
 
@@ -120,6 +120,7 @@ export class CasesListPage implements OnInit, AfterViewInit {
   updateTableData(courtId: string, year: string): void {
     this.caseService.getCasesList(courtId, year).subscribe({
       next: (data: IListDTO<ICaseRow>) => {
+        console.log('the case list', data);
         this.casesList = data;
 
         // Update the data source with new data

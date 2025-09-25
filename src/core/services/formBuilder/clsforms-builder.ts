@@ -37,7 +37,7 @@ export class clsFormsBuilder {
     return this.fb.group({
       subject: this.fb.control('', Validators.required),
       clientRequests: this.fb.control('', Validators.required),
-      partiesToTheCase: this.fb.control(1, {
+      partiesToTheCase: this.fb.control('مدعي', {
         validators: [Validators.required],
       }),
       estimatedTime: this.fb.control(
@@ -46,8 +46,8 @@ export class clsFormsBuilder {
           validators: [Validators.required, featureValidator],
         }
       ),
-      courtType: this.fb.control(''),
-      assignedOfficer: this.fb.control(''),
+      courtType: this.fb.control('', Validators.required),
+      assignedOfficer: this.fb.control('', Validators.required),
       caseNumber: this.fb.control(''),
       lawyerOpinion: this.fb.control('', Validators.required),
     });
@@ -61,7 +61,7 @@ export class clsFormsBuilder {
 
   createNewEmployeeForm(): FormGroup<INewEmployee> {
     return this.fb.group({
-      person: this.createPersonForm(),
+      person: this.createPersonForm(undefined, 18),
       email: this.fb.control('', {
         validators: [Validators.email, Validators.required],
       }),
@@ -76,7 +76,7 @@ export class clsFormsBuilder {
     });
   }
 
-  createPersonForm(obj?: INewPersonForm): FormGroup<INewPersonForm> {
+  createPersonForm(obj?: INewPersonForm, minuimumAge:number = 1): FormGroup<INewPersonForm> {
     return this.fb.group({
       name: this.fb.control(obj?.name || '', {
         validators: [Validators.required, Validators.minLength(3)],
@@ -84,8 +84,8 @@ export class clsFormsBuilder {
       natId: this.fb.control(obj?.natId || '', {
         validators: [Validators.required, Validators.pattern(/^\d{10}/)],
       }),
-      birthDate: this.fb.control(obj?.birthDate || '', {
-        validators: [Validators.required, minAgeValidator(18)],
+      birthDate: this.fb.control(obj?.birthDate || this.helper.formatDateForInput(new Date(new Date().getFullYear() - minuimumAge, new Date().getMonth(), new Date().getDate())), {
+        validators: [Validators.required, minAgeValidator(minuimumAge)],
       }),
       phone: this.fb.control<string>(obj?.phone || '', {
         validators: [Validators.required, Validators.pattern(/^05\d{8}$/)],

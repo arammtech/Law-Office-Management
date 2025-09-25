@@ -15,6 +15,7 @@ import { ClsHelpers } from '../../../../../shared/util/helpers/cls-helpers';
 import { ClsTableUtil } from '../../../../../shared/util/table/cls-table-util';
 import { EmptyTable } from '../../../../../shared/components/empty-table/empty-table/empty-table';
 import { ScrollStrategyOptions } from '@angular/cdk/overlay';
+import { enDialogMode } from '../../../../../shared/enums/dialog-mode';
 @Component({
   selector: 'app-mange-employee-page',
   imports: [
@@ -934,6 +935,15 @@ export class MangeEmployeePage {
     this.dialogof.open(AddEmployeeComponent, {
       height: '450px',
       minWidth: '400px',
+      data: { mode: enDialogMode.add },
+    });
+  }
+
+  update(employeeId: string) {
+    this.dialogof.open(AddEmployeeComponent, {
+      height: '450px',
+      minWidth: '400px',
+      data: { mode: enDialogMode.update, employeeId: employeeId },
     });
   }
 }

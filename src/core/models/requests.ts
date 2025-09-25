@@ -17,7 +17,7 @@ export interface IAddCaseForm {
 export interface frmAddNewCase {
   subject: FormControl<string>;
   clientRequests: FormControl<string>;
-  partiesToTheCase: FormControl<number>;
+  partiesToTheCase: FormControl<string>;
   estimatedTime: FormControl<string>;
   courtType: FormControl<string>;
   assignedOfficer: FormControl<string>;
@@ -89,6 +89,7 @@ export interface IAddSessionForm {
 }
 
 export interface ISessionsRow {
+  id: string;
   sessionDate: Date;
   assignedEmployeeName: string;
   createdByEmployeeName: string;
@@ -163,7 +164,6 @@ export interface IAddPOAForm {
   poaAttachment: FormControl<File | null>;
 }
 
-
 export interface IAddAttachmetnForm {
   name: FormControl<string>;
   attachmentFile: FormControl<File | null>;
@@ -173,6 +173,36 @@ export interface IPOARow {
   number: string;
   issueDate: Date;
   creatorName: string;
-  createdDate:Date;
-  publisherName:string;
+  createdDate: Date;
+  publisherName: string;
+}
+
+export interface sessionDetails {
+  id: string;
+  caseId: string;
+  assignedEmployeeId: string;
+  assignedEmployeeName: string;
+  scheduledAt: Date;
+  assignedTasks: string;
+  isSessionDateExpired: boolean;
+}
+
+export interface ICounty {
+  code: string;
+  name: string;
+}
+
+export interface IEmployeeDetails extends PersonDetails {
+  id: string;
+  role: string;
+  email: string;
+}
+
+export interface PersonDetails {
+  fullName: string;
+  nationalId: string;
+  birthDate: Date;
+  phone: string;
+  address: string;
+  countryCode: string;
 }

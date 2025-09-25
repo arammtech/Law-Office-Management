@@ -1,5 +1,6 @@
-<app-dialog-header-component title="إضافة جلسة جديدة" (onClose)="dialogRef.close()"></app-dialog-header-component>
+<app-dialog-header-component [title]="title" (onClose)="dialogRef.close()"></app-dialog-header-component>
 <mat-dialog-content>
+    <h1>{{sessionForm.value | json}}</h1>
     <form [formGroup]="sessionForm" id="sessionForm" (ngSubmit)="submit()" class="row d-flex g-3">
         <div class="col-md-6">
             <label class="form-label">تاريخ الجلسة</label>

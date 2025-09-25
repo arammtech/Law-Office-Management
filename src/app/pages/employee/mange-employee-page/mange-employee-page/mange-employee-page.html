@@ -61,8 +61,8 @@
                 <ng-container [matColumnDef]="displayedColumns[6]">
                     <th mat-header-cell *matHeaderCellDef>الاجراءات</th>
                     <td mat-cell *matCellDef="let element" class="d-flex gap-3">
-                        <a class="btn btn-icon px-2 py-1 "><i class="fa-solid fa-pen-to-square"></i></a>
-                        <a class="btn btn-icon px-2 py-1"><i class="fa-solid fa-trash"></i></a>
+                        <button (click)="update(element.id)" class="btn btn-icon px-2 py-1 "><i class="fa-solid fa-pen-to-square"></i></button>
+                        <button class="btn btn-icon px-2 py-1"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 </ng-container>
 

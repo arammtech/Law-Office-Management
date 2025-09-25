@@ -8,6 +8,7 @@ import {
   IAddSessionForm,
   IListDTO,
   ISessionsRow,
+  sessionDetails,
 } from '../../../core/models/requests';
 import { FormGroup } from '@angular/forms';
 
@@ -24,13 +25,19 @@ export class SessionService extends AppService {
     caseId: string
   ): Observable<void> {
     const body = this.adapter.createSessionAdapter(frmNewSession);
-    console.log('the session body', body);
     return this.http.post<any>(
       `${this.baseURL}/cases/${caseId}/court-sessions`,
       body
     );
   }
 
+  update(updatedSession: FormGroup<IAddSessionForm>, sessionId:string, caseId: string) : Observable<void> {
+    const body = this.adapter.createSessionAdapter(updatedSession);
+    return this.http.put<any>(
+      `${this.baseURL}/cases/${caseId}/court-sessions/${sessionId}`,
+      body
+    );
+  }
   getSessionsByCaseId(caseId: string): Observable<IListDTO<ISessionsRow>> {
     return this.http
       .get<any>(`${this.baseURL}/cases/${caseId}/court-sessions/paged`)
@@ -42,5 +49,14 @@ export class SessionService extends AppService {
           )
         )
       );
+  }
+
+  getSessionsDetails(
+    sessionId: string,
+    caseId: string
+  ): Observable<sessionDetails> {
+    return this.http
+      .get<any>(`${this.baseURL}/cases/${caseId}/court-sessions/${sessionId}`)
+      .pipe(map((data) => this.adapter.sessionDetailsAdapter(data)));
   }
 }

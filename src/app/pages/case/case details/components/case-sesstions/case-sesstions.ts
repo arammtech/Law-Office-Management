@@ -11,6 +11,7 @@ import { ClsHelpers } from '../../../../../../shared/util/helpers/cls-helpers';
 import { SessionService } from '../../../../../../shared/services/session.service/session-service';
 import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { enDialogMode } from '../../../../../../shared/enums/dialog-mode';
 
 @Component({
   selector: 'app-case-sesstions',
@@ -26,7 +27,14 @@ import { DatePipe } from '@angular/common';
   styleUrl: './case-sesstions.css',
 })
 export class CaseSessions implements AfterViewInit, OnInit {
-  displayedColumns: string[] = ['index', 'date', 'assignedEmployeeName', 'createdByEmployeeName', 'createdDate'];
+  displayedColumns: string[] = [
+    'index',
+    'date',
+    'assignedEmployeeName',
+    'createdByEmployeeName',
+    'createdDate',
+    'actions',
+  ];
   sessionsDataSource = new MatTableDataSource<ISessionsRow>();
   sessions: IListDTO<ISessionsRow> = {} as IListDTO<ISessionsRow>;
   currentPage = 0;
@@ -64,18 +72,30 @@ export class CaseSessions implements AfterViewInit, OnInit {
     this.currentPage = event.pageIndex;
   }
 
-  openAddSession(): void {
-    this.dialogof.open(AddSessionDialog, {
-      height: '325x',
-      minWidth: '600px',
-      data: {caseId: this.caseId}
-    });
-  }
-
   loadSessions() {
     this.sessionService.getSessionsByCaseId(this.caseId).subscribe((data) => {
       this.sessions = data;
       this.sessionsDataSource.data = this.sessions.items;
+    });
+  }
+
+  openAddSession(): void {
+    this.dialogof.open(AddSessionDialog, {
+      height: '325x',
+      minWidth: '600px',
+      data: { caseId: this.caseId, mode: enDialogMode.add },
+    });
+  }
+
+  openUpdateSession(sessionId: string): void {
+    this.dialogof.open(AddSessionDialog, {
+      height: '325x',
+      minWidth: '600px',
+      data: {
+        caseId: this.caseId,
+        sessionId: sessionId,
+        mode: enDialogMode.update,
+      },
     });
   }
 }

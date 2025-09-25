@@ -20,7 +20,7 @@
   /* Gold Accent #C9A227 */
   --accent: #eaecefff;
   --accent-foreground: rgba(5, 3, 3, 0.792);
-  
+
   --txt: rgba(191, 191, 191, 0.621);
 }
 
@@ -30,11 +30,10 @@ mat-paginator {
 
 .mat-mdc-table {
   background-color: var(--secondary);
-} 
+}
 .mat-mdc-table thead {
   background-color: #ececec !important;
 }
-
 
 .mat-mdc-header-cell {
   color: var(--secondary-foreground);
@@ -187,14 +186,12 @@ textarea {
   animation: fadeIn 0.5s;
 }
 
-.field input.border-error,
-.field textarea.border-error,
-.field select.border-error {
+.form-control.border-error,
+.form-select.border-error {
   border: 1px rgb(246, 55, 55) solid;
 }
 
-.field input.border-error::placeholder,
-.field textarea.border-error {
+.form-control.border-error::placeholder {
   color: rgb(246, 55, 55);
 }
 
@@ -378,4 +375,13 @@ ngx-intl-tel-input input[disabled] {
 option:hover {
   background-color: var(--secondary);
   color: var(--primary-foreground);
+}
+
+td {
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+  }
 }

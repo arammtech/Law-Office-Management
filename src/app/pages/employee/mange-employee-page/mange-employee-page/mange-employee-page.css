@@ -31,5 +31,8 @@ button {
 .btn-icon:hover {
     background-color: var(--secondary);
     color: var(--secondary-foreground);
+}
 
+.h-fit {
+    height: fit-content;
 }
