@@ -1,12 +1,12 @@
 <button (click)="sideNav.toggle()"><i class="fa-solid fa-bars"></i></button>
 <mat-sidenav-container>
     <mat-sidenav #sideNav mode="side" fixedInViewport="true" class="nav">
-            <button (click)="sideNav.close()"><i class="fa-solid fa-bars"></i></button>
-            <div class="logo"><i class="fa-solid fa-gavel"></i></div>
-            <ul>
-                <a class="btn">
-                    <i class="fa-solid fa-house"></i> الرئيسية
-                </a>
+        <button (click)="sideNav.close()"><i class="fa-solid fa-bars"></i></button>
+        <div class="logo"><i class="fa-solid fa-gavel"></i></div>
+        <ul>
+            <a class="btn">
+                <i class="fa-solid fa-house"></i> الرئيسية
+            </a>
             <a routerLink="add-case" routerLinkActive="bg-accent" class="btn">
                 <i class="fa-solid fa-plus"></i> إضافة قضية
                 جديدة
@@ -21,12 +21,15 @@
             <a [routerLink]='["draft-cases"]' routerLinkActive="bg-accent" class="btn">
                 <i class="fa-brands fa-firstdraft"></i> القضايا المسودة
             </a>
+            <a routerLink="templates" routerLinkActive="bg-accent" class="btn">
+                <i class="fa-solid fa-box"></i>النماذج
+            </a>
             <a routerLink="employees" routerLinkActive="bg-accent" class="btn">
                 <i class="fa-solid fa-users"></i> إدارة
                 الموظفين
             </a>
         </ul>
-        
+
         <div class="logout">
             <a (click)="logout()" class="btn bg-main">تسجيل الخروج <i class="fa-solid fa-right-from-bracket"></i></a>
         </div>

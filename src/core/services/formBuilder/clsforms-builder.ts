@@ -14,6 +14,7 @@ import {
   IAddPOAForm,
   IAddAttachmetnForm,
   frmAddJudgment,
+  frmAddTemplate,
 } from '../../models/requests';
 import { ClsHelpers } from '../../../shared/util/helpers/cls-helpers';
 import { enContractType } from '../../../shared/enums/contract-types';
@@ -38,11 +39,21 @@ export class clsFormsBuilder {
       file: this.fb.control<File | null>(null, { validators: [Validators.required, FileValidator.validate()] }),
     });
   }
+
   constructor(private fb: NonNullableFormBuilder, private helper: ClsHelpers) {}
   createAddAttachmentForm(): FormGroup<IAddAttachmetnForm> {
     return this.fb.group({
       name: this.fb.control('', { validators: [Validators.required] }),
       attachmentFile: this.fb.control<File | null>(null, {
+        validators: [Validators.required, FileValidator.validate()],
+      }),
+    });
+  }
+
+   frmAddTemplate(): FormGroup<frmAddTemplate> {
+    return this.fb.group({
+      name: this.fb.control('', { validators: [Validators.required] }),
+      file: this.fb.control<File | null>(null, {
         validators: [Validators.required, FileValidator.validate()],
       }),
     });

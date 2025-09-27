@@ -20,6 +20,7 @@ import {
   IEmployeeDetails,
   frmAddJudgment,
   IJudgmentRow,
+  frmAddTemplate,
 } from '../../models/requests';
 import {
   ICseGeneralDetails,
@@ -30,7 +31,7 @@ import { IAttachmentRow } from '../../../app/pages/case/case details/components/
 
 @Injectable({ providedIn: 'root' })
 export class Adapter {
-  judgmentRowAdapter(res: any) : IJudgmentRow {
+  judgmentRowAdapter(res: any): IJudgmentRow {
     return {
       createdDate: res.createdDate,
       issueDate: res.issueDate,
@@ -40,10 +41,8 @@ export class Adapter {
       id: res.id,
       subType: res.subType,
       type: res.type,
-      caseId: res.caseId
-
-
-    }
+      caseId: res.caseId,
+    };
   }
   constructor(private fb: NonNullableFormBuilder) {}
 
@@ -354,7 +353,7 @@ export class Adapter {
     };
   }
 
-  frmAddJudgmentAdapter(judgment: FormGroup<frmAddJudgment>) : any {
+  frmAddJudgmentAdapter(judgment: FormGroup<frmAddJudgment>): any {
     const form = new FormData();
 
     form.append('Number', String(judgment.value.number));
@@ -363,9 +362,18 @@ export class Adapter {
     form.append('IssuedOn', String(judgment.value.issueDate));
     form.append('ExpiresOn', String('2025-02-02'));
 
-    if (judgment.value.file)
-      form.append('File', judgment.value.file);
+    if (judgment.value.file) form.append('File', judgment.value.file);
 
     return form;
-  } 
+  }
+
+  frmAddTemplateAdapter(frmTemplate: FormGroup<frmAddTemplate>) {
+    const form = new FormData();
+
+    form.append('Number', String(frmTemplate.value.name));
+
+    if (frmTemplate.value.file) form.append('File', frmTemplate.value.file);
+
+    return form;
+  }
 }

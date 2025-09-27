@@ -18,6 +18,7 @@ import { CaseSessions } from './pages/case/case details/components/case-sesstion
 import { DraftCasesPage } from './pages/case/draft-cases/draft-cases-page/draft-cases-page';
 import { CaseJudgmentsComponents } from './pages/case/case details/components/case-judgments-components/case-judgments-components';
 import { JudgmentsListPage } from './pages/case/judgments/judgments-list-page/judgments-list-page';
+import { TemplatesPage } from './pages/case/template/templats-page/templats-page';
 
 export const routes: Routes = [
   {
@@ -99,10 +100,13 @@ export const routes: Routes = [
         // },
       },
 
-            {
+      {
         path: 'judgments-list',
         component: JudgmentsListPage,
-        
+      },
+      {
+        path: 'templates',
+        component: TemplatesPage,
       },
     ],
   },

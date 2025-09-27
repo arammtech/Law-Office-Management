@@ -229,3 +229,16 @@ export interface IJudgmentRow {
   filePath:string;
   caseId: string;
 }
+
+export interface ITemplateBox {
+  id:string;
+  name:string;
+  filePath:string;
+}
+
+
+
+export interface frmAddTemplate {
+  name: FormControl<string>;
+  file: FormControl<File | null>;
+}
