@@ -17,6 +17,7 @@ import { authGuard } from '../core/guards/authGuard/auth-guard';
 import { CaseSessions } from './pages/case/case details/components/case-sesstions/case-sesstions';
 import { DraftCasesPage } from './pages/case/draft-cases/draft-cases-page/draft-cases-page';
 import { CaseJudgmentsComponents } from './pages/case/case details/components/case-judgments-components/case-judgments-components';
+import { JudgmentsListPage } from './pages/case/judgments/judgments-list-page/judgments-list-page';
 
 export const routes: Routes = [
   {
@@ -96,6 +97,12 @@ export const routes: Routes = [
         // resolve: {
         //   court: courtResolverResolver,
         // },
+      },
+
+            {
+        path: 'judgments-list',
+        component: JudgmentsListPage,
+        
       },
     ],
   },
