@@ -11,6 +11,8 @@ import { ClsTableUtil } from '../../../../../../shared/util/table/cls-table-util
 import { EmptyTable } from '../../../../../../shared/components/empty-table/empty-table/empty-table';
 import { IContractRow, IListDTO } from '../../../../../../core/models/requests';
 import { DatePipe } from '@angular/common';
+import { ContractService } from '../../../../../../core/services/contract/contract-service';
+import { ClsHelpers } from '../../../../../../shared/util/helpers/cls-helpers';
 
 @Component({
   selector: 'app-case-contract',
@@ -55,7 +57,9 @@ export class CaseContract implements OnInit, AfterViewInit {
   constructor(
     private dialogof: MatDialog,
     private activatedRoute: ActivatedRoute,
-    private caseService: CaseService
+    private contractService: ContractService,
+    public helper:ClsHelpers,
+    
   ) {}
 
   ngOnInit(): void {
@@ -71,69 +75,13 @@ export class CaseContract implements OnInit, AfterViewInit {
   }
 
   loadContracts(): void {
-    // this.caseService.getCaseContracts(this.caseId).subscribe({
-    //   next: (res) => {
-    //     this.contracts = res;
-    //     this.contractsDataSource.data = this.contracts.items;
-    //   },
-    // });
-    this.contractsDataSource.data = [
-      {
-        id: 'C-001',
-        contractNumber: 'CN-2025-001',
-        contractType: 'إيجار',
-        totalAmount: '150,000 ريال',
-        restAmount: '50,000 ريال',
-        issueDate: '2025-01-15',
-        expirationDate: '2026-01-15',
-        employeeNameCreatedIt: 'أحمد الزهراني',
-        createdDate: '2025-01-10',
+    this.contractService.getContractsByCaseId(this.caseId).subscribe({
+      next: (res) => {
+        this.contracts = res;
+        this.contractsDataSource.data = this.contracts.items;
       },
-      {
-        id: 'C-002',
-        contractNumber: 'CN-2025-002',
-        contractType: 'صيانة',
-        totalAmount: '75,000 ريال',
-        restAmount: '0 ريال',
-        issueDate: '2025-03-01',
-        expirationDate: '2025-09-01',
-        employeeNameCreatedIt: 'سارة العتيبي',
-        createdDate: '2025-02-28',
-      },
-      {
-        id: 'C-003',
-        contractNumber: 'CN-2025-003',
-        contractType: 'توريد',
-        totalAmount: '220,000 ريال',
-        restAmount: '120,000 ريال',
-        issueDate: '2025-05-10',
-        expirationDate: '2025-11-10',
-        employeeNameCreatedIt: 'خالد الحربي',
-        createdDate: '2025-05-05',
-      },
-      {
-        id: 'C-004',
-        contractNumber: 'CN-2025-004',
-        contractType: 'استشارة',
-        totalAmount: '30,000 ريال',
-        restAmount: '5,000 ريال',
-        issueDate: '2025-06-20',
-        expirationDate: '2025-12-20',
-        employeeNameCreatedIt: 'نورة القحطاني',
-        createdDate: '2025-06-18',
-      },
-      {
-        id: 'C-005',
-        contractNumber: 'CN-2025-005',
-        contractType: 'إيجار',
-        totalAmount: '180,000 ريال',
-        restAmount: '60,000 ريال',
-        issueDate: '2025-08-01',
-        expirationDate: '2026-08-01',
-        employeeNameCreatedIt: 'فهد السبيعي',
-        createdDate: '2025-07-30',
-      },
-    ];
+    });
+  
   }
 
   filterContracts(event: Event): void {
@@ -144,16 +92,6 @@ export class CaseContract implements OnInit, AfterViewInit {
   handlePage(event: any): void {
     this.currentPage = event.pageIndex;
   }
-
-  helper = {
-    getCurrentRowNumber: (
-      index: number,
-      pageIndex: number,
-      pageSize: number
-    ): number => {
-      return index + 1 + pageIndex * pageSize;
-    },
-  };
 
   openAddContract() {
     this.dialogof.open(AddContractDialog, {

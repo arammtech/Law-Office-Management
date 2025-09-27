@@ -1,4 +1,6 @@
 <section class="section">
+
+  @if (contractsDataSource.data?.length) {
   <header class="d-myflex my-justi mb-2">
     <h3>العقود</h3>
     <button (click)="openAddContract()" class="btn bg-sub">إضافة عقد</button>
@@ -10,8 +12,6 @@
       <input type="text" placeholder="ابحث في العقود..." (keyup)="filterContracts($event)" class="form-control">
     </div>
   </div>
-
-  @if (contractsDataSource.data?.length) {
   <div class="table-responsive tb-container">
     <table matSort mat-table [dataSource]="contractsDataSource" class="mat-elevation-z8 table">
       <!-- Index Column -->
@@ -82,6 +82,6 @@
   </div>
   } @else {
   <app-empty-table title="لاتوجد عقود مسجلة بعد في هذه القضية"
-    msg="لاتوجد عقود مسجلة بعد, يمكنك اضافة واحدة"></app-empty-table>
+    msg="لاتوجد عقود مسجلة بعد, يمكنك اضافة واحدة" [hasAction]="true" action="أضف عقد" (actionClicked)="openAddContract()"></app-empty-table>
   }
 </section>

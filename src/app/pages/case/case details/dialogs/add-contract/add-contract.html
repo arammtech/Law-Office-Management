@@ -26,11 +26,11 @@
         <div class="col-md-6">
             <label>نوع العقد</label>
             <select formControlName="contractType" class="form-control">
-                <option value="1">محدد بمدة</option>
-                <option value="2">غير محدد بمدة</option>
+                <option value="محدد بمدة">محدد بمدة</option>
+                <option value="غير محدد بمدة">غير محدد بمدة</option>
             </select>
         </div>
-        @if (contractForm.value.contractType == 1) {
+        @if (contractForm.value.contractType == fixedTerm) {
         <div class="col-md-6">
             <label class="form-label">تاريخ البداية</label>
             <input type="date" formControlName="issueDate"

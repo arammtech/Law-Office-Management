@@ -22,7 +22,7 @@ export class AttachmentService extends AppService{
       .pipe(map((data) => data as string));
   }
 
-  getAttachmentsPOAs(caseId: string): Observable<IListDTO<IAttachmentRow>> {
+  getAttachments(caseId: string): Observable<IListDTO<IAttachmentRow>> {
     return this.http.get<any>(`${this.baseURL}/cases/${caseId}/attachments`).pipe(
       map((res) => {
         console.log(res);

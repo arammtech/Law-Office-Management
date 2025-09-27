@@ -8,13 +8,14 @@ import {
   PageEvent,
 } from '@angular/material/paginator';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
-import { FormsModule } from '@angular/forms';
+import { FormGroup, FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { AddAttachmentDialog } from '../../dialogs/add-attachment/add-attachment';
 import { ClsTableUtil } from '../../../../../../shared/util/table/cls-table-util';
 import { ClsHelpers } from '../../../../../../shared/util/helpers/cls-helpers';
 import { EmptyTable } from '../../../../../../shared/components/empty-table/empty-table/empty-table';
 import { ActivatedRoute } from '@angular/router';
+import { IAddAttachmetnForm } from '../../../../../../core/models/requests';
 
 export interface IAttachmentRow {
   id?: string;
@@ -59,20 +60,19 @@ export class CaseAttachments implements OnInit, AfterViewInit {
 
   // Updated column definitions to match enhanced template
   displayedColumns: string[] = [
-    'index', // #
-    'name', // اسم المرفق
-    'rasiedDate', // تاريخ رفع المرفق
-    'raisedBy', // الموظف
-    'actions', // الإجراءات
+    'index', 
+    'name', 
+    'rasiedDate',
+    'raisedBy', 
+    'actions', 
   ];
 
   constructor(
     private dialogof: MatDialog,
     public helper: ClsHelpers,
-    private activatedRoute: ActivatedRoute
-  ) {
-    this.initializeAttachments();
-  }
+    private activatedRoute: ActivatedRoute,
+
+  ) {}
 
   ngOnInit(): void {
     this.activatedRoute.parent?.params.subscribe((params) => {
@@ -85,67 +85,6 @@ export class CaseAttachments implements OnInit, AfterViewInit {
     // Connect paginator and sort to data source
     this.attachmentsDataSource.paginator = this.paginator;
     this.attachmentsDataSource.sort = this.sort;
-
-    // // Configure custom filter predicate for Arabic text
-    // this.attachmentsDataSource.filterPredicate = (data: IAttachmentRow, filter: string) => {
-    //   const filterValue = filter.trim().toLowerCase();
-    //   return (
-    //     data.name?.toLowerCase().includes(filterValue) ||
-    //     data.raisedBy?.toLowerCase().includes(filterValue) ||
-    //     data.rasiedDate?.toLowerCase().includes(filterValue) ||
-    //     data.fileType?.toLowerCase().includes(filterValue)
-    //   );
-    // };
-  }
-
-  private initializeAttachments(): void {
-    this.attachments = [
-      {
-        id: '1',
-        name: 'عقد الإيجار الأساسي',
-        raisedBy: 'عبدالعزيز أحمد',
-        rasiedDate: '2024-12-15',
-        fileSize: '2.5 MB',
-        fileType: 'PDF',
-        filePath: '/uploads/contract1.pdf',
-      },
-      {
-        id: '2',
-        name: 'تقرير الخبرة القانونية',
-        raisedBy: 'فاطمة محمد',
-        rasiedDate: '2024-12-10',
-        fileSize: '1.8 MB',
-        fileType: 'PDF',
-        filePath: '/uploads/report1.pdf',
-      },
-      {
-        id: '3',
-        name: 'صور المستندات المطلوبة',
-        raisedBy: 'خالد سالم',
-        rasiedDate: '2024-12-08',
-        fileSize: '5.2 MB',
-        fileType: 'ZIP',
-        filePath: '/uploads/documents.zip',
-      },
-      {
-        id: '4',
-        name: 'مراسلات المحكمة',
-        raisedBy: 'نورا علي',
-        rasiedDate: '2024-12-05',
-        fileSize: '800 KB',
-        fileType: 'PDF',
-        filePath: '/uploads/court_letters.pdf',
-      },
-      {
-        id: '5',
-        name: 'شهادات الشهود',
-        raisedBy: 'عبدالعزيز أحمد',
-        rasiedDate: '2024-12-03',
-        fileSize: '1.2 MB',
-        fileType: 'PDF',
-        filePath: '/uploads/witness_statements.pdf',
-      },
-    ];
   }
 
   private loadAttachments(): void {
@@ -238,7 +177,6 @@ export class CaseAttachments implements OnInit, AfterViewInit {
       // Update the original array as well
       this.attachments = updatedData;
 
-      console.log('Attachment deleted successfully');
       // Here you would typically call an API to delete from server
       // this.attachmentService.deleteAttachment(attachment.id)
     }
@@ -254,25 +192,15 @@ export class CaseAttachments implements OnInit, AfterViewInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
-      if (result) {
-        // Add the new attachment to the data source
+    dialogRef.afterClosed().subscribe((result:FormGroup<IAddAttachmetnForm>) => {
+      if (result.value) {
         const newAttachment: IAttachmentRow = {
-          id: Date.now().toString(), // Generate unique ID
-          name: result.name || 'مرفق جديد',
-          raisedBy: result.raisedBy || 'المستخدم الحالي',
-          rasiedDate: new Date().toISOString().split('T')[0],
-          fileSize: result.fileSize || 'غير معروف',
-          fileType: result.fileType || 'غير معروف',
-          filePath: result.filePath || '',
-        };
+          name: result.value.name ?? '',
+          raisedBy: 'عبدالعزيز حسن',
+          rasiedDate: this.helper.formatDateForInput(new Date()),
+        }
 
-        // Add to both arrays
-        this.attachments.push(newAttachment);
-        const currentData = this.attachmentsDataSource.data;
-        this.attachmentsDataSource.data = [...currentData, newAttachment];
-
-        console.log('New attachment added:', newAttachment);
+        this.attachmentsDataSource.data.push(newAttachment);
       }
     });
   }

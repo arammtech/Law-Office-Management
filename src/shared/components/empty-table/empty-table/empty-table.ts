@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output, output } from '@angular/core';
 
 @Component({
   selector: 'app-empty-table',
@@ -8,9 +8,17 @@ import { Component, Input } from '@angular/core';
 })
 export class EmptyTable {
   @Input({
-    required: true
-  }) title: string = '';
+    required: true,
+  })
+  title: string = '';
   @Input({
-    required: true
-  }) msg: string = '';
+    required: true,
+  })
+  msg: string = '';
+
+  @Input() action: string = '';
+
+  @Output() actionClicked: EventEmitter<void> = new EventEmitter;
+  @Input() hasAction:boolean = false; 
+
 }

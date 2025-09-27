@@ -32,7 +32,9 @@ export class SessionService extends AppService {
   }
 
   update(updatedSession: FormGroup<IAddSessionForm>, sessionId:string, caseId: string) : Observable<void> {
-    const body = this.adapter.createSessionAdapter(updatedSession);
+    console.log('the court session id', sessionId);
+    const body = this.adapter.updateSessionAdapter(updatedSession);
+    
     return this.http.put<any>(
       `${this.baseURL}/cases/${caseId}/court-sessions/${sessionId}`,
       body
@@ -42,11 +44,14 @@ export class SessionService extends AppService {
     return this.http
       .get<any>(`${this.baseURL}/cases/${caseId}/court-sessions/paged`)
       .pipe(
-        map((data) =>
-          this.adapter.getListDTOAdapter(
+        map((data) => {
+          console.log('the sessions list', data);
+          return this.adapter.getListDTOAdapter(
             data,
             this.adapter.getSessionsByCaseIdAdapter
           )
+
+        }
         )
       );
   }

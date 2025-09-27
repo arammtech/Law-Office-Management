@@ -11,18 +11,19 @@ export const authGuard: CanActivateFn = () => {
   const session = inject(SessionManagement);
   const authService = inject(AuthManagement);
 
-  if (!session.isAccessTokenExpired()) {
-    return true;
-  } else if (session.isAuthenticated()) {
-    return authService.refreshToken().pipe(
-      map(() => true),
-      catchError(() => {
-        return of(showError(route, toaster));
-      })
-    );
-  } else {
-    return showError(route, toaster);
-  }
+  return true
+  // if (!session.isAccessTokenExpired()) {
+  //   return true;
+  // } else if (session.isAuthenticated()) {
+  //   return authService.refreshToken().pipe(
+  //     map(() => true),
+  //     catchError(() => {
+  //       return of(showError(route, toaster));
+  //     })
+  //   );
+  // } else {
+  //   return showError(route, toaster);
+  // }
 };
 
 function showError(route:Router, toaster:ToasterService) : boolean {

@@ -52,6 +52,7 @@ export class AddSessionDialog {
     this.caseId = this.data.caseId;
     this.sessionId = this.data?.sessionId;
 
+
     this.initialize();
   }
   submit() {
@@ -66,7 +67,7 @@ export class AddSessionDialog {
                 this.dialogRef.close();
               },
               error: (error) => {
-                console.log('Error details:', error);
+                console.log('Error details during adding session:', error);
                 this.toastService.error('حدث خطا في اضافة الجلسة');
               },
             });
@@ -77,14 +78,14 @@ export class AddSessionDialog {
       case enDialogMode.update: {
         if (!this.sessionForm.invalid) {
           this.sessionService
-            .update(this.sessionForm, this.caseId, this.sessionId)
+            .update(this.sessionForm,  this.sessionId, this.caseId)
             .subscribe({
               next: (response) => {
                 this.toastService.success('تم تحديث الجلسة بنجاح');
                 this.dialogRef.close();
               },
               error: (error) => {
-                console.log('Error details:', error);
+                console.log('Error details during updating session:', error);
                 this.toastService.error('حدث خطا في تحديث الجلسة');
                 this.dialogRef.close();
               },
@@ -113,10 +114,13 @@ export class AddSessionDialog {
             .getSessionsDetails(this.sessionId, this.caseId)
             .subscribe({
               next: (data) => {
-                this.sessionForm = this.fillSessionForm(data, this.sessionForm);
+                this.sessionForm.controls.date.setValue(String(data.scheduledAt));
+                this.sessionForm.controls.layerId.setValue(data.assignedEmployeeId);
+                this.sessionForm.controls.tasks.setValue(data.assignedTasks);
+                console.log('the form after updating', this.sessionForm.value);
               },
               error: (error) => {
-                console.log('Error details:', error);
+                console.log('Error details during g:', error);
                 this.toastService.error('حدث خطا في تحديث الجلسة');
                 this.dialogRef.close();
               },
@@ -126,14 +130,5 @@ export class AddSessionDialog {
     }
   }
 
-  private fillSessionForm(
-    sessionDetails: sessionDetails,
-    sessionForm: FormGroup<IAddSessionForm>
-  ): FormGroup<IAddSessionForm> {
-    sessionForm.value.date = sessionDetails.scheduledAt.toISOString();
-    sessionForm.value.layerId = sessionDetails.assignedEmployeeId;
-    sessionForm.value.tasks = sessionDetails.assignedTasks;
-
-    return sessionForm;
-  }
+ 
 }

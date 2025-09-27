@@ -1,4 +1,6 @@
 <section class="section">
+
+    @if(attachments?.length) {
     <header class="d-myflex my-justi mb-2">
         <h3>المرفقات</h3>
         <button (click)="openAddAttachment()" class="btn bg-sub">إضافة مرفق</button>
@@ -10,8 +12,6 @@
             <input type="text" placeholder="ابحث في المرفقات..." (keyup)="filter($event)" class="form-control">
         </div>
     </div>
-
-    @if(attachments?.length) {
     <div class="table-responsive tb-container">
         <table matSort mat-table [dataSource]="attachmentsDataSource" class="mat-elevation-z8 table">
 
@@ -74,6 +74,7 @@
         </mat-paginator>
     </div>
     } @else {
-    <app-empty-table title="لا توجد مرفقات" msg="لم يتم رفع أي مرفقات بعد"></app-empty-table>
+    <app-empty-table title="لا توجد مرفقات" msg="لم يتم رفع أي مرفقات بعد" [hasAction]="true" action="أضف مرفق"
+        (actionClicked)="openAddAttachment()"></app-empty-table>
     }
 </section>

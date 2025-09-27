@@ -92,15 +92,5 @@ export class CaseService {
       .pipe(map((res) => this.adapter.fromCaseDetailsAPI(res)));
   }
 
-  getCaseContracts(caseId: string): Observable<IListDTO<IContractRow>> {
-    return this.http.get<any>(`${this.baseURL}/cases/${caseId}/contracts`).pipe(
-      map((res) => {
-        console.log(res);
-        return this.adapter.getListDTOAdapter<IContractRow>(
-          res,
-          this.adapter.getCaseContractRowAdapter
-        );
-      })
-    );
-  }
+ 
 }

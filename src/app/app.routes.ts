@@ -16,6 +16,7 @@ import { App } from './app';
 import { authGuard } from '../core/guards/authGuard/auth-guard';
 import { CaseSessions } from './pages/case/case details/components/case-sesstions/case-sesstions';
 import { DraftCasesPage } from './pages/case/draft-cases/draft-cases-page/draft-cases-page';
+import { CaseJudgmentsComponents } from './pages/case/case details/components/case-judgments-components/case-judgments-components';
 
 export const routes: Routes = [
   {
@@ -75,6 +76,10 @@ export const routes: Routes = [
           {
             path: `sessions`,
             component: CaseSessions,
+          },
+          {
+            path: `judgments`,
+            component: CaseJudgmentsComponents,
           },
         ],
       },

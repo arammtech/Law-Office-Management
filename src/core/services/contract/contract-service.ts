@@ -3,8 +3,8 @@ import { environmentDev } from '../../../environments/environment.development';
 import { HttpClient } from '@angular/common/http';
 
 import { FormGroup } from '@angular/forms';
-import { map } from 'rxjs';
-import { frmAddContract } from '../../models/requests';
+import { map, Observable } from 'rxjs';
+import { frmAddContract, IContractRow, IListDTO } from '../../models/requests';
 import { Adapter } from '../adapter/adapter';
 
 @Injectable({
@@ -19,5 +19,18 @@ export class ContractService {
     return this.http
       .post(`${this.baseURL}/cases/${caseId}/contracts`, formdate)
       .pipe(map((data) => data as string));
+  }
+
+   getContractsByCaseId(caseId: string): Observable<IListDTO<IContractRow>> {
+    console.log(caseId);
+    return this.http.get<any>(`${this.baseURL}/cases/${caseId}/contracts/paged`).pipe(
+      map((res) => {
+        console.log(res);
+        return this.adapter.getListDTOAdapter<IContractRow>(
+          res,
+          this.adapter.getCaseContractRowAdapter
+        );
+      })
+    );
   }
 }

@@ -13,20 +13,35 @@ import {
   IAddSessionForm,
   IAddPOAForm,
   IAddAttachmetnForm,
+  frmAddJudgment,
 } from '../../models/requests';
 import { ClsHelpers } from '../../../shared/util/helpers/cls-helpers';
 import { enContractType } from '../../../shared/enums/contract-types';
 import { contractDateValidator } from '../../../shared/validators/Date/contract-dates-validator';
 import { FileValidator } from '../../../shared/validators/files/file-validator';
+import { enJudgmentSubType, enJudgmentType } from '../../../shared/enums/enums';
 
 @Injectable({
   providedIn: 'root',
 })
 export class clsFormsBuilder {
+  createAddJudgmentForm(): FormGroup<frmAddJudgment> {
+    return this.fb.group({
+      number: this.fb.control('', Validators.required),
+      type: this.fb.control(enJudgmentType.FTDegree, Validators.required),
+      subType: this.fb.control(enJudgmentSubType.normal, {
+        validators: Validators.required,
+      }),
+      issueDate: this.fb.control(this.helper.formatDateForInput(new Date()), {
+        validators: [Validators.required],
+      }),
+      file: this.fb.control<File | null>(null, { validators: [Validators.required, FileValidator.validate()] }),
+    });
+  }
   constructor(private fb: NonNullableFormBuilder, private helper: ClsHelpers) {}
   createAddAttachmentForm(): FormGroup<IAddAttachmetnForm> {
     return this.fb.group({
-      name: this.fb.control('', {validators:[Validators.required]}),
+      name: this.fb.control('', { validators: [Validators.required] }),
       attachmentFile: this.fb.control<File | null>(null, {
         validators: [Validators.required, FileValidator.validate()],
       }),
@@ -76,7 +91,10 @@ export class clsFormsBuilder {
     });
   }
 
-  createPersonForm(obj?: INewPersonForm, minuimumAge:number = 1): FormGroup<INewPersonForm> {
+  createPersonForm(
+    obj?: INewPersonForm,
+    minuimumAge: number = 1
+  ): FormGroup<INewPersonForm> {
     return this.fb.group({
       name: this.fb.control(obj?.name || '', {
         validators: [Validators.required, Validators.minLength(3)],
@@ -84,9 +102,19 @@ export class clsFormsBuilder {
       natId: this.fb.control(obj?.natId || '', {
         validators: [Validators.required, Validators.pattern(/^\d{10}/)],
       }),
-      birthDate: this.fb.control(obj?.birthDate || this.helper.formatDateForInput(new Date(new Date().getFullYear() - minuimumAge, new Date().getMonth(), new Date().getDate())), {
-        validators: [Validators.required, minAgeValidator(minuimumAge)],
-      }),
+      birthDate: this.fb.control(
+        obj?.birthDate ||
+          this.helper.formatDateForInput(
+            new Date(
+              new Date().getFullYear() - minuimumAge,
+              new Date().getMonth(),
+              new Date().getDate()
+            )
+          ),
+        {
+          validators: [Validators.required, minAgeValidator(minuimumAge)],
+        }
+      ),
       phone: this.fb.control<string>(obj?.phone || '', {
         validators: [Validators.required, Validators.pattern(/^05\d{8}$/)],
       }),
@@ -150,7 +178,9 @@ export class clsFormsBuilder {
 
   createAddSessionForm(): FormGroup<IAddSessionForm> {
     return this.fb.group({
-      date: this.fb.control(this.helper.formatDateForInput(new Date()), {validators:[Validators.required, featureValidator]}),
+      date: this.fb.control(this.helper.formatDateForInput(new Date()), {
+        validators: [Validators.required, featureValidator],
+      }),
       layerId: this.fb.control('', Validators.required),
       tasks: this.fb.control('', Validators.required),
     });

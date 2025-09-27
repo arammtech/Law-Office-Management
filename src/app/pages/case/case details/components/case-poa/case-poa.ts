@@ -7,9 +7,10 @@ import { AddPoaDialog } from '../../dialogs/add-poa/add-poa';
 import { ClsTableUtil } from '../../../../../../shared/util/table/cls-table-util';
 import { EmptyTable } from '../../../../../../shared/components/empty-table/empty-table/empty-table';
 import { ActivatedRoute } from '@angular/router';
-import { IListDTO, IPOARow } from '../../../../../../core/models/requests';
+import { IAddPOAForm, IListDTO, IPOARow } from '../../../../../../core/models/requests';
 import { POAService } from '../../../../../../core/services/poa/poa-service';
 import { ClsHelpers } from '../../../../../../shared/util/helpers/cls-helpers';
+import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-case-poa',
@@ -26,11 +27,12 @@ import { ClsHelpers } from '../../../../../../shared/util/helpers/cls-helpers';
 })
 export class CasePoa implements AfterViewInit, OnInit {
   displayedColumns: string[] = [
+    'publisherName',
     'index',
     'number',
-    'publisherName',
     'creatorName',
     'createdDate',
+    'issueDate',
   ];
   POAsDataSource = new MatTableDataSource<IPOARow>();
   poas:IListDTO<IPOARow> = {} as IListDTO<IPOARow>
@@ -45,13 +47,12 @@ export class CasePoa implements AfterViewInit, OnInit {
     public helper: ClsHelpers,
     private poaService: POAService
   ) {
-    const initialData: IPOARow[] = [];
-    this.POAsDataSource.data = initialData;
+    this.POAsDataSource.data = [];
   }
   ngOnInit(): void {
     this.activatedRoute.parent?.params.subscribe((params) => {
       this.caseId = params['caseId'] || '';
-      this.loadContracts();
+      this.loadPOAs();
     });
   }
 
@@ -60,7 +61,7 @@ export class CasePoa implements AfterViewInit, OnInit {
     this.POAsDataSource.sort = this.sort;
   }
 
-  loadContracts(): void {
+  loadPOAs(): void {
     this.poaService.getCasePOAs(this.caseId).subscribe({
       next: (res) => {
         this.poas = res;
@@ -83,6 +84,10 @@ export class CasePoa implements AfterViewInit, OnInit {
       height: '325x',
       minWidth: '600px',
       data: { caseId: this.caseId },
+    }).afterClosed().subscribe((res:FormGroup<IAddPOAForm>) => {
+      if (res) {
+        this.loadPOAs()
+      }
     });
   }
 }

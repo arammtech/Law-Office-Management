@@ -1,5 +1,6 @@
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { enContractType } from '../../shared/enums/contract-types';
+import { enJudgmentSubType, enJudgmentType } from '../../shared/enums/enums';
 
 export interface ICourt {
   courtTypeId: string;
@@ -89,11 +90,11 @@ export interface IAddSessionForm {
 }
 
 export interface ISessionsRow {
-  id: string;
-  sessionDate: Date;
+  scheduledAt: Date
   assignedEmployeeName: string;
   createdByEmployeeName: string;
   createdDate: Date;
+  courtSessionId: string;
 }
 
 export interface IListDTO<T> {
@@ -205,4 +206,25 @@ export interface PersonDetails {
   phone: string;
   address: string;
   countryCode: string;
+}
+
+
+
+export interface frmAddJudgment {
+  number: FormControl<string>;
+  type: FormControl<enJudgmentType>;
+  subType: FormControl<enJudgmentSubType>;
+  issueDate: FormControl<string>;
+  file: FormControl<File | null>;
+}
+
+export interface IJudgmentRow {
+  id:string;
+  number:string;
+  type:string;
+  subType:string;
+  issueDate:Date;
+  creatorName:string;
+  createdDate:string;
+  filePath:string;
 }

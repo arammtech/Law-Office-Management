@@ -1,4 +1,4 @@
 export enum enContractType {
-  FixedTerm = 1,
-  OpenEnded = 2,
+  FixedTerm = 'محدد بمدة',
+  OpenEnded = 'غير محدد بمدة',
 }

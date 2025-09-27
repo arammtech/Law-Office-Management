@@ -25,7 +25,11 @@ export class POAService extends AppService {
     const formdate = this.adapter.toAddPOAFormAPI(poaFrm);
     return this.http
       .post(`${this.baseURL}/cases/${caseId}/poas`, formdate)
-      .pipe(map((data) => data as string));
+      .pipe(
+        map((data) => {
+          data as string;
+        })
+      );
   }
 
   getCasePOAs(caseId: string): Observable<IListDTO<IPOARow>> {

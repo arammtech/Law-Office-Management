@@ -1,4 +1,5 @@
 import { AfterViewInit, Directive, ElementRef, Renderer2 } from '@angular/core';
+import { enContractType } from '../../../../../shared/enums/contract-types';
 
 @Directive({
   selector: '[appContractType]',
@@ -23,28 +24,32 @@ export class ContractType implements AfterViewInit {
   }
 
   private textColor() {
-    console.log(this.el.nativeElement.textContent);
-    switch (this.el.nativeElement.innerText) {
-      case 'غير محددة بمدة':
+    switch (this.el.nativeElement.innerText as enContractType) {
+      case enContractType.FixedTerm: // عقد محدد المدة
         this.renderer.setStyle(
           this.el.nativeElement,
           'backgroundColor',
-          '#4e504e63'
-        );
-        this.renderer.setStyle(this.el.nativeElement, 'color', '#4e504eff');
+          '#e2e3e5'
+        ); // رمادي فاتح
+        this.renderer.setStyle(this.el.nativeElement, 'color', '#41464b'); // رمادي غامق
         break;
 
-      case 'محددة بمدة':
+      case enContractType.OpenEnded: // عقد غير محدد المدة
         this.renderer.setStyle(
           this.el.nativeElement,
           'backgroundColor',
-          '#e4b10974'
-        );
-        this.renderer.setStyle(this.el.nativeElement, 'color', '#edb603ff');
+          '#fff3cd'
+        ); // أصفر فاتح
+        this.renderer.setStyle(this.el.nativeElement, 'color', '#856404'); // أصفر غامق
         break;
 
-      default:
-        break;  
+      default: // عقد تجريبي
+        this.renderer.setStyle(
+          this.el.nativeElement,
+          'backgroundColor',
+          '#cfe2ff'
+        ); // أزرق فاتح
+        this.renderer.setStyle(this.el.nativeElement, 'color', '#084298'); // أز
     }
   }
 }

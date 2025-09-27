@@ -3,13 +3,7 @@
     max-width: 100%;
 }
 
-nav {
-    display: flex;
-    flex-direction: column;
-    border-left: 1px solid var(--txt);
-    padding: 1rem 0.4rem;
-    max-height: 100vh;
-}
+.nav {}
 
 .logo {
     padding: 1rem;
@@ -51,5 +45,20 @@ a:hover {
 
 
 ngx-spinner {
-    /* z-index: 99; */
+    z-index: 99999;
 }
+
+
+mat-sidenav {
+    display: flex;
+    flex-direction: column;
+    border-left: 1px solid #e7e7e7;
+    padding: 1rem 0.4rem;
+    max-height: 100vh;
+    background-color: rgb(255, 255, 255);
+}
+
+mat-sidenav-content {
+    padding: 1rem;
+}
+

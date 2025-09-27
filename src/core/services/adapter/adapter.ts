@@ -18,6 +18,7 @@ import {
   INewPersonForm,
   INewEmployee,
   IEmployeeDetails,
+  frmAddJudgment,
 } from '../../models/requests';
 import {
   ICseGeneralDetails,
@@ -29,7 +30,7 @@ import { IAttachmentRow } from '../../../app/pages/case/case details/components/
 @Injectable({ providedIn: 'root' })
 export class Adapter {
   constructor(private fb: NonNullableFormBuilder) {}
-  
+
   getCaseAttachmentRowAdapter(row: any): IAttachmentRow {
     return {
       id: row?.id ?? '',
@@ -50,7 +51,7 @@ export class Adapter {
     if (attachmentFile.value) {
       formData.append('file', attachmentFile.value);
     }
-    
+
     return formData;
   }
   /**
@@ -99,26 +100,25 @@ export class Adapter {
       years: ['1447'],
     };
   }
-  
+
   fromEmployeeNamesAPI(model: any): IemployeeName {
     return {
       id: model.employeeId,
       name: model.fullName,
     };
   }
-  
+
   getCaseContractRowAdapter(res: any): IContractRow {
-    console.log('in the contract adapter', res);
     return {
-      id: res.id,
-      createdDate: res.createdDate,
-      employeeNameCreatedIt: res.employeeName,
-      expirationDate: res.expirationDate,
-      issueDate: res.issueDate,
-      restAmount: res.restAmount,
-      totalAmount: res.totalAmount,
-      contractNumber: res.contractNumber,
-      contractType: res.contractType,
+      id: res?.contractId,
+      createdDate: res?.createdDate,
+      employeeNameCreatedIt: res?.employeeName ?? 'مافي اسم',
+      expirationDate: res?.createdDate,
+      issueDate: res?.createdDate,
+      restAmount: res?.initialPayment,
+      totalAmount: res?.totalAmount,
+      contractNumber: res?.contractNumber,
+      contractType: res?.contractType,
     };
   }
   getCasePOARowAdapter(res: any): IPOARow {
@@ -132,24 +132,24 @@ export class Adapter {
   }
   fromCaseDetailsAPI(data: any): ICseGeneralDetails {
     const parties: ICasesParties[] = Array.isArray(data.clients)
-    ? data.clients.map(
-      (client: any) =>
-        ({
-          clientId: client.clientId,
+      ? data.clients.map(
+          (client: any) =>
+            ({
+              clientId: client.clientId,
               name: client.fullName,
               natId: client.nationalId,
-              phoneNumber: client.phoneNumber,
+              phoneNumber: client.phoneNumber.number,
               countryCode: client.countryCode,
               address: client.address,
               birthDate: client.birthdate,
             } as ICasesParties)
-          )
-          : [];
-          
-          return {
-            caseId: data.caseId,
-            caseNumber: data.caseNumber,
-            courtTypeName: data.courtTypeName,
+        )
+      : [];
+
+    return {
+      caseId: data.caseId,
+      caseNumber: data.caseNumber,
+      courtTypeName: data.courtTypeName,
       assignedEmployeeName: data.assignedEmployeeName,
       status: data.status,
       caseSubject: data.caseSubject,
@@ -161,7 +161,7 @@ export class Adapter {
       caseParities: parties,
     };
   }
-  
+
   toAddCaseAPI(creaCaseForm: FormGroup<IAddCaseForm>, isDraft: boolean): any {
     const formValue = creaCaseForm.value; // safer than .value for disabled fields
     const newClients = formValue.newClients?.map((clientGroup) => ({
@@ -171,7 +171,10 @@ export class Adapter {
           fullName: clientGroup?.person?.name,
           nationalId: clientGroup?.person?.natId,
           birthDate: clientGroup?.person?.birthDate,
-          phoneNumber: clientGroup?.person?.phone,
+          phone: {
+            number: clientGroup?.person?.phone,
+            code: '+966',
+          },
           address: clientGroup?.person?.address,
           countryCode: clientGroup?.person?.countryCode,
         },
@@ -184,9 +187,9 @@ export class Adapter {
         clientId: existingClient.Id,
       })
     );
-    
+
     const allClients = [...(newClients ?? []), ...(existingClients ?? [])];
-    
+
     const body = {
       caseNumber: formValue.case?.caseNumber,
       courtTypeId: formValue.case?.courtType,
@@ -204,13 +207,13 @@ export class Adapter {
   }
   toAddContractFormAPI(contractFrm: FormGroup<frmAddContract>): FormData {
     const form = new FormData();
-    
+
     // Add basic fields with proper conversion
     form.append('ContractType', String(contractFrm.value.contractType));
     form.append('InitialPayment', String(contractFrm.value?.downAmount));
     form.append('BaseAmount', String(contractFrm.value.totalPrice));
     form.append('IsAssigned', String(contractFrm.value.assigned));
-    
+
     // Handle dates properly
 
     if (contractFrm.value.expirationDate) {
@@ -219,31 +222,30 @@ export class Adapter {
     if (contractFrm.value.issueDate) {
       form.append('IssuedOn', String(contractFrm.value.issueDate));
     }
-    
+
     if (contractFrm.value.contractAttachment) {
       const file = contractFrm.value.contractAttachment;
       form.append('ContractFile', file);
     }
     return form;
   }
-  
+
   toAddPOAFormAPI(frmAddPoa: FormGroup<IAddPOAForm>): FormData {
     const form = new FormData();
-    
+
     form.append('POANumber', String(frmAddPoa.value.poaNumber));
     form.append('IssueDate', String(frmAddPoa.value.poaIssueDate));
     form.append('IssuingAuthority', String(frmAddPoa.value.poaAuthrizedBy));
     if (frmAddPoa.value.poaAttachment)
       form.append('AttachmentFile', frmAddPoa.value.poaAttachment);
-    
+
     return form;
   }
-  
+
   getListDTOAdapter<Type>(
     data: any,
     itemAdapter: (row: any) => Type
   ): IListDTO<Type> {
-    console.log('in the adapter', data);
     return {
       pageIndex: data.pageIndex,
       pageSize: data.pageSize,
@@ -270,22 +272,29 @@ export class Adapter {
 
   getSessionsByCaseIdAdapter(row: any): ISessionsRow {
     return {
-      id: 'DB294385-CCEA-4506-AFAB-77B603D0DDF5',
-      sessionDate: new Date(row.scheduledAt),
+      courtSessionId: row.courtSessionId,
+      createdDate: new Date(row.scheduledAt),
       assignedEmployeeName: String(row.assignedEmployeeName),
       createdByEmployeeName: String(row.assignedEmployeeName),
-      createdDate: new Date(row.scheduledAt),
+      scheduledAt: new Date(row.scheduledAt),
     };
   }
-  
+
   createSessionAdapter(data: FormGroup<IAddSessionForm>): any {
     return {
       assignedEmployeeId: data.value.layerId,
-      scheduledAt: data.value.date,
+      scheduledAt: data.value.date ? new Date(data.value.date) : undefined,
       assignedTasks: data.value.tasks,
     };
   }
 
+  updateSessionAdapter(data: FormGroup<IAddSessionForm>): any {
+    return {
+      assignedEmployeeId: data.value.layerId,
+      newDate: data.value.date,
+      assignedTasks: data.value.tasks,
+    };
+  }
   sessionDetailsAdapter(data: any): sessionDetails {
     return {
       id: data.id,
@@ -325,7 +334,22 @@ export class Adapter {
       phone: data.phone,
       role: data.role,
       birthDate: data.birthDate,
-      countryCode: data.countryCode
-    }
+      countryCode: data.countryCode,
+    };
   }
+
+  frmAddJudgmentAdapter(judgment: FormGroup<frmAddJudgment>) : any {
+    const form = new FormData();
+
+    form.append('Number', String(judgment.value.number));
+    form.append('Type', String(judgment.value.type));
+    form.append('SubType', String(judgment.value.subType));
+    form.append('IssuedOn', String(judgment.value.issueDate));
+    form.append('ExpiresOn', String('2025-02-02'));
+
+    if (judgment.value.file)
+      form.append('File', judgment.value.file);
+
+    return form;
+  } 
 }

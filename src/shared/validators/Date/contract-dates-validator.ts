@@ -12,9 +12,9 @@ export function contractDateValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const formGroup = control as FormGroup<frmAddContract>;
 
+    const errors: ValidationErrors = {};
     if (formGroup.value.contractType === enContractType.FixedTerm) {
       // Replace with your actual enum value
-      const errors: ValidationErrors = {};
 
       // Validate issue date
       if (!formGroup.value.issueDate) {
@@ -35,17 +35,17 @@ export function contractDateValidator(): ValidatorFn {
           errors['invalidDateRange'] = true;
         }
       }
-      // Validate expiration date
-      if (
-        Number(formGroup?.value?.downAmount) >
-        Number(formGroup.value.totalPrice)
-      ) {
-        errors['downAmountExceeded'] = true;
-      }
-
-      return Object.keys(errors).length > 0 ? errors : null;
+      
     }
-
-    return null; // No validation for non-fixed contracts
+    
+    // Validate expiration date
+    if (
+      Number(formGroup?.value?.downAmount) >
+      Number(formGroup.value.totalPrice)
+    ) {
+      console.log('the down amount is bigger');
+      errors['downAmountExceeded'] = true;
+    }
+    return Object.keys(errors).length > 0 ? errors : null;
   };
 }

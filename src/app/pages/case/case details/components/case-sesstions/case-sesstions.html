@@ -1,4 +1,6 @@
 <section class="section">
+
+  @if(sessionsDataSource?.data?.length) {
   <header class="d-myflex my-justi mb-2">
     <h3>الجلسات</h3>
     <button (click)="openAddSession()" class="btn bg-sub">إضافة جلسة</button>
@@ -10,8 +12,6 @@
       <input type="text" placeholder="ابحث في الجلسات..." (keyup)="filterSessions($event)" class="form-control">
     </div>
   </div>
-
-  @if(sessionsDataSource?.data?.length) {
   <div class="table-responsive tb-container">
     <table matSort mat-table [dataSource]="sessionsDataSource" class="mat-elevation-z8 table">
 
@@ -27,7 +27,7 @@
       <ng-container [matColumnDef]="displayedColumns[1]">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ الجلسة</th>
         <td mat-cell *matCellDef="let element">
-          {{ element.sessionDate | date:'dd/MM/yyyy' }}
+          {{ element.scheduledAt | date:'dd/MM/yyyy' }}
         </td>
       </ng-container>
 
@@ -56,9 +56,11 @@
       </ng-container>
 
       <ng-container [matColumnDef]="displayedColumns[5]">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>الاجراءات<th>
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>الاجراءات
+        <th>
         <td mat-cell *matCellDef="let element">
-          <button (click)="openUpdateSession(element.id)" class="btn btn-icon px-2 py-1 "><i class="fa-solid fa-pen-to-square"></i></button>
+          <button (click)="openUpdateSession(element.courtSessionId)" class="btn btn-icon px-2 py-1 ">clik<i
+              class="fa-solid fa-pen-to-square"></i></button>
         </td>
       </ng-container>
 
@@ -73,6 +75,6 @@
     </mat-paginator>
   </div>
   } @else {
-  <app-empty-table title="لاتوجد جلسات مضافة بعد" msg="لاتوجد جلسات لهذه القضية"></app-empty-table>
+  <app-empty-table title="لاتوجد جلسات مضافة بعد" msg="لاتوجد جلسات لهذه القضية" [hasAction]="true" action="أضف جلسة" (actionClicked)="openAddSession()"></app-empty-table>
   }
 </section>

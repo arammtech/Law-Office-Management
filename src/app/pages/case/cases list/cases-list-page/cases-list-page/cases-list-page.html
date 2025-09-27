@@ -7,7 +7,7 @@
         <div class="row">
             @for (court of courts; track court.courtTypeId; let firstItem = $first) {
             <button (click)="updateTableData(court.courtTypeId, selectedYear)" (click)="onCourtChange(court)"
-                class="btn col-sm-12 col-lg-1 " [ngClass]="{'bg-sub': activeButton === court.code}"
+                class="btn col-sm-12 col-lg-1 d-flex justfi-content-center h-fit text-center w-fit" [ngClass]="{'bg-sub': activeButton === court.code}"
                 (click)="setActiveButton(court.code)">
                 {{ court.name }}
             </button>

@@ -84,6 +84,8 @@ export class CaseSessions implements AfterViewInit, OnInit {
       height: '325x',
       minWidth: '600px',
       data: { caseId: this.caseId, mode: enDialogMode.add },
+    }).afterClosed().subscribe(() => {
+      this.loadSessions();
     });
   }
 
@@ -96,6 +98,8 @@ export class CaseSessions implements AfterViewInit, OnInit {
         sessionId: sessionId,
         mode: enDialogMode.update,
       },
-    });
+    }).afterClosed().subscribe(() => {
+      this.loadSessions();
+    });;
   }
 }
