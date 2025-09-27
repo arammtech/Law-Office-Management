@@ -53,9 +53,15 @@
             </ng-container>
 
             <!-- Remaining Amount -->
-            <ng-container [matColumnDef]="displayedColumns[4]">
+            <ng-container [matColumnDef]="displayedColumns[6]">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ الانشاء</th>
                 <td mat-cell *matCellDef="let element">{{ element.createdDate | date:'dd/MM/yyyy' }}</td>
+            </ng-container>
+
+            <!-- Remaining Amount -->
+            <ng-container [matColumnDef]="displayedColumns[7]">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>الاجراءات</th>
+                <td mat-cell *matCellDef="let element"></td>
             </ng-container>
 
             <!-- Header and Row Definitions -->

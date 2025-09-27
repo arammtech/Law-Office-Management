@@ -227,4 +227,5 @@ export interface IJudgmentRow {
   creatorName:string;
   createdDate:string;
   filePath:string;
+  caseId: string;
 }

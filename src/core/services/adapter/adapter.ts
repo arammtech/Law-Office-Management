@@ -19,6 +19,7 @@ import {
   INewEmployee,
   IEmployeeDetails,
   frmAddJudgment,
+  IJudgmentRow,
 } from '../../models/requests';
 import {
   ICseGeneralDetails,
@@ -29,6 +30,21 @@ import { IAttachmentRow } from '../../../app/pages/case/case details/components/
 
 @Injectable({ providedIn: 'root' })
 export class Adapter {
+  judgmentRowAdapter(res: any) : IJudgmentRow {
+    return {
+      createdDate: res.createdDate,
+      issueDate: res.issueDate,
+      creatorName: res.creatorName,
+      number: res.number,
+      filePath: res.filePath,
+      id: res.id,
+      subType: res.subType,
+      type: res.type,
+      caseId: res.caseId
+
+
+    }
+  }
   constructor(private fb: NonNullableFormBuilder) {}
 
   getCaseAttachmentRowAdapter(row: any): IAttachmentRow {
