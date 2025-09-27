@@ -21,6 +21,7 @@ import {
   frmAddJudgment,
   IJudgmentRow,
   frmAddTemplate,
+  frmChangePassword,
 } from '../../models/requests';
 import {
   ICseGeneralDetails,
@@ -31,6 +32,13 @@ import { IAttachmentRow } from '../../../app/pages/case/case details/components/
 
 @Injectable({ providedIn: 'root' })
 export class Adapter {
+  frmChangePasswordAdapter(frmChangePassword: FormGroup<frmChangePassword>): any {
+    return {
+      username: frmChangePassword?.value?.username,
+      currentPassword: frmChangePassword?.value?.current,
+      newPassword: frmChangePassword?.value?.new,
+    }
+  }
   judgmentRowAdapter(res: any): IJudgmentRow {
     return {
       createdDate: res.createdDate,

@@ -16,6 +16,7 @@ import { ClsTableUtil } from '../../../../../shared/util/table/cls-table-util';
 import { EmptyTable } from '../../../../../shared/components/empty-table/empty-table/empty-table';
 import { ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { enDialogMode } from '../../../../../shared/enums/dialog-mode';
+import { ChangePasswordDialog } from '../../dialogs/change-password/change-password-dialog/change-password-dialog';
 @Component({
   selector: 'app-mange-employee-page',
   imports: [
@@ -35,6 +36,12 @@ import { enDialogMode } from '../../../../../shared/enums/dialog-mode';
   styleUrl: './mange-employee-page.css',
 })
 export class MangeEmployeePage {
+  changePassword() {
+    this.dialogof.open(ChangePasswordDialog, {
+      height: '450px',
+      minWidth: '400px',
+    });
+  }
   sortedData: IEmployeeRow[] = [];
   currentPage: number = 0;
 

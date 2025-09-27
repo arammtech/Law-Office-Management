@@ -4,6 +4,9 @@ import { Injectable } from '@angular/core';
 import { catchError, map, Observable, tap, throwError } from 'rxjs';
 import { SessionManagement } from '../session/session-management';
 import { IrefreshToken, loggedUser, LoginResponse } from '../session/models/cls-user';
+import { frmChangePassword } from '../../models/requests';
+import { Adapter } from '../adapter/adapter';
+import { FormGroup } from '@angular/forms';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +14,8 @@ import { IrefreshToken, loggedUser, LoginResponse } from '../session/models/cls-
 export class AuthManagement {
   constructor(
     private http: HttpClient,
-    private sessionService: SessionManagement
+    private sessionService: SessionManagement,
+    private adapter:Adapter
   ) {}
   baseURL = environmentDev.baseURL;
 
@@ -41,6 +45,18 @@ export class AuthManagement {
         map(() => {}),
         catchError((error) => {
           console.error('Error in login pipe:', error);
+          return throwError(() => error);
+        })
+      );
+  }
+
+  changePassword(frmChangePassword:FormGroup<frmChangePassword>): Observable<void> {
+    return this.http
+      .post<any>(`${this.baseURL}/auth/change-password`, this.adapter.frmChangePasswordAdapter(frmChangePassword) , {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError((error) => {
           return throwError(() => error);
         })
       );

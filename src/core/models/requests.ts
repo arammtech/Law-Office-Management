@@ -242,3 +242,9 @@ export interface frmAddTemplate {
   name: FormControl<string>;
   file: FormControl<File | null>;
 }
+
+export interface frmChangePassword {
+  username: FormControl<string>;
+  new: FormControl<string>;
+  current: FormControl<string>;
+}

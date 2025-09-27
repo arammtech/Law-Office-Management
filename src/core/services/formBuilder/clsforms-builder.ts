@@ -15,12 +15,14 @@ import {
   IAddAttachmetnForm,
   frmAddJudgment,
   frmAddTemplate,
+  frmChangePassword,
 } from '../../models/requests';
 import { ClsHelpers } from '../../../shared/util/helpers/cls-helpers';
 import { enContractType } from '../../../shared/enums/contract-types';
 import { contractDateValidator } from '../../../shared/validators/Date/contract-dates-validator';
 import { FileValidator } from '../../../shared/validators/files/file-validator';
 import { enJudgmentSubType, enJudgmentType } from '../../../shared/enums/enums';
+import { passwordPolicyValidator } from '../../../shared/validators/password/password-validator';
 
 @Injectable({
   providedIn: 'root',
@@ -36,7 +38,9 @@ export class clsFormsBuilder {
       issueDate: this.fb.control(this.helper.formatDateForInput(new Date()), {
         validators: [Validators.required],
       }),
-      file: this.fb.control<File | null>(null, { validators: [Validators.required, FileValidator.validate()] }),
+      file: this.fb.control<File | null>(null, {
+        validators: [Validators.required, FileValidator.validate()],
+      }),
     });
   }
 
@@ -50,11 +54,21 @@ export class clsFormsBuilder {
     });
   }
 
-   frmAddTemplate(): FormGroup<frmAddTemplate> {
+  frmAddTemplate(): FormGroup<frmAddTemplate> {
     return this.fb.group({
       name: this.fb.control('', { validators: [Validators.required] }),
       file: this.fb.control<File | null>(null, {
         validators: [Validators.required, FileValidator.validate()],
+      }),
+    });
+  }
+
+  frmChangePassword(): FormGroup<frmChangePassword> {
+    return this.fb.group({
+      new: this.fb.control('', { validators: [Validators.required, passwordPolicyValidator] }),
+      current: this.fb.control('', { validators: [Validators.required] }),
+      username: this.fb.control('', {
+        validators: [Validators.required, Validators.pattern(/^\d{10}/)],
       }),
     });
   }
