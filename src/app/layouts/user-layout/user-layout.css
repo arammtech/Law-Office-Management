@@ -3,16 +3,20 @@
     max-width: 100%;
 }
 
-.nav {}
 
-.logo {
-    padding: 1rem;
-    border-bottom: 1px solid var(--txt);
-    margin-bottom: 1.5rem;
+nav {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 ul {
     flex: 1;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    row-gap: 0.3rem;
+    padding: 0;
 }
 
 
@@ -21,7 +25,10 @@ a {
     transition: hover 0.3s;
     margin-bottom: 0.2rem;
     padding: 0.3rem 1rem;
-    text-align: right;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 7px;
 }
 
 a:hover {
@@ -50,15 +57,32 @@ ngx-spinner {
 
 
 mat-sidenav {
-    display: flex;
-    flex-direction: column;
-    border-left: 1px solid #e7e7e7;
     padding: 1rem 0.4rem;
-    max-height: 100vh;
     background-color: rgb(255, 255, 255);
+    
+    border-left: 1px solid #cccccc !important;
 }
 
 mat-sidenav-content {
-    padding: 1rem;
+    padding: 1rem 1.5rem;
 }
 
+.side-btn {
+    padding: 0.3rem 0.7rem;
+    border-radius: 4px;
+    font-size: 1.4rem;
+}
+
+.side-btn-container {
+    border-bottom: #d9d9d9 solid 1px;
+    padding-bottom: 1rem;
+}
+
+.visible {
+    visibility: hidden;
+}
+
+.only-icon {
+    padding: 0.5rem 0rem;
+    font-size: 1.3rem;
+}

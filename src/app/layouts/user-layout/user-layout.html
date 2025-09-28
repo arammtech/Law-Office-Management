@@ -1,42 +1,71 @@
-<button (click)="sideNav.toggle()"><i class="fa-solid fa-bars"></i></button>
 <mat-sidenav-container>
-    <mat-sidenav #sideNav mode="side" fixedInViewport="true" class="nav">
-        <button (click)="sideNav.close()"><i class="fa-solid fa-bars"></i></button>
-        <div class="logo"><i class="fa-solid fa-gavel"></i></div>
-        <ul>
-            <a class="btn">
-                <i class="fa-solid fa-house"></i> الرئيسية
-            </a>
-            <a routerLink="add-case" routerLinkActive="bg-accent" class="btn">
-                <i class="fa-solid fa-plus"></i> إضافة قضية
-                جديدة
-            </a>
-            <a routerLink="cases-list" routerLinkActive="bg-accent" class="btn">
-                <i class="fa-solid fa-sheet-plastic"></i>
-                القضايا المستلمة
-            </a>
-            <a routerLink="judgments-list" routerLinkActive="bg-accent" class="btn">
-                <i class="fa-solid fa-gavel"></i> القضايا حسب الصكوك
-            </a>
-            <a [routerLink]='["draft-cases"]' routerLinkActive="bg-accent" class="btn">
-                <i class="fa-brands fa-firstdraft"></i> القضايا المسودة
-            </a>
-            <a routerLink="templates" routerLinkActive="bg-accent" class="btn">
-                <i class="fa-solid fa-box"></i>النماذج
-            </a>
-            <a routerLink="employees" routerLinkActive="bg-accent" class="btn">
-                <i class="fa-solid fa-users"></i> إدارة
-                الموظفين
-            </a>
-        </ul>
+    <mat-sidenav mode="side" opened fixedInViewport="true" [style.width]="sideNavWidth()">
+        <nav>
 
-        <div class="logout">
-            <a (click)="logout()" class="btn bg-main">تسجيل الخروج <i class="fa-solid fa-right-from-bracket"></i></a>
-        </div>
+            <div class="side-btn-container" [class.text-center]="!IsnavigatorsTextVisable()">
+                <button class="side-btn" [class.bg-accent]="IsnavigatorsTextVisable()" (click)="collapsed.set(!collapsed())"><i class="fa-solid fa-bars"></i></button>
+            </div>
+            <ul>
+                <a routerLink="add-case" routerLinkActive="bg-accent" class="btn"
+                    [ngClass]="!IsnavigatorsTextVisable() ? ['justify-content-center', 'only-icon'] : []">
+                    <i class="fa-solid fa-plus"></i>
+                    @if (IsnavigatorsTextVisable())
+                    {
+                    <span>إضافة قضية جديدة</span>
+                    }
+                </a>
+                <a routerLink="cases-list" routerLinkActive="bg-accent" class="btn"
+                    [ngClass]="!IsnavigatorsTextVisable() ? ['justify-content-center', 'only-icon'] : []">
+                    <i class="fa-solid fa-sheet-plastic"></i>
+                    @if (IsnavigatorsTextVisable())
+                    {
+                    <span>القضايا المستلمة</span>
+                    }
+                </a>
+                <a routerLink="judgments-list" routerLinkActive="bg-accent" class="btn"
+                    [ngClass]="!IsnavigatorsTextVisable() ? ['justify-content-center', 'only-icon'] : []">
+                    <i class="fa-solid fa-gavel"></i>
+                    @if (IsnavigatorsTextVisable()) {
 
+                    <span>القضايا حسب الصكوك</span>
+                    }
+                </a>
+                <a [routerLink]='["draft-cases"]' routerLinkActive="bg-accent" class="btn"
+                    [ngClass]="!IsnavigatorsTextVisable() ? ['justify-content-center', 'only-icon'] : []">
+                    <i class="fa-brands fa-firstdraft"></i>
+                    @if (IsnavigatorsTextVisable()) {
+                    <span>القضايا المسودة</span>
+                    }
+                </a>
+                <a routerLink="templates" routerLinkActive="bg-accent" class="btn"
+                    [ngClass]="!IsnavigatorsTextVisable() ? ['justify-content-center', 'only-icon'] : []">
+                    <i class="fa-solid fa-box"></i>
+                    @if (IsnavigatorsTextVisable()) {
+                    <span>النماذج</span>
+                    }
+                </a>
+                <a routerLink="employees" routerLinkActive="bg-accent" class="btn"
+                    [ngClass]="!IsnavigatorsTextVisable() ? ['justify-content-center', 'only-icon'] : []">
+                    <i class="fa-solid fa-users"></i>
+                    @if (IsnavigatorsTextVisable()) {
+                    <span>إدارة الموظفين</span>
+                    }
+                </a>
+            </ul>
+
+            <div class="logout">
+                <a (click)="logout()" class="btn bg-main justify-content-center">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    @if (IsnavigatorsTextVisable()) {
+                    <span>تسجيل الخروج</span>
+                    }
+                </a>
+            </div>
+
+        </nav>
     </mat-sidenav>
 
-    <mat-sidenav-content>
+    <mat-sidenav-content [style.margin-right]="sideNavWidth()">
         <router-outlet></router-outlet>
     </mat-sidenav-content>
 </mat-sidenav-container>

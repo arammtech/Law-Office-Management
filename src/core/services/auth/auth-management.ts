@@ -51,8 +51,10 @@ export class AuthManagement {
   }
 
   changePassword(frmChangePassword:FormGroup<frmChangePassword>): Observable<void> {
+    const body = this.adapter.frmChangePasswordAdapter(frmChangePassword);
+    console.log('the change password body', body);
     return this.http
-      .post<any>(`${this.baseURL}/auth/change-password`, this.adapter.frmChangePasswordAdapter(frmChangePassword) , {
+      .post<any>(`${this.baseURL}/auth/change-password`, body , {
         withCredentials: true,
       })
       .pipe(
