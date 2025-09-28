@@ -2,11 +2,7 @@
 
     <section class="mb-5">
         <header class="row align-items">
-            <app-page-header-component title="إدارة الموظفين" description="إدارة وإضافة موظفي المكتب القانوني"
-                class="col-lg-10 col-sm-12"></app-page-header-component>
-            <button class="btn bg-sub col-lg-2 col-sm-12" (click)="addEmployee()"><i class="fa-solid fa-plus"></i> إضافة
-                موظف</button>
-            <button class="btn bg-sub col-lg-2 col-sm-12" (click)="changePassword()"><i class="fa-solid fa-plus"></i> تغير كلمة المرور</button>
+                <app-section-button actionText="إضافة" (action)="addEmployee()"></app-section-button>
         </header>
     </section>
 

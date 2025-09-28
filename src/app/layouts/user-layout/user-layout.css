@@ -59,8 +59,13 @@ ngx-spinner {
 mat-sidenav {
     padding: 1rem 0.4rem;
     background-color: rgb(255, 255, 255);
-    
     border-left: 1px solid #cccccc !important;
+    height: 100%;
+    height: calc(100% - 65px);  
+}
+
+mat-sidenav-container {
+    height: calc(100vh - 65px);
 }
 
 mat-sidenav-content {
@@ -73,11 +78,6 @@ mat-sidenav-content {
     font-size: 1.4rem;
 }
 
-.side-btn-container {
-    border-bottom: #d9d9d9 solid 1px;
-    padding-bottom: 1rem;
-}
-
 .visible {
     visibility: hidden;
 }
@@ -85,4 +85,10 @@ mat-sidenav-content {
 .only-icon {
     padding: 0.5rem 0rem;
     font-size: 1.3rem;
+}
+
+mat-toolbar {
+    border-bottom: #d9d9d9 solid 1px;
+    padding: 1rem 0.5rem;    
+
 }

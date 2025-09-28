@@ -5,10 +5,11 @@ import { IListDTO, ITemplateBox } from '../../../../../core/models/requests';
 import { AddTemplateDialog } from '../dialogs/add-template-dialog/add-template-dialog';
 import { DialogRef } from '@angular/cdk/dialog';
 import { MatDialog } from '@angular/material/dialog';
+import { SectionButton } from "../../../../../shared/components/section-button/section-button";
 
 @Component({
   selector: 'app-templats-page',
-  imports: [PageHeaderComponent, TemplateBoxComponent],
+  imports: [PageHeaderComponent, TemplateBoxComponent, SectionButton],
   templateUrl: './templats-page.html',
   styleUrl: './templats-page.css',
 })

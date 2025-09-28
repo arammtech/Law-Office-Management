@@ -1,56 +1,27 @@
+<mat-toolbar>
+    <div class="d-flex align-items-center w-100 gap-4">
+
+        <button class="side-btn" [class.bg-accent]="IsnavigatorsTextVisable()" (click)="collapsed.set(!collapsed())"><i
+            class="fa-solid fa-bars"></i></button>
+            
+            <app-page-header-component [title]="activeRout.title"></app-page-header-component>
+        </div>
+</mat-toolbar>
 <mat-sidenav-container>
-    <mat-sidenav mode="side" opened fixedInViewport="true" [style.width]="sideNavWidth()">
+    <mat-sidenav mode="side" opened fixedInViewport="true" fixedTopGap="65" [style.width]="sideNavWidth()">
         <nav>
-
-            <div class="side-btn-container" [class.text-center]="!IsnavigatorsTextVisable()">
-                <button class="side-btn" [class.bg-accent]="IsnavigatorsTextVisable()" (click)="collapsed.set(!collapsed())"><i class="fa-solid fa-bars"></i></button>
-            </div>
             <ul>
-                <a routerLink="add-case" routerLinkActive="bg-accent" class="btn"
+                @for (item of navElements; track item.name) {
+                    <a [routerLink]="item.route" (isActiveChange)="routeChanged($event, item)" routerLinkActive="bg-accent" class="btn"
                     [ngClass]="!IsnavigatorsTextVisable() ? ['justify-content-center', 'only-icon'] : []">
-                    <i class="fa-solid fa-plus"></i>
-                    @if (IsnavigatorsTextVisable())
-                    {
-                    <span>إضافة قضية جديدة</span>
+                    
+                        <i [class]=item.icon></i>
+                        @if (IsnavigatorsTextVisable())
+                        {
+                        <span>{{item.name}}</span>
+                        }
+                    </a>
                     }
-                </a>
-                <a routerLink="cases-list" routerLinkActive="bg-accent" class="btn"
-                    [ngClass]="!IsnavigatorsTextVisable() ? ['justify-content-center', 'only-icon'] : []">
-                    <i class="fa-solid fa-sheet-plastic"></i>
-                    @if (IsnavigatorsTextVisable())
-                    {
-                    <span>القضايا المستلمة</span>
-                    }
-                </a>
-                <a routerLink="judgments-list" routerLinkActive="bg-accent" class="btn"
-                    [ngClass]="!IsnavigatorsTextVisable() ? ['justify-content-center', 'only-icon'] : []">
-                    <i class="fa-solid fa-gavel"></i>
-                    @if (IsnavigatorsTextVisable()) {
-
-                    <span>القضايا حسب الصكوك</span>
-                    }
-                </a>
-                <a [routerLink]='["draft-cases"]' routerLinkActive="bg-accent" class="btn"
-                    [ngClass]="!IsnavigatorsTextVisable() ? ['justify-content-center', 'only-icon'] : []">
-                    <i class="fa-brands fa-firstdraft"></i>
-                    @if (IsnavigatorsTextVisable()) {
-                    <span>القضايا المسودة</span>
-                    }
-                </a>
-                <a routerLink="templates" routerLinkActive="bg-accent" class="btn"
-                    [ngClass]="!IsnavigatorsTextVisable() ? ['justify-content-center', 'only-icon'] : []">
-                    <i class="fa-solid fa-box"></i>
-                    @if (IsnavigatorsTextVisable()) {
-                    <span>النماذج</span>
-                    }
-                </a>
-                <a routerLink="employees" routerLinkActive="bg-accent" class="btn"
-                    [ngClass]="!IsnavigatorsTextVisable() ? ['justify-content-center', 'only-icon'] : []">
-                    <i class="fa-solid fa-users"></i>
-                    @if (IsnavigatorsTextVisable()) {
-                    <span>إدارة الموظفين</span>
-                    }
-                </a>
             </ul>
 
             <div class="logout">

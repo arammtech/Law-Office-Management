@@ -1,11 +1,11 @@
 <section class="body">
     <section class="mb-5">
         <header>
-            <app-page-header-component title="صكوك الاحكام" class="col-12"></app-page-header-component>
         </header>
     </section>
     <section class="section">
 
+        @if (dataSource.data.length) {
         <div class="table-responsive tb-container">
 
             <!-- @if (dataSource?.data?.length) { -->
@@ -73,10 +73,13 @@
 
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
             <!-- } @else {
-            <app-empty-table title="لايوجد صكوك احكام" msg="لايوجد معلومات لاي صك حكم في النظام"></app-empty-table>
-            } -->
+                <app-empty-table title="لايوجد صكوك احكام" msg="لايوجد معلومات لاي صك حكم في النظام"></app-empty-table>
+                } -->
 
         </div>
+        } @else {
+        <app-empty-table title="لا توجد صكوك" msg="لا توجد صكوك مسجل بعد في النظام"></app-empty-table>
+        }
     </section>
 
 </section>

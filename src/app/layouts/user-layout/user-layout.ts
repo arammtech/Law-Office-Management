@@ -2,40 +2,93 @@ import { Component, computed, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { NgxSpinnerComponent } from 'ngx-spinner';
 import { AuthManagement } from '../../../core/services/auth/auth-management';
-import {MatSidenav, MatSidenavContainer, MatSidenavContent, MatSidenavModule} from '@angular/material/sidenav';
+import {
+  MatSidenav,
+  MatSidenavContainer,
+  MatSidenavContent,
+  MatSidenavModule,
+} from '@angular/material/sidenav';
 import { NgClass } from '@angular/common';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { PageHeaderComponent } from '../../../shared/components/page header/page-header-component/page-header-component';
 
 @Component({
   selector: 'app-user-layout',
-  imports: [NgxSpinnerComponent, RouterModule, MatSidenavContainer, MatSidenav, MatSidenavContent, NgClass],
+  imports: [
+    NgxSpinnerComponent,
+    RouterModule,
+    MatSidenavContainer,
+    MatSidenav,
+    MatSidenavContent,
+    NgClass,
+    MatToolbarModule,
+    PageHeaderComponent,
+  ],
   templateUrl: './user-layout.html',
-  styleUrl: './user-layout.css'
+  styleUrl: './user-layout.css',
 })
 export class UserLayout {
-  /**
-   *
-   */
-  constructor(private authMangment:AuthManagement, private route:Router) {
-    
-  }
-  logout() {
-    this.authMangment.logout().subscribe({
-      next: () => {this.route.navigate(['/login'])},
-      error: () => {}
-    })
-
-
-
-  }
-
-  
+  navElements: INavBtn[] = [
+    {
+      name: 'إضافة قضية جديدة',
+      icon: 'fa-solid fa-plus',
+      title: 'إدارة الموظفين',
+      route: 'add-case',
+    },
+    {
+      name: 'القضايا المستلمة',
+      icon: 'fa-solid fa-sheet-plastic',
+      title: 'القضايا المستلمة',
+      route: 'cases-list',
+    },
+    {
+      name: 'صكوك الاحكام',
+      icon: 'fa-solid fa-gavel',
+      title: 'صكوك الاحكام',
+      route: 'judgments-list',
+    },
+    {
+      name: 'القضايا المسودة',
+      icon: 'fa-brands fa-firstdraft',
+      title: 'القضايا المسودة',
+      route: 'draft-cases',
+    },
+    {
+      name: 'النماذج',
+      icon: 'fa-solid fa-box',
+      title: 'النماذج',
+      route: 'templates',
+    },
+    {
+      name: 'إدارة الموظفين',
+      icon: 'fa-solid fa-users',
+      title: 'إدارة الموظفين',
+      route: 'employees',
+    },
+  ];
+  activeRout:INavBtn = this.navElements[5]
   IsnavigatorsTextVisable = computed(() => !this.collapsed());
   collapsed = signal(false);
-  sideNavWidth = computed(() => this.collapsed() ? '80px' : '255px');
-
-  opned : boolean = true;
-  toggle() {
-    this.opned = !this.opned
+  sideNavWidth = computed(() => (this.collapsed() ? '80px' : '255px'));
+  constructor(private authMangment: AuthManagement, private route: Router) {}
+  logout() {
+    this.authMangment.logout().subscribe({
+      next: () => {
+        this.route.navigate(['/login']);
+      },
+      error: () => {},
+    });
   }
 
+  routeChanged(isActive:boolean, element:INavBtn) {
+    if (isActive) this.activeRout = element;
+  }
+
+}
+
+export interface INavBtn {
+  name: string;
+  icon: string;
+  title: string;
+  route: string;
 }

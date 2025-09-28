@@ -17,6 +17,7 @@ import { EmptyTable } from '../../../../../shared/components/empty-table/empty-t
 import { ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { enDialogMode } from '../../../../../shared/enums/dialog-mode';
 import { ChangePasswordDialog } from '../../dialogs/change-password/change-password-dialog/change-password-dialog';
+import { SectionButton } from "../../../../../shared/components/section-button/section-button";
 @Component({
   selector: 'app-mange-employee-page',
   imports: [
@@ -25,7 +26,8 @@ import { ChangePasswordDialog } from '../../dialogs/change-password/change-passw
     MatPaginatorModule,
     MatSortModule,
     EmptyTable,
-  ],
+    SectionButton
+],
   providers: [
     {
       provide: MatPaginatorIntl,
