@@ -31,4 +31,15 @@ export class ClsHelpers {
       { code: 'BH', name: 'البحرين' },
     ];
   }
+
+  download(fileName:string, blob:Blob) {
+          // const blob = new Blob([response], {type : response.type});
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download =fileName;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+  }
 }

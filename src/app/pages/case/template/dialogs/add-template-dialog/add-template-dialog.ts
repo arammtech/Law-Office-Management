@@ -29,8 +29,9 @@ addTemplateForm: FormGroup<frmAddTemplate>;
   }
 
   submit() {
+    this.addTemplateForm.markAllAsTouched();
     if (!this.addTemplateForm.invalid) {
-      this.templateService.add(this.addTemplateForm, this.data.caseId).subscribe({
+      this.templateService.add(this.addTemplateForm).subscribe({
         next: () => {
           this.toastService.success('تم إضافة القالب بنجاح');
           this.dialogRef.close(true);

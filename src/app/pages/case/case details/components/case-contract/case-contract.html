@@ -15,7 +15,7 @@
   <div class="table-responsive tb-container">
     <table matSort mat-table [dataSource]="contractsDataSource" class="mat-elevation-z8 table">
       <!-- Index Column -->
-      <ng-container matColumnDef="index">
+      <ng-container [matColumnDef]="displayedColumns[0]">
         <th mat-header-cell *matHeaderCellDef>#</th>
         <td mat-cell *matCellDef="let i = index">
           {{ helper.getCurrentRowNumber(i, paginator?.pageIndex || 0, paginator?.pageSize || 20) }}
@@ -23,51 +23,60 @@
       </ng-container>
 
       <!-- Contract Number -->
-      <ng-container matColumnDef="contractNumber">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>رقم العقد</th>
+      <ng-container [matColumnDef]="displayedColumns[1]">
+        <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[1]">رقم العقد</th>
         <td mat-cell *matCellDef="let element">{{ element.contractNumber }}</td>
       </ng-container>
 
       <!-- Contract Type -->
-      <ng-container matColumnDef="contractType">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>نوع العقد</th>
+      <ng-container [matColumnDef]="displayedColumns[2]">
+        <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[2]">نوع العقد</th>
         <td mat-cell *matCellDef="let element"><span appContractType>{{ element.contractType }}</span></td>
       </ng-container>
 
       <!-- Total Amount -->
-      <ng-container matColumnDef="totalAmount">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>المبلغ الإجمالي</th>
+      <ng-container [matColumnDef]="displayedColumns[3]">
+        <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[3]">المبلغ الإجمالي</th>
         <td mat-cell *matCellDef="let element">{{ element.totalAmount }}</td>
       </ng-container>
 
-      <!-- Remaining Amount -->
-      <ng-container matColumnDef="restAmount">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>المبلغ المتبقي</th>
-        <td mat-cell *matCellDef="let element">{{ element.restAmount }}</td>
-      </ng-container>
-
       <!-- Issue Date -->
-      <ng-container matColumnDef="issueDate">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ الإصدار</th>
+      <ng-container [matColumnDef]="displayedColumns[4]">
+        <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[4]">تاريخ الإصدار</th>
         <td mat-cell *matCellDef="let element">{{ element.issueDate | date:'dd/MM/yyyy' }}</td>
       </ng-container>
 
       <!-- Expiration Date -->
-      <ng-container matColumnDef="expirationDate">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ الانتهاء</th>
+      <ng-container [matColumnDef]="displayedColumns[5]">
+        <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[5]">تاريخ الانتهاء</th>
         <td mat-cell *matCellDef="let element">{{ element.expirationDate | date:'dd/MM/yyyy' }}</td>
       </ng-container>
 
       <!-- Created By -->
-      <ng-container matColumnDef="employeeNameCreatedIt">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>منشئ العقد</th>
-        <td mat-cell *matCellDef="let element">{{ element.employeeNameCreatedIt }}</td>
+      <ng-container [matColumnDef]="displayedColumns[6]">
+        <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[6]">منشئ العقد</th>
+        <td mat-cell *matCellDef="let element">{{ element.employeeNameCreatedBy }}</td>
       </ng-container>
 
       <!-- Created Date -->
-      <ng-container matColumnDef="createdDate">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>تاريخ الإنشاء</th>
-        <td mat-cell *matCellDef="let element">{{ element.createdDate | date:'dd/MM/yyyy' }}</td>
+      <ng-container [matColumnDef]="displayedColumns[7]">
+        <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[7]">تاريخ الإنشاء</th>
+        <td mat-cell *matCellDef="let element">{{ (element.createdDate  | date:'dd/MM/yyyy') }}</td>
+      </ng-container>
+
+      <!-- Remaining Amount -->
+      <ng-container [matColumnDef]="displayedColumns[8]">
+        <th mat-header-cell *matHeaderCellDef>الاجراءات</th>
+        <td mat-cell *matCellDef="let element">
+          <button [matMenuTriggerFor]="menu"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item class="btn btn-sm bg-main" (click)="download(element)" title="تحميل">
+              <i class="fa-solid fa-download"></i>
+              تحميل
+            </button>
+          </mat-menu>
+
+        </td>
       </ng-container>
 
       <!-- Header and Row Definitions -->
@@ -81,7 +90,7 @@
     </mat-paginator>
   </div>
   } @else {
-  <app-empty-table title="لاتوجد عقود مسجلة بعد في هذه القضية"
-    msg="لاتوجد عقود مسجلة بعد, يمكنك اضافة واحدة" [hasAction]="true" action="أضف عقد" (actionClicked)="openAddContract()"></app-empty-table>
+  <app-empty-table title="لاتوجد عقود مسجلة بعد في هذه القضية" msg="لاتوجد عقود مسجلة بعد, يمكنك اضافة واحدة"
+    [hasAction]="true" action="أضف عقد" (actionClicked)="openAddContract()"></app-empty-table>
   }
 </section>

@@ -4,12 +4,13 @@ import { ToasterService } from '../../services/toaster-service';
 import { inject } from '@angular/core';
 import { catchError, switchMap, throwError } from 'rxjs';
 import { AuthManagement } from '../../services/auth/auth-management';
+import { enErrorCodes, IBusinessError } from '../../../shared/enums/errors';
 
 export const httpErrorHandelrInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const authMangment = inject(AuthManagement);
   const toastService = inject(ToasterService);
-
+  let counter = 0;
   const NewReq = req.clone({
     withCredentials: true,
   });
@@ -17,23 +18,30 @@ export const httpErrorHandelrInterceptor: HttpInterceptorFn = (req, next) => {
   return next(NewReq).pipe(
     catchError((error: HttpErrorResponse) => {
       // handle unauthorized
-      if (error.status === 401) {
-        return authMangment.refreshToken().pipe(
-          switchMap(() => {
-            // إعادة إرسال الطلب بعد التحديث
-            console.log('refreshed');
-            const newReq = req.clone({withCredentials: true});
-            return next(newReq);
-          }),
-          catchError((refreshErr) => {
-            // لو فشل الريفرش نطرد المستخدم
-            toastService.error(
-              'انتهت صلاحية الجلسة، يرجى تسجيل الدخول مرة أخرى'
-            );
-            router.navigate(['/login']);
-            return throwError(() => refreshErr);
-          })
-        );
+      console.log('error accrued', error);
+      if (error.status === 401 && counter == 0) {
+        counter++;
+          
+          return authMangment.refreshToken().pipe(
+            switchMap(() => {
+              counter = 0;
+              const newReq = req.clone({ withCredentials: true });
+              return next(newReq);
+            }),
+            catchError((refreshErr) => {
+              // لو فشل الريفرش نطرد المستخدم
+              toastService.error(
+                'انتهت صلاحية الجلسة، يرجى تسجيل الدخول مرة أخرى'
+              );
+              router.navigate(['/login']);
+              return throwError(() => refreshErr);
+            })
+          );
+        
+      } else {
+        
+        // router.navigate(['/login']);
+        counter = 0
       }
 
       // handle other errors
@@ -48,16 +56,23 @@ export const httpErrorHandelrInterceptor: HttpInterceptorFn = (req, next) => {
           toastService.error('ليس لديك صلاحية الوصول');
           break;
         case 404:
-          toastService.error('العنصر غير موجود');
+          // toastService.error('العنصر غير موجود');
           break;
         case 500:
           toastService.error('حدث خطأ في الخادم، يرجى المحاولة لاحقًا');
           break;
         default:
-          toastService.error('حدث خطأ غير متوقع', `خطأ ${error.status}`);
+          toastService.error('حدث خطأ غير متوقع');
       }
 
-      return throwError(() => error);
+      const myerror : IBusinessError = {
+        code: error?.error?.detail as enErrorCodes,
+        status: error.status,
+        title: error?.error?.title,
+        type: error?.error?.type
+      }
+
+      return throwError(() => myerror);
     })
   );
 };

@@ -48,8 +48,6 @@ export class CaseService {
       );
   }
 
-
-
   updateCaseStatus(caseId: string, status: enCaseStatus): Observable<void> {
     return this.http
       .put<any[]>(`${this.baseURL}/cases/${caseId}/status`, { status })
@@ -62,9 +60,27 @@ export class CaseService {
     pageNumber: number = 1,
     pageSize: number = 10
   ): Observable<IListDTO<ICaseRow>> {
+    console.log('the court id', courtId);
+    console.log('the year', year);
+
     return this.http
       .get<any>(
         `${this.baseURL}/cases/by-court-type/${courtId}/year/${year}?pageNumber=${pageNumber}&pageSize=${pageSize}`
+      )
+      .pipe(
+        map((data) =>
+          this.adapter.getListDTOAdapter(data, this.adapter.caseListRowAdapter)
+        )
+      );
+  }
+
+  getDraftCasesList(
+    pageNumber: number = 1,
+    pageSize: number = 10
+  ): Observable<IListDTO<ICaseRow>> {
+    return this.http
+      .get<any>(
+        `${this.baseURL}/cases/list?pageNumber=${pageNumber}&pageSize=${pageSize}&status=${enCaseStatus.Draft}`
       )
       .pipe(
         map((data) =>
@@ -91,6 +107,4 @@ export class CaseService {
       .get<any>(`${this.baseURL}/cases/${caseId}`)
       .pipe(map((res) => this.adapter.fromCaseDetailsAPI(res)));
   }
-
- 
 }

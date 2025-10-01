@@ -47,8 +47,7 @@
             </div>
             }
         </div>
-
-        <div class="col-md-6">
+        <div class="col-md-12">
             <label class="form-label">ملف الحكم</label>
             <input type="file" (change)="onFileChange($event)"
                 [class.border-error]="judgmentForm.controls.file.invalid && judgmentForm.controls.file.touched" class="form-control"
@@ -73,6 +72,7 @@
     </form>
 </mat-dialog-content>
 
-<mat-dialog-actions>
-    <input type="submit" value="إضافة الحكم" form="judgmentForm" class="btn bg-sub w-fill">
+<mat-dialog-actions  class="btn-group d-flex justfiy-content-center gap-3" role="group">
+    <input type="submit" value="إضافة الحكم" form="judgmentForm" class="btn bg-main w-fill">
+    <button class="btn bg-accent " type="button" mat-dialog-close>إلغاء</button>
 </mat-dialog-actions>

@@ -21,11 +21,12 @@ import {
 import { ClsHelpers } from '../../../../../../shared/util/helpers/cls-helpers';
 import { ClsTableUtil } from '../../../../../../shared/util/table/cls-table-util';
 import { EmptyTable } from '../../../../../../shared/components/empty-table/empty-table/empty-table';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-cases-list-page',
   imports: [
-    PageHeaderComponent,
+    MatMenuModule,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
@@ -67,7 +68,6 @@ export class CasesListPage implements OnInit, AfterViewInit {
     'fileNumber',
     'caseNumber',
     'status',
-    'courtTypeName',
     'createdDate',
     'employeeName',
     'caseSubject',
@@ -177,11 +177,6 @@ export class CasesListPage implements OnInit, AfterViewInit {
     return this.getTotalCases() > 0;
   }
 
-  isLoading(): boolean {
-    // Add loading state if needed
-    return false;
-  }
-
   // Export functionality (optional)
   exportData(): void {
     const dataToExport = this.casesDataSource.filteredData;
@@ -199,17 +194,5 @@ export class CasesListPage implements OnInit, AfterViewInit {
   // Clear filters
   clearFilter(): void {
     this.casesDataSource.filter = '';
-  }
-
-  // Get case status color class (optional helper)
-  getStatusClass(status: string): string {
-    const statusMap: { [key: string]: string } = {
-      active: 'text-success',
-      pending: 'text-warning',
-      closed: 'text-danger',
-      completed: 'text-info',
-    };
-
-    return statusMap[status?.toLowerCase()] || 'text-muted';
   }
 }

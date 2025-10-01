@@ -10,3 +10,4 @@ export enum enJudgmentSubType {
   normal = 'عادي',
   special = 'مميز',
 }
+

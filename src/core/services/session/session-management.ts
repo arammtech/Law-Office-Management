@@ -29,10 +29,10 @@ export class SessionManagement {
     const currentSession = this.getSession();
     if (currentSession) {
       return (
-        Number(currentSession.accessTokenExpirationDate) > Number(Date.now())
+        Number(currentSession.accessTokenExpirationDate) < Number(Date.now())
       );
     } else {
-      return false;
+      return true;
     }
   }
 
@@ -50,6 +50,7 @@ export class SessionManagement {
   updateRefreshToken(refreshToken: IrefreshToken) {
     const currentSession = this.getSession();
     if (currentSession) {
+      console.log('logged user before refresh', currentSession);
       currentSession.accessTokenExpirationDate =
         refreshToken.accessTokenExpirationDate;
       currentSession.refreshTokenExpirationDate =

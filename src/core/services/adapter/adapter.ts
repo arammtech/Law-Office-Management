@@ -22,46 +22,61 @@ import {
   IJudgmentRow,
   frmAddTemplate,
   frmChangePassword,
+  IEmployeeRow,
+  ITemplateBox,
+  IAttachmentRow,
 } from '../../models/requests';
 import {
   ICseGeneralDetails,
   ICasesParties,
 } from '../../../app/pages/case/case details/components/case-details-component/case-details-component';
 import { Injectable } from '@angular/core';
-import { IAttachmentRow } from '../../../app/pages/case/case details/components/case-attachments/case-attachments';
 
 @Injectable({ providedIn: 'root' })
 export class Adapter {
-  frmChangePasswordAdapter(frmChangePassword: FormGroup<frmChangePassword>): any {
+  employeeRowAdapter(row: any): IEmployeeRow {
+    return {
+      id: row.id,
+      name: row.name,
+      natId: row.natId,
+      countryCode: row.countryCode,
+      role: row.role,
+      email: row.email,
+      birthDate: row.birthDate,
+      phone: row.phone,
+      IsActive: row.isActive,
+    };
+  }
+  frmChangePasswordAdapter(
+    frmChangePassword: FormGroup<frmChangePassword>
+  ): any {
     return {
       username: frmChangePassword?.value?.username,
       currentPassword: frmChangePassword?.value?.current,
       newPassword: frmChangePassword?.value?.new,
-    }
+    };
   }
   judgmentRowAdapter(res: any): IJudgmentRow {
     return {
-      createdDate: res.createdDate,
-      issueDate: res.issueDate,
-      creatorName: res.creatorName,
-      number: res.number,
-      filePath: res.filePath,
-      id: res.id,
-      subType: res.subType,
-      type: res.type,
+      id: res.judgmentId,
       caseId: res.caseId,
+      type: res.type,
+      subType: res.subType,
+      number: res.number,
+      issueDate: res.issuedOn,
+      creatorName: res.employeeNameCreatedBy,
+      createdDate: res.createdDate,
+      filePath: res.filePath,      
     };
   }
   constructor(private fb: NonNullableFormBuilder) {}
 
   getCaseAttachmentRowAdapter(row: any): IAttachmentRow {
     return {
-      id: row?.id ?? '',
-      name: row?.name ?? '',
-      rasiedDate: row?.rasiedDate ?? '',
-      raisedBy: row?.raisedBy ?? '',
-      fileSize: row?.fileSize ?? '',
-      fileType: row?.fileType ?? '',
+      id: row?.attachmentId ?? '',
+      name: row?.attachmentName ?? '',
+      createdDate: row?.createdDate ?? '',
+      CreatedBy: row?.createdByEmployeeName ?? '',
       filePath: row?.filePath ?? '',
     };
   }
@@ -70,9 +85,9 @@ export class Adapter {
     const formData = new FormData();
     const { name, attachmentFile } = frmAddAttachment.controls;
 
-    formData.append('name', name.value);
+    formData.append('AttachmentName', name.value);
     if (attachmentFile.value) {
-      formData.append('file', attachmentFile.value);
+      formData.append('File', attachmentFile.value);
     }
 
     return formData;
@@ -134,13 +149,14 @@ export class Adapter {
   getCaseContractRowAdapter(res: any): IContractRow {
     return {
       id: res?.contractId,
-      createdDate: res?.createdDate,
-      employeeNameCreatedIt: res?.employeeName ?? 'مافي اسم',
-      expirationDate: res?.createdDate,
-      issueDate: res?.createdDate,
-      restAmount: res?.initialPayment,
-      totalAmount: res?.totalAmount,
+      caseId: res.caseId,
+      filePath: res.filePath,
       contractNumber: res?.contractNumber,
+      createdDate: res?.createdDate,
+      employeeNameCreatedBy: res?.employeeNameCreatedBy ?? 'مافي اسم',
+      expirationDate: res?.expiryDate ?? '0000-00-00',
+      issueDate: res?.issueDate  ??'0000-00-00',
+      totalAmount: res?.totalAmount,
       contractType: res?.contractType,
     };
   }
@@ -148,9 +164,10 @@ export class Adapter {
     return {
       number: res.poaNumber,
       createdDate: res.createdDate,
-      creatorName: res.employeeCreatedByName,
+      creatorName: res.employeeNameCreatedBy,
       publisherName: res.issuingAuthority,
       issueDate: res.issueDate,
+      filePath: res.filePath
     };
   }
   fromCaseDetailsAPI(data: any): ICseGeneralDetails {
@@ -230,7 +247,6 @@ export class Adapter {
   }
   toAddContractFormAPI(contractFrm: FormGroup<frmAddContract>): FormData {
     const form = new FormData();
-
     // Add basic fields with proper conversion
     form.append('ContractType', String(contractFrm.value.contractType));
     form.append('InitialPayment', String(contractFrm.value?.downAmount));
@@ -284,12 +300,12 @@ export class Adapter {
     return {
       caseId: row.caseId,
       caseNumber: row.caseNumber || 'N/A',
-      caseSubject: row.caseSubject,
-      courtTypeName: row.courtTypeName,
-      status: row.status,
       fileNumber: row.fileNumber,
-      employeeName: row.createdByName,
+      status: row.status,
+      caseSubject: row.caseSubject,
       createdDate: row.createdDate,
+      courtTypeName: row.courtTypeName,
+      employeeName: row.employeeNameCreatedBy ?? row.createdByName,
     };
   }
 
@@ -350,11 +366,11 @@ export class Adapter {
   employeeDetailsAdapter(data: any): IEmployeeDetails {
     return {
       id: data.id,
-      nationalId: data.nationalId,
-      fullName: data.fullName,
+      nationalId: data.natId,
+      fullName: data.name,
       email: data.email,
       address: data.address,
-      phone: data.phone,
+      phone: data.phoneNumber,
       role: data.role,
       birthDate: data.birthDate,
       countryCode: data.countryCode,
@@ -368,7 +384,6 @@ export class Adapter {
     form.append('Type', String(judgment.value.type));
     form.append('SubType', String(judgment.value.subType));
     form.append('IssuedOn', String(judgment.value.issueDate));
-    form.append('ExpiresOn', String('2025-02-02'));
 
     if (judgment.value.file) form.append('File', judgment.value.file);
 
@@ -378,10 +393,26 @@ export class Adapter {
   frmAddTemplateAdapter(frmTemplate: FormGroup<frmAddTemplate>) {
     const form = new FormData();
 
-    form.append('Number', String(frmTemplate.value.name));
+    form.append('TemplateName', String(frmTemplate.value.name));
 
     if (frmTemplate.value.file) form.append('File', frmTemplate.value.file);
 
     return form;
+  }
+
+  templateRowAdapter(data:any) : ITemplateBox {
+    return {
+      id: data?.id,
+      name: data?.templateName,
+      filePath: data?.filePath
+    }
+  }
+
+  templatesList(data:any) : ITemplateBox[] {
+    return data.map((row:any) => this.templateRowAdapter(row));
+  }
+
+  getAllEmployees(data:any) : IEmployeeRow[] {
+    return data.map((row:any) => this.employeeRowAdapter(row))
   }
 }

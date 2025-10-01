@@ -5,11 +5,13 @@ import { IListDTO, ITemplateBox } from '../../../../../core/models/requests';
 import { AddTemplateDialog } from '../dialogs/add-template-dialog/add-template-dialog';
 import { DialogRef } from '@angular/cdk/dialog';
 import { MatDialog } from '@angular/material/dialog';
-import { SectionButton } from "../../../../../shared/components/section-button/section-button";
+import { SectionButton } from '../../../../../shared/components/section-button/section-button';
+import { TemplateService } from '../../../../../core/services/template/template-service';
+import { EmptyTable } from "../../../../../shared/components/empty-table/empty-table/empty-table";
 
 @Component({
   selector: 'app-templats-page',
-  imports: [PageHeaderComponent, TemplateBoxComponent, SectionButton],
+  imports: [PageHeaderComponent, TemplateBoxComponent, SectionButton, EmptyTable],
   templateUrl: './templats-page.html',
   styleUrl: './templats-page.css',
 })
@@ -19,36 +21,27 @@ export class TemplatesPage implements OnInit {
   /**
    *
    */
-  constructor(private dilogRef:MatDialog) {
-    
-  }
-  
+  constructor(
+    private dilogRef: MatDialog,
+    private templateService: TemplateService
+  ) {}
+
   ngOnInit(): void {
-    this.templates = [
-      {
-        id: '1',
-        name: 'نموذج عقد',
-        filePath: 'path',
-      },
-      {
-        id: '2',
-        name: 'نموذج استرحام',
-        filePath: 'path',
-      },{
-        id: '3',
-        name: 'نموذج عرض سعر',
-        filePath: 'path',
-      },{
-        id: '4',
-        name: 'نموذج طلب رفض',
-        filePath: 'path',
-      },
-    ];
+    this.templateService.getAll().subscribe((data) => {
+      this.templates = data;
+    });
   }
   addTemplate() {
-      this.dilogRef.open(AddTemplateDialog, {
-        height: '450px',
+    this.dilogRef
+      .open(AddTemplateDialog, {
+        height: '300px',
         minWidth: '400px',
+      })
+      .afterClosed()
+      .subscribe(() => {
+        this.templateService.getAll().subscribe((data) => {
+          this.templates = data;
+        });
       });
   }
 }

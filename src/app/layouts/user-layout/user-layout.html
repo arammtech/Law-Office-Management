@@ -12,15 +12,18 @@
         <nav>
             <ul>
                 @for (item of navElements; track item.name) {
-                    <a [routerLink]="item.route" (isActiveChange)="routeChanged($event, item)" routerLinkActive="bg-accent" class="btn"
-                    [ngClass]="!IsnavigatorsTextVisable() ? ['justify-content-center', 'only-icon'] : []">
-                    
-                        <i [class]=item.icon></i>
-                        @if (IsnavigatorsTextVisable())
-                        {
-                        <span>{{item.name}}</span>
-                        }
-                    </a>
+                    @if (hasRole(item)) {
+                        <a [routerLink]="item.route" (isActiveChange)="routeChanged($event, item)" routerLinkActive="bg-main" class="btn"
+                        [ngClass]="!IsnavigatorsTextVisable() ? ['justify-content-center', 'only-icon'] : []">
+                        
+                            <i [class]=item.icon></i>
+                            @if (IsnavigatorsTextVisable())
+                            {
+                            <span>{{item.name}}</span>
+                            }
+                        </a>
+
+                    }
                     }
             </ul>
 

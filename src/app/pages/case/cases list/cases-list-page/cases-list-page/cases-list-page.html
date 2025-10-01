@@ -4,8 +4,8 @@
         <div class="row">
             @for (court of courts; track court.courtTypeId; let firstItem = $first) {
             <button (click)="updateTableData(court.courtTypeId, selectedYear)" (click)="onCourtChange(court)"
-                class="btn col-sm-12 col-lg-1 d-flex justfi-content-center h-fit text-center w-fit" [ngClass]="{'bg-sub': activeButton === court.code}"
-                (click)="setActiveButton(court.code)">
+                class="btn col-sm-12 col-lg-1 d-flex justfi-content-center h-fit text-center w-fit"
+                [ngClass]="{'bg-main': activeButton === court.code}" (click)="setActiveButton(court.code)">
                 {{ court.name }}
             </button>
             }
@@ -52,50 +52,48 @@
 
                 <!-- Case Number Column with Sort -->
                 <ng-container [matColumnDef]="displayedColumns[2]">
-                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[3]">رقم القضية</th>
+                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[2]">رقم القضية</th>
                     <td mat-cell *matCellDef="let element">{{element.caseNumber}}</td>
                 </ng-container>
 
                 <!-- Case Status Column with Sort -->
                 <ng-container [matColumnDef]="displayedColumns[3]">
-                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[4]">حالة القضية</th>
+                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[3]">حالة القضية</th>
                     <td mat-cell *matCellDef="let element">
                         <span appCaseStatus>{{element.status}}</span>
                     </td>
                 </ng-container>
 
-                <!-- Court Type Column -->
-                <ng-container [matColumnDef]="displayedColumns[4]">
-                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[5]">اسم المحكمة</th>
-                    <td mat-cell *matCellDef="let element">{{element.courtTypeName}}</td>
-                </ng-container>
-
                 <!-- Created Date Column -->
-                <ng-container [matColumnDef]="displayedColumns[5]">
-                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[6]">تاريخ الإنشاء</th>
+                <ng-container [matColumnDef]="displayedColumns[4]">
+                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[4]">تاريخ الإنشاء</th>
                     <td mat-cell *matCellDef="let element">{{element.createdDate | date:'dd/MM/yyyy'}}</td>
                 </ng-container>
 
                 <!-- Employee Name Column -->
-                <ng-container [matColumnDef]="displayedColumns[6]">
-                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[7]">اسم الموظف</th>
+                <ng-container [matColumnDef]="displayedColumns[5]">
+                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[5]">اسم الموظف</th>
                     <td mat-cell *matCellDef="let element">{{element.employeeName}}</td>
                 </ng-container>
 
                 <!-- Case Subject Column -->
-                <ng-container [matColumnDef]="displayedColumns[7]">
-                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[8]">موضوع القضية</th>
+                <ng-container [matColumnDef]="displayedColumns[6]">
+                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[6]">موضوع القضية</th>
                     <td mat-cell *matCellDef="let element">{{element.caseSubject}}</td>
                 </ng-container>
 
 
                 <!-- Actions Column -->
-                <ng-container [matColumnDef]="displayedColumns[8]">
+                <ng-container [matColumnDef]="displayedColumns[7]">
                     <th mat-header-cell *matHeaderCellDef>التفاصيل</th>
                     <td mat-cell *matCellDef="let element">
-                        <a [routerLink]="['../case-details', element.caseId]" class="btn h-fit bg-main">
-                            التفاصيل<i class="fa-solid fa-eye me-1"></i>
-                        </a>
+                        <button [matMenuTriggerFor]="menu"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                        <mat-menu #menu="matMenu" class="bg-accent">
+                            <a [routerLink]="['../case-details', element.caseId]" class="h-fit">
+                                <i class="fa-solid fa-eye me-1"></i>
+                                التفاصيل
+                            </a>
+                        </mat-menu>
                     </td>
                 </ng-container>
 

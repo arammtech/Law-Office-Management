@@ -1,11 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import {
   MatPaginator,
   MatPaginatorModule,
   PageEvent,
 } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ActivatedRoute } from '@angular/router';
 import {
@@ -19,14 +19,26 @@ import { DatePipe } from '@angular/common';
 import { EmptyTable } from '../../../../../../shared/components/empty-table/empty-table/empty-table';
 import { AddJudgmentDialog } from '../../dialogs/add-judgment-component/add-judgment-component';
 import { JudgmentService } from '../../../../../../core/services/judgments/judgment-service';
+import { MatMenuModule } from '@angular/material/menu';
+import { JudgmentStyleDirective } from '../../../../../../shared/directives/judgment-type/judgment-type';
+import { JudgmentSubTypeStyleDirective } from '../../../../../../shared/directives/judgment-sub-type/judgment-sub-type';
 
 @Component({
   selector: 'app-case-judgments-components',
-  imports: [MatPaginatorModule, MatTableModule, DatePipe, EmptyTable],
+  imports: [
+    MatPaginatorModule,
+    MatTableModule,
+    DatePipe,
+    EmptyTable,
+    MatMenuModule,
+    MatSortModule,
+    JudgmentStyleDirective,
+    JudgmentSubTypeStyleDirective
+  ],
   templateUrl: './case-judgments-components.html',
   styleUrl: './case-judgments-components.css',
 })
-export class CaseJudgmentsComponents implements OnInit {
+export class CaseJudgmentsComponents implements OnInit, AfterViewInit {
   handlePage($event: PageEvent) {
     throw new Error('Method not implemented.');
   }
@@ -63,66 +75,16 @@ export class CaseJudgmentsComponents implements OnInit {
       this.caseId = params['caseId'] || '';
     });
 
-    this.judgmentsDataSource.data = [
-      {
-        id: 'JUDG-001',
-        number: 'حكم-2025-001',
-        type: 'جنائي',
-        subType: 'سرقة',
-        issueDate: new Date('2025-03-15'),
-        creatorName: 'أحمد الزهراني',
-        createdDate: '2025-03-16T09:30:00Z',
-        filePath: '/files/judgments/JUDG-001.pdf',
-        caseId: 'CASE-1001',
-      },
-      {
-        id: 'JUDG-002',
-        number: 'حكم-2025-002',
-        type: 'مدني',
-        subType: 'عقد إيجار',
-        issueDate: new Date('2025-04-10'),
-        creatorName: 'سارة القحطاني',
-        createdDate: '2025-04-11T14:45:00Z',
-        filePath: '/files/judgments/JUDG-002.docx',
-        caseId: 'CASE-1002',
-      },
-      {
-        id: 'JUDG-003',
-        number: 'حكم-2025-003',
-        type: 'تجاري',
-        subType: 'نزاع شراكة',
-        issueDate: new Date('2025-05-05'),
-        creatorName: 'فهد العتيبي',
-        createdDate: '2025-05-06T11:20:00Z',
-        filePath: '/files/judgments/JUDG-003.pdf',
-        caseId: 'CASE-1003',
-      },
-      {
-        id: 'JUDG-004',
-        number: 'حكم-2025-004',
-        type: 'أحوال شخصية',
-        subType: 'طلاق',
-        issueDate: new Date('2025-06-01'),
-        creatorName: 'نورة السبيعي',
-        createdDate: '2025-06-02T08:10:00Z',
-        filePath: '/files/judgments/JUDG-004.doc',
-        caseId: 'CASE-1004',
-      },
-      {
-        id: 'JUDG-005',
-        number: 'حكم-2025-005',
-        type: 'إداري',
-        subType: 'مخالفة تنظيمية',
-        issueDate: new Date('2025-07-20'),
-        creatorName: 'عبدالله الحربي',
-        createdDate: '2025-07-21T16:00:00Z',
-        filePath: '/files/judgments/JUDG-005.pdf',
-        caseId: 'CASE-1005',
-      },
-    ];
+    this.loadJudjments();
   }
 
-  loadContracts(): void {
+   ngAfterViewInit(): void {
+    // Connect paginator and sort to data source
+    this.judgmentsDataSource.paginator = this.paginator;
+    this.judgmentsDataSource.sort = this.sort;
+  }
+
+  loadJudjments(): void {
     this.judgmentService.getAllByCaseId(this.caseId).subscribe({
       next: (res) => {
         this.judgments = res;
@@ -132,10 +94,21 @@ export class CaseJudgmentsComponents implements OnInit {
   }
 
   openAddJudgmentDialog() {
-    this.dialogof.open(AddJudgmentDialog, {
-      height: '325x',
-      minWidth: '600px',
-      data: { caseId: this.caseId },
-    });
+    this.dialogof
+      .open(AddJudgmentDialog, {
+        height: '325x',
+        minWidth: '600px',
+        data: { caseId: this.caseId },
+      })
+      .afterClosed()
+      .subscribe(() => {
+        this.loadJudjments();
+      });
+  }
+
+  download(element: IJudgmentRow) {
+    this.judgmentService
+      .download(this.caseId, element.id, element.filePath)
+      .subscribe((blob) => this.helper.download('ملف صك', blob));
   }
 }

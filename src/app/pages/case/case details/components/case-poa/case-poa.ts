@@ -11,6 +11,8 @@ import { IAddPOAForm, IListDTO, IPOARow } from '../../../../../../core/models/re
 import { POAService } from '../../../../../../core/services/poa/poa-service';
 import { ClsHelpers } from '../../../../../../shared/util/helpers/cls-helpers';
 import { FormGroup } from '@angular/forms';
+import { DatePipe } from '@angular/common';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-case-poa',
@@ -21,7 +23,7 @@ import { FormGroup } from '@angular/forms';
       useValue: ClsTableUtil.getArabicPaginatorIntl(),
     },
   ],
-  imports: [MatTableModule, MatPaginator, MatSortModule, EmptyTable],
+  imports: [MatTableModule, MatPaginator, MatSortModule, EmptyTable, DatePipe, MatMenuModule],
   templateUrl: './case-poa.html',
   styleUrl: './case-poa.css',
 })
@@ -33,6 +35,7 @@ export class CasePoa implements AfterViewInit, OnInit {
     'creatorName',
     'createdDate',
     'issueDate',
+    'actions'
   ];
   POAsDataSource = new MatTableDataSource<IPOARow>();
   poas:IListDTO<IPOARow> = {} as IListDTO<IPOARow>
@@ -60,7 +63,7 @@ export class CasePoa implements AfterViewInit, OnInit {
     this.POAsDataSource.paginator = this.paginator;
     this.POAsDataSource.sort = this.sort;
   }
-
+  
   loadPOAs(): void {
     this.poaService.getCasePOAs(this.caseId).subscribe({
       next: (res) => {
@@ -69,16 +72,16 @@ export class CasePoa implements AfterViewInit, OnInit {
       },
     });
   }
-
+  
   filterPOAs(event: Event): void {
     const value = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.POAsDataSource.filter = value;
   }
-
+  
   handlePage(event: any): void {
     this.currentPage = event.pageIndex;
   }
-
+  
   openAddPOA(): void {
     this.dialogof.open(AddPoaDialog, {
       height: '325x',
@@ -89,5 +92,8 @@ export class CasePoa implements AfterViewInit, OnInit {
         this.loadPOAs()
       }
     });
+  }
+  download(poa: IPOARow) {
+    // this.poaService.download(poa.)
   }
 }

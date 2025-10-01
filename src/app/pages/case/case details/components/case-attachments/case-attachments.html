@@ -1,6 +1,6 @@
 <section class="section">
 
-    @if(attachments?.length) {
+    @if(attachmentsDataSource?.data?.length) {
     <header class="d-myflex my-justi mb-2">
         <h3>المرفقات</h3>
         <button (click)="openAddAttachment()" class="btn bg-sub">إضافة مرفق</button>
@@ -35,7 +35,7 @@
             <ng-container [matColumnDef]="displayedColumns[2]">
                 <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[2]">تاريخ رفع المرفق</th>
                 <td mat-cell *matCellDef="let element">
-                    <span>{{element.rasiedDate | date:'dd/MM/yyyy'}}</span>
+                    <span>{{element.createdDate | date:'dd/MM/yyyy'}}</span>
                 </td>
             </ng-container>
 
@@ -43,23 +43,22 @@
             <ng-container [matColumnDef]="displayedColumns[3]">
                 <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[3]">الموظف</th>
                 <td mat-cell *matCellDef="let element">
-                    <span>{{element.raisedBy}}</span>
+                    <span>{{element.CreatedBy}}</span>
                 </td>
             </ng-container>
 
             <!-- Actions Column -->
             <ng-container [matColumnDef]="displayedColumns[4]">
                 <th mat-header-cell *matHeaderCellDef>الإجراءات</th>
-                <td mat-cell *matCellDef="let element" class="d-flex gap-2">
-                    <button class="btn btn-sm bg-main" (click)="downloadAttachment(element)" title="تحميل">
-                        <i class="fa-solid fa-download"></i>
-                    </button>
-                    <button class="btn btn-sm btn-outline-primary" (click)="viewAttachment(element)" title="عرض">
-                        <i class="fa-solid fa-eye"></i>
-                    </button>
-                    <button class="btn btn-sm btn-outline-danger" (click)="deleteAttachment(element)" title="حذف">
-                        <i class="fa-solid fa-trash"></i>
-                    </button>
+
+                <td mat-cell *matCellDef="let element">
+                    <button [matMenuTriggerFor]="menu"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                    <mat-menu #menu="matMenu">
+                        <button mat-menu-item class="btn" (click)="downloadAttachment(element)" title="تحميل">
+                            <i class="fa-solid fa-download"></i>
+                            تحميل
+                        </button>
+                    </mat-menu>
                 </td>
             </ng-container>
 

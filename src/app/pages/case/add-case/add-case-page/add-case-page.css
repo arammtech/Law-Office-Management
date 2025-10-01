@@ -46,3 +46,8 @@ h3 {
 .btn-group {
     gap: 1rem;
 }
+
+.btn.bg-accent:hover {
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
+}

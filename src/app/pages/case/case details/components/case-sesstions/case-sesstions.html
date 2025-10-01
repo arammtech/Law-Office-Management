@@ -56,11 +56,16 @@
       </ng-container>
 
       <ng-container [matColumnDef]="displayedColumns[5]">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>الاجراءات
+        <th mat-header-cell *matHeaderCellDef>الاجراءات
         <th>
         <td mat-cell *matCellDef="let element">
-          <button (click)="openUpdateSession(element.courtSessionId)" class="btn btn-icon px-2 py-1 ">clik<i
-              class="fa-solid fa-pen-to-square"></i></button>
+          <button [matMenuTriggerFor]="menu"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+          <mat-menu #menu="matMenu">
+          <button (click)="openUpdateSession(element.courtSessionId)" class="btn btn-icon px-2 py-1 ">
+            <i class="fa-solid fa-pen-to-square"></i>
+            تحديث
+            </button>
+          </mat-menu>
         </td>
       </ng-container>
 

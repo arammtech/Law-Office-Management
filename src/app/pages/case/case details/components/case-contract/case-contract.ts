@@ -13,6 +13,7 @@ import { IContractRow, IListDTO } from '../../../../../../core/models/requests';
 import { DatePipe } from '@angular/common';
 import { ContractService } from '../../../../../../core/services/contract/contract-service';
 import { ClsHelpers } from '../../../../../../shared/util/helpers/cls-helpers';
+import { MatMenuItem, MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-case-contract',
@@ -30,6 +31,7 @@ import { ClsHelpers } from '../../../../../../shared/util/helpers/cls-helpers';
     MatSortModule,
     EmptyTable,
     DatePipe,
+    MatMenuModule
   ],
   templateUrl: './case-contract.html',
   styleUrl: './case-contract.css',
@@ -40,11 +42,12 @@ export class CaseContract implements OnInit, AfterViewInit {
     'contractNumber',
     'contractType',
     'totalAmount',
-    'restAmount',
     'issueDate',
     'expirationDate',
     'employeeNameCreatedIt',
     'createdDate',
+    'actions',
+    
   ];
   contractsDataSource = new MatTableDataSource<IContractRow>();
   caseId: string = '';
@@ -61,19 +64,19 @@ export class CaseContract implements OnInit, AfterViewInit {
     public helper:ClsHelpers,
     
   ) {}
-
+  
   ngOnInit(): void {
     this.activatedRoute.parent?.params.subscribe((params) => {
       this.caseId = params['caseId'] || '';
       this.loadContracts();
     });
   }
-
+  
   ngAfterViewInit(): void {
     this.contractsDataSource.paginator = this.paginator;
     this.contractsDataSource.sort = this.sort;
   }
-
+  
   loadContracts(): void {
     this.contractService.getContractsByCaseId(this.caseId).subscribe({
       next: (res) => {
@@ -81,9 +84,9 @@ export class CaseContract implements OnInit, AfterViewInit {
         this.contractsDataSource.data = this.contracts.items;
       },
     });
-  
+    
   }
-
+  
   filterContracts(event: Event): void {
     const value = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.contractsDataSource.filter = value;
@@ -92,12 +95,20 @@ export class CaseContract implements OnInit, AfterViewInit {
   handlePage(event: any): void {
     this.currentPage = event.pageIndex;
   }
-
+  
   openAddContract() {
     this.dialogof.open(AddContractDialog, {
       height: '325x',
       minWidth: '600px',
       data: { caseId: this.caseId },
+    }).afterClosed().subscribe(() => {
+      this.loadContracts()
     });
+  }
+  download(contract: IContractRow) {
+    this.contractService.download(contract.id, this.caseId, contract.filePath).subscribe((blob) => {
+      debugger
+      this.helper.download('ملف', blob)
+    })
   }
 }

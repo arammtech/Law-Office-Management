@@ -33,7 +33,6 @@ import { enContractType } from '../../../../../../shared/enums/contract-types';
 })
 export class AddContractDialog {
   contractForm: FormGroup<frmAddContract>;
-  formSubmitted: boolean = false;
   fixedTerm: enContractType = enContractType.FixedTerm;
   constructor(
     private formBuilder: clsFormsBuilder,

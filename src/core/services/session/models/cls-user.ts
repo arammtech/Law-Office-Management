@@ -1,7 +1,10 @@
+import { enRole } from '../../../../shared/enums/roles';
+
 export interface loggedUser {
+  username:string
   accessTokenExpirationDate: Date;
   refreshTokenExpirationDate: Date;
-  role: string;
+  role: enRole;
 }
 
 export interface IrefreshToken {
@@ -10,7 +13,8 @@ export interface IrefreshToken {
 }
 
 export interface LoginResponse {
-  role: string;
-  refreshTokenExpirationDate: Date;
-  accessTokenExpirationDate: Date;
+  username: string;
+  role: enRole;
+  accessTokenExpiration: Date;
+  refreshTokenExpiration: Date;
 }

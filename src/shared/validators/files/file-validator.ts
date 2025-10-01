@@ -60,7 +60,7 @@ export class FileValidator {
    */
   static validate(
     config: FileValidationConfig = {
-      maxSize: 100 * 1024 * 1024,
+      maxSize: 10 * 1024 * 1024,
       allowedExtensions: imageExtensions.concat(documentExtensions),
     }
   ): ValidatorFn {
@@ -193,6 +193,9 @@ export class FileValidator {
 
     // File size validation
     if (config.maxSize && file.size > config.maxSize) {
+      console.log('the file size: ', file.size);
+      console.log('the config size: ', config.maxSize);
+
       errors[`maxSize`] = {
         file,
         fileName: file.name,

@@ -1,6 +1,8 @@
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 import { enContractType } from '../../shared/enums/contract-types';
 import { enJudgmentSubType, enJudgmentType } from '../../shared/enums/enums';
+import { enRole } from '../../shared/enums/roles';
+import { datesValidator } from '../../shared/validators/Date/dates-validators';
 
 export interface ICourt {
   courtTypeId: string;
@@ -90,7 +92,7 @@ export interface IAddSessionForm {
 }
 
 export interface ISessionsRow {
-  scheduledAt: Date
+  scheduledAt: Date;
   assignedEmployeeName: string;
   createdByEmployeeName: string;
   createdDate: Date;
@@ -117,13 +119,13 @@ export interface IDraftCaseRow {
 
 export interface ICaseRow {
   caseId: string;
+  fileNumber: string;
   employeeName: string;
+  caseNumber: string;
+  status: string;
+  createdDate: Date;
   caseSubject: string;
   courtTypeName: string;
-  status: string;
-  caseNumber: string;
-  fileNumber: string;
-  createdDate: Date;
 }
 
 export interface ICourtDetaills {
@@ -141,16 +143,22 @@ export interface IEmployeeRow {
   countryCode: string;
   role: string;
   email: string;
+  birthDate: Date;
+  phone: string;
+  IsActive: boolean;
 }
 
-export interface IContractRow extends ICommonRow {
+export interface IContractRow {
   id: string;
+  caseId:string;
   contractNumber: string;
   contractType: string;
-  totalAmount: string;
-  restAmount: string;
-  issueDate: string;
+  issueDate: Date;
   expirationDate: string;
+  totalAmount: string;
+  filePath: string;
+  employeeNameCreatedBy:string;
+  createdDate:Date;
 }
 
 export interface ICommonRow {
@@ -173,9 +181,10 @@ export interface IAddAttachmetnForm {
 export interface IPOARow {
   number: string;
   issueDate: Date;
+  publisherName: string;
   creatorName: string;
   createdDate: Date;
-  publisherName: string;
+  filePath:string;
 }
 
 export interface sessionDetails {
@@ -208,8 +217,6 @@ export interface PersonDetails {
   countryCode: string;
 }
 
-
-
 export interface frmAddJudgment {
   number: FormControl<string>;
   type: FormControl<enJudgmentType>;
@@ -219,24 +226,22 @@ export interface frmAddJudgment {
 }
 
 export interface IJudgmentRow {
-  id:string;
-  number:string;
-  type:string;
-  subType:string;
-  issueDate:Date;
-  creatorName:string;
-  createdDate:string;
-  filePath:string;
+  id: string;
   caseId: string;
+  type: enJudgmentType;
+  subType: enJudgmentSubType;
+  number: string;
+  issueDate: Date;
+  creatorName: string;
+  createdDate: string;
+  filePath: string;
 }
 
 export interface ITemplateBox {
-  id:string;
-  name:string;
-  filePath:string;
+  id: string;
+  name: string;
+  filePath: string;
 }
-
-
 
 export interface frmAddTemplate {
   name: FormControl<string>;
@@ -247,4 +252,13 @@ export interface frmChangePassword {
   username: FormControl<string>;
   new: FormControl<string>;
   current: FormControl<string>;
+}
+
+
+export interface IAttachmentRow {
+  id: string;
+  name: string;
+  createdDate: Date;
+  CreatedBy: string;
+  filePath: string;
 }

@@ -2,7 +2,7 @@
 <mat-dialog-content>
     <form [formGroup]="employeeForm" id="employeeForm" (ngSubmit)="submit()">
         <div formGroupName="person" class="d-flex row g-3">
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label class="form-label">الاسم الرباعي</label>
                 <input type="text" placeholder="أدخل الاسم الرباعي" formControlName="name"
                     [class.border-error]="(employeeForm.controls.person.controls.name.touched && employeeForm.controls.person.controls.name.invalid)"
@@ -18,10 +18,10 @@
                 </div>
                 }
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label class="form-label">رقم الهوية</label>
                 <input type="text" placeholder="أدخل رقم الهوية" formControlName="natId"
-                    [class.border-error]="(employeeForm.controls.person.controls.natId.touched && employeeForm.controls.person.controls.natId.invalid)"
+                    [class.border-error]="(employeeForm.controls.person.controls.natId.touched && employeeForm.controls.person.controls.natId.invalid) || (IsNatDuplicated() && employeeForm.value.person?.natId === usedNatId)"
                     class="form-control">
                 @if (employeeForm.controls.person.controls.natId?.touched) {
                 <div class="errors" animate.enter="error-animation">
@@ -31,10 +31,13 @@
                     @if (employeeForm.controls.person.controls.natId?.errors?.['pattern']) {
                     <p>يجب ان يحتوي رقم الهوية على 10 خانات</p>
                     }
+                    @if (IsNatDuplicated() && employeeForm.value.person?.natId === usedNatId){
+                    <p>رقم الهوية مستخدم مسبقا</p>
+                    }
                 </div>
                 }
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label class="form-label">الجنسية</label>
                 <select formControlName="countryCode"
                     [class.border-error]="(employeeForm.controls.person.controls.countryCode.touched && employeeForm.controls.person.controls.countryCode.invalid)"
@@ -51,7 +54,7 @@
                 </div>
                 }
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label class="form-label">تاريخ الميلاد</label>
                 <input type="date" formControlName="birthDate"
                     [class.border-error]="(employeeForm.controls.person.controls.birthDate.touched && employeeForm.controls.person.controls.birthDate.invalid)"
@@ -67,10 +70,10 @@
                 </div>
                 }
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label class="form-label">رقم الجوال</label>
                 <input type="text" formControlName="phone"
-                    [class.border-error]="(employeeForm.controls.person.controls.phone.touched && employeeForm.controls.person.controls.phone.invalid)"
+                    [class.border-error]="(employeeForm.controls.person.controls.phone.touched && employeeForm.controls.person.controls.phone.invalid) || (IsPhoneDuplicated() && employeeForm.value.person?.phone === usedPhone)"
                     class="form-control">
                 @if (employeeForm.controls.person.controls.phone?.touched) {
                 <div class="errors" animate.enter="error-animation">
@@ -80,10 +83,13 @@
                     @if (employeeForm.controls.person.controls.phone?.errors?.['pattern']) {
                     <p>ادخل رقم هاتف صحيح</p>
                     }
+                    @if (IsPhoneDuplicated() && employeeForm.value.person?.phone === usedPhone){
+                    <p>رقم الهاتف مستخدم</p>
+                    }
                 </div>
                 }
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label class="form-label">العنوان</label>
                 <input type="text" formControlName="address"
                     [class.border-error]="(employeeForm.controls.person.controls.address.touched && employeeForm.controls.person.controls.address.invalid)"
@@ -100,44 +106,51 @@
                 }
             </div>
         </div>
-        <div class="col-md-12">
-            <label class="form-label">البريد الالكتروني</label>
-            <input type="text" formControlName="email"
-                [class.border-error]="(employeeForm.controls.email.touched && employeeForm.controls.email.invalid)"
-                class="form-control">
-            @if (employeeForm.controls.email?.touched) {
-            <div class="errors" animate.enter="error-animation">
-                @if (employeeForm.controls.email?.errors?.['required']) {
-                <p>هاذا الحقل مطلوب</p>
-                }
-                @if (employeeForm.controls.email?.errors?.['email']) {
-                <p>تأكد من كتابة ايميل صحيح</p>
-                }
-            </div>
-            }
-        </div>
-        <div class="col-md-12 mb-2">
-            <label class="form-label">الدور</label>
-            <select formControlName="role"
-                [class.border-error]="(employeeForm.controls.role.touched && employeeForm.controls.role.invalid)"
-                class="form-select">
-                <option value="ExecutiveManager">مدير تنفيذي</option>
-                <option value="Consultant">مستشار</option>
-                <option value="Lawyer">محامي</option>
-            </select>
-            @if (employeeForm.controls.role?.touched) {
-            <div class="errors" animate.enter="error-animation">
-                @if (employeeForm.controls.role?.errors?.['required']) {
-                <p>هاذا الحقل مطلوب</p>
+        <div class="row mt-4 mb-2">
+            <div class="col-md-6">
+                <label class="form-label">البريد الالكتروني</label>
+                <input type="text" formControlName="email"
+                    [class.border-error]="(employeeForm.controls.email.touched && employeeForm.controls.email.invalid) || (IsEmailDuplicated() && employeeForm.value.email === usedEmail)"
+                    class="form-control">
+                @if (employeeForm.controls.email?.touched) {
+                <div class="errors" animate.enter="error-animation">
+                    @if (employeeForm.controls.email?.errors?.['required']) {
+                    <p>هاذا الحقل مطلوب</p>
+                    }
+                    @if (employeeForm.controls.email?.errors?.['email']) {
+                    <p>تأكد من كتابة ايميل صحيح</p>
+                    }
+                    @if (IsEmailDuplicated() && employeeForm.value.email === usedEmail){
+                    <p>الايميل مستخدم مسبقا</p>
+                    }
+                </div>
                 }
             </div>
-            }
+            <div class="col-md-6 mb-2">
+                <label class="form-label">الدور</label>
+                <select formControlName="role"
+                    [class.border-error]="(employeeForm.controls.role.touched && employeeForm.controls.role.invalid)"
+                    class="form-select">
+                    <option value="المدير العام">مدير عام</option>
+                    <option value="المدير التنفيذي">مدير تنفيذي</option>
+                    <option value="المستشار">مستشار</option>
+                    <option value="المحامي">محامي</option>
+                </select>
+                @if (employeeForm.controls.role?.touched) {
+                <div class="errors" animate.enter="error-animation">
+                    @if (employeeForm.controls.role?.errors?.['required']) {
+                    <p>هاذا الحقل مطلوب</p>
+                    }
+                </div>
+                }
+            </div>
         </div>
+
 
     </form>
 </mat-dialog-content>
 
-<mat-dialog-actions class="btn-group row g-3" role="group">
-    <button class="btn bg-main col-sm-12" type="submit" form="employeeForm">حفظ العميل</button>
-    <button class="btn bg-accent col-sm-12" type="button" mat-dialog-close>إلغاء</button>
+<mat-dialog-actions class="btn-group d-flex justfiy-content-center gap-3" role="group">
+    <button class="btn bg-main " type="submit" form="employeeForm">حفظ العميل</button>
+    <button class="btn bg-accent " type="button" mat-dialog-close>إلغاء</button>
 </mat-dialog-actions>

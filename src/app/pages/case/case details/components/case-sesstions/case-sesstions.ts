@@ -12,6 +12,7 @@ import { SessionService } from '../../../../../../shared/services/session.servic
 import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { enDialogMode } from '../../../../../../shared/enums/dialog-mode';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-case-sesstions',
@@ -22,7 +23,7 @@ import { enDialogMode } from '../../../../../../shared/enums/dialog-mode';
       useValue: ClsTableUtil.getArabicPaginatorIntl(),
     },
   ],
-  imports: [MatTableModule, MatPaginator, MatSortModule, EmptyTable, DatePipe],
+  imports: [MatTableModule, MatPaginator, MatSortModule, EmptyTable, DatePipe, MatMenuModule],
   templateUrl: './case-sesstions.html',
   styleUrl: './case-sesstions.css',
 })

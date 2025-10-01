@@ -3,10 +3,15 @@ import { environmentDev } from '../../../environments/environment.development';
 import { Injectable } from '@angular/core';
 import { catchError, map, Observable, tap, throwError } from 'rxjs';
 import { SessionManagement } from '../session/session-management';
-import { IrefreshToken, loggedUser, LoginResponse } from '../session/models/cls-user';
+import {
+  IrefreshToken,
+  loggedUser,
+  LoginResponse,
+} from '../session/models/cls-user';
 import { frmChangePassword } from '../../models/requests';
 import { Adapter } from '../adapter/adapter';
 import { FormGroup } from '@angular/forms';
+import { enRole } from '../../../shared/enums/roles';
 
 @Injectable({
   providedIn: 'root',
@@ -15,7 +20,7 @@ export class AuthManagement {
   constructor(
     private http: HttpClient,
     private sessionService: SessionManagement,
-    private adapter:Adapter
+    private adapter: Adapter
   ) {}
   baseURL = environmentDev.baseURL;
 
@@ -28,15 +33,17 @@ export class AuthManagement {
           password: password,
         },
         {
-          withCredentials: true,
+          // withCredentials: true,
         }
       )
       .pipe(
         map((responses) => {
           if (responses) {
+            console.log('the login response');
             const myLoggedUser: loggedUser = {
-              accessTokenExpirationDate: responses.accessTokenExpirationDate,
-              refreshTokenExpirationDate: responses.refreshTokenExpirationDate,
+              username: responses.username,
+              accessTokenExpirationDate: responses.accessTokenExpiration,
+              refreshTokenExpirationDate: responses.refreshTokenExpiration,
               role: responses.role,
             };
             this.sessionService.setSession(myLoggedUser);
@@ -50,11 +57,13 @@ export class AuthManagement {
       );
   }
 
-  changePassword(frmChangePassword:FormGroup<frmChangePassword>): Observable<void> {
+  changePassword(
+    frmChangePassword: FormGroup<frmChangePassword>
+  ): Observable<void> {
     const body = this.adapter.frmChangePasswordAdapter(frmChangePassword);
     console.log('the change password body', body);
     return this.http
-      .post<any>(`${this.baseURL}/auth/change-password`, body , {
+      .post<any>(`${this.baseURL}/auth/change-password`, body, {
         withCredentials: true,
       })
       .pipe(
@@ -80,7 +89,7 @@ export class AuthManagement {
 
   refreshToken(): Observable<void> {
     return this.http
-      .post<IrefreshToken>(
+      .post<any>(
         `${this.baseURL}/auth/token/refresh-token`,
         {},
         {
@@ -88,7 +97,13 @@ export class AuthManagement {
         }
       )
       .pipe(
-        tap((response) => this.sessionService.updateRefreshToken(response)),
+        tap((response) => {
+          console.log('refresh token is working');
+          this.sessionService.updateRefreshToken({
+            accessTokenExpirationDate: response.accessTokenExpiration,
+            refreshTokenExpirationDate: response.refreshTokenExpiration,
+          });
+        }),
         map(() => {}),
         catchError((error) => {
           console.log(`error while refreshing the token ${error}`);

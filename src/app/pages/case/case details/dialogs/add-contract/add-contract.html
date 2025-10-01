@@ -34,9 +34,9 @@
         <div class="col-md-6">
             <label class="form-label">تاريخ البداية</label>
             <input type="date" formControlName="issueDate"
-                [class.border-error]="contractForm.errors?.['issueDateRequired'] && formSubmitted"
+                [class.border-error]="contractForm.errors?.['issueDateRequired'] && contractForm.controls?.issueDate?.touched"
                 class="form-control" />
-            @if (contractForm.controls?.issueDate?.invalid && formSubmitted) {
+            @if (contractForm.controls?.issueDate?.touched) {
             <div class="errors" animate.enter="error-animation">
                 @if (contractForm?.errors?.['issueDateRequired']) {
                 <p>هاذا الحقل مطلوب</p>
@@ -48,10 +48,9 @@
         <div class="col-md-6">
             <label class="form-label">تاريخ النهاية</label>
             <input type="date" formControlName="expirationDate"
-                [class.border-error]="contractForm.errors?.['expirationDateRequired'] && formSubmitted"
+                [class.border-error]="(contractForm.errors?.['expirationDateRequired'] || contractForm.errors?.['invalidDateRange']) && contractForm.controls?.expirationDate?.touched"
                 class="form-control" />
-            @if (contractForm.controls?.expirationDate?.invalid ||
-            formSubmitted) {
+            @if (contractForm.controls?.expirationDate?.touched) {
             <div class="errors" animate.enter="error-animation">
                 @if (contractForm?.errors?.['expirationDateRequired']) {
                 <p>هاذا الحقل مطلوب</p>
@@ -67,8 +66,9 @@
         <div class="col-md-6">
             <label class="form-label">قيمة العقد</label>
             <input type="number" formControlName="totalPrice"
-                [class.border-error]="contractForm.controls.totalPrice.invalid && formSubmitted" class="form-control" />
-            @if (contractForm.controls?.totalPrice?.invalid && formSubmitted) {
+                [class.border-error]="contractForm.controls.totalPrice.invalid && contractForm.controls.totalPrice.touched"
+                class="form-control" />
+            @if (contractForm.controls.totalPrice.touched) {
             <div class="errors" animate.enter="error-animation">
                 @if (contractForm.controls?.totalPrice?.errors?.['min']) {
                 <p>ادخل قيمة صالحة</p>
@@ -80,8 +80,9 @@
         <div class="col-md-6">
             <label class="form-label">مقدم العقد</label>
             <input type="number" formControlName="downAmount"
-                [class.border-error]="contractForm.controls.downAmount.invalid && formSubmitted" class="form-control" />
-            @if (contractForm.controls?.downAmount?.invalid && formSubmitted || contractForm.controls?.downAmount?.touched) {
+                [class.border-error]="contractForm.controls.downAmount.invalid && contractForm.controls?.downAmount?.touched"
+                class="form-control" />
+            @if (contractForm.controls?.downAmount?.touched) {
             <div class="errors" animate.enter="error-animation">
                 @if (contractForm.controls?.downAmount?.errors?.['min']) {
                 <p>ادخل قيمة صالحة</p>
@@ -99,6 +100,7 @@
         </div>
     </form>
 </mat-dialog-content>
-<mat-dialog-actions>
-    <input type="submit" value="رفع العقد" form="contractForm" class="btn bg-sub w-fill">
+<mat-dialog-actions class="btn-group d-flex justfiy-content-center gap-3" role="group">
+    <input type="submit" value="رفع العقد" form="contractForm" class="btn bg-main w-fill">
+    <button class="btn bg-accent " type="button" mat-dialog-close>إلغاء</button>
 </mat-dialog-actions>

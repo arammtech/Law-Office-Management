@@ -15,17 +15,13 @@ import { ClsTableUtil } from '../../../../../../shared/util/table/cls-table-util
 import { ClsHelpers } from '../../../../../../shared/util/helpers/cls-helpers';
 import { EmptyTable } from '../../../../../../shared/components/empty-table/empty-table/empty-table';
 import { ActivatedRoute } from '@angular/router';
-import { IAddAttachmetnForm } from '../../../../../../core/models/requests';
-
-export interface IAttachmentRow {
-  id?: string;
-  name: string;
-  rasiedDate: string;
-  raisedBy: string;
-  fileSize?: string;
-  fileType?: string;
-  filePath?: string;
-}
+import {
+  IAddAttachmetnForm,
+  IAttachmentRow,
+  IListDTO,
+} from '../../../../../../core/models/requests';
+import { AttachmentService } from '../../../../../../core/services/attachment/attachment-service';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-case-attachments',
@@ -36,6 +32,7 @@ export interface IAttachmentRow {
     FormsModule,
     DatePipe,
     EmptyTable,
+    MatMenuModule,
   ],
   providers: [
     {
@@ -53,25 +50,25 @@ export class CaseAttachments implements OnInit, AfterViewInit {
 
   // Component properties
   currentPage: number = 0;
-  attachments: IAttachmentRow[] = [];
+  attachments: IListDTO<IAttachmentRow> = {} as IListDTO<IAttachmentRow>;
   caseId: string = '';
   // Enhanced data source for table functionality
   attachmentsDataSource = new MatTableDataSource<IAttachmentRow>([]);
 
   // Updated column definitions to match enhanced template
   displayedColumns: string[] = [
-    'index', 
-    'name', 
+    'index',
+    'name',
     'rasiedDate',
-    'raisedBy', 
-    'actions', 
+    'raisedBy',
+    'actions',
   ];
 
   constructor(
     private dialogof: MatDialog,
     public helper: ClsHelpers,
     private activatedRoute: ActivatedRoute,
-
+    private attachmentService: AttachmentService,
   ) {}
 
   ngOnInit(): void {
@@ -87,18 +84,13 @@ export class CaseAttachments implements OnInit, AfterViewInit {
     this.attachmentsDataSource.sort = this.sort;
   }
 
-  private loadAttachments(): void {
-    // Update the data source with attachments data
-    if (this.attachments && Array.isArray(this.attachments)) {
-      this.attachmentsDataSource.data = this.attachments;
-    } else {
-      this.attachmentsDataSource.data = [];
-    }
-
-    // Reset to first page when data loads
-    // if (this.paginator) {
-    //   this.paginator.firstPage();
-    // }
+  private loadAttachments(pageIndex: number = 1, pageSize: number = 20): void {
+    this.attachmentService
+      .getAttachments(pageIndex, pageSize, this.caseId)
+      .subscribe((data) => {
+        this.attachments = data;
+        this.attachmentsDataSource.data = this.attachments.items;
+      });
   }
 
   // Filter function for search
@@ -112,25 +104,9 @@ export class CaseAttachments implements OnInit, AfterViewInit {
     }
   }
 
-  // Filter by employee
-  filterByEmployee(event: any): void {
-    const employeeName = event.target.value?.trim() || '';
-    if (employeeName) {
-      this.attachmentsDataSource.filter = employeeName;
-    } else {
-      this.attachmentsDataSource.filter = '';
-    }
-
-    // Reset to first page when filtering
-    if (this.attachmentsDataSource.paginator) {
-      this.attachmentsDataSource.paginator.firstPage();
-    }
-  }
-
   // Handle pagination changes
   handlePage(event: PageEvent): void {
     this.currentPage = event.pageIndex;
-    console.log('Page changed:', event);
   }
 
   // Handle sort changes
@@ -140,32 +116,17 @@ export class CaseAttachments implements OnInit, AfterViewInit {
 
   // Action methods
   downloadAttachment(attachment: IAttachmentRow): void {
-    console.log('Downloading attachment:', attachment);
-    // Implement download logic here
-    // Example: window.open(attachment.filePath, '_blank');
-
-    // Create a temporary download link
-    const link = document.createElement('a');
-    link.href = attachment.filePath || '#';
-    link.download = attachment.name;
-    link.target = '_blank';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-
-  viewAttachment(attachment: IAttachmentRow): void {
-    console.log('Viewing attachment:', attachment);
-    // Implement view logic here
-    // For PDFs, you might want to open in a new tab or modal
-    if (attachment.filePath) {
-      window.open(attachment.filePath, '_blank');
-    }
+    this.attachmentService.download(
+      attachment.id,
+      attachment?.filePath,
+      this.caseId
+    ).subscribe((blob) => {
+    
+      this.helper.download('ملف', blob);
+    });
   }
 
   deleteAttachment(attachment: IAttachmentRow): void {
-    console.log('Deleting attachment:', attachment);
-
     if (confirm(`هل أنت متأكد من حذف المرفق "${attachment.name}"؟`)) {
       // Remove from data source
       const currentData = this.attachmentsDataSource.data;
@@ -173,18 +134,12 @@ export class CaseAttachments implements OnInit, AfterViewInit {
         (item) => item.id !== attachment.id
       );
       this.attachmentsDataSource.data = updatedData;
-
-      // Update the original array as well
-      this.attachments = updatedData;
-
-      // Here you would typically call an API to delete from server
-      // this.attachmentService.deleteAttachment(attachment.id)
     }
   }
 
   openAddAttachment(): void {
     const dialogRef = this.dialogof.open(AddAttachmentDialog, {
-      height: '300px',
+      height: '350px',
       width: '900px',
       disableClose: true,
       data: {
@@ -192,89 +147,10 @@ export class CaseAttachments implements OnInit, AfterViewInit {
       },
     });
 
-    dialogRef.afterClosed().subscribe((result:FormGroup<IAddAttachmetnForm>) => {
-      if (result.value) {
-        const newAttachment: IAttachmentRow = {
-          name: result.value.name ?? '',
-          raisedBy: 'عبدالعزيز حسن',
-          rasiedDate: this.helper.formatDateForInput(new Date()),
-        }
-
-        this.attachmentsDataSource.data.push(newAttachment);
-      }
-    });
-  }
-
-  // Utility methods
-  getTotalAttachments(): number {
-    return this.attachmentsDataSource?.data?.length || 0;
-  }
-
-  getFilteredAttachments(): number {
-    return this.attachmentsDataSource?.filteredData?.length || 0;
-  }
-
-  hasData(): boolean {
-    return this.getTotalAttachments() > 0;
-  }
-
-  getUniqueEmployees(): string[] {
-    const employees = this.attachments
-      .map((att) => att.raisedBy)
-      .filter(Boolean);
-    return [...new Set(employees)].sort();
-  }
-
-  // Get file type icon class
-  getFileTypeIcon(fileType: string): string {
-    const iconMap: { [key: string]: string } = {
-      PDF: 'fa-file-pdf text-danger',
-      DOC: 'fa-file-word text-primary',
-      DOCX: 'fa-file-word text-primary',
-      XLS: 'fa-file-excel text-success',
-      XLSX: 'fa-file-excel text-success',
-      PNG: 'fa-file-image text-info',
-      JPG: 'fa-file-image text-info',
-      JPEG: 'fa-file-image text-info',
-      ZIP: 'fa-file-archive text-warning',
-      RAR: 'fa-file-archive text-warning',
-    };
-
-    return iconMap[fileType?.toUpperCase()] || 'fa-file text-muted';
-  }
-
-  // Export functionality
-  exportAttachmentsList(): void {
-    const dataToExport = this.attachmentsDataSource.filteredData.map((att) => ({
-      'اسم المرفق': att.name,
-      'تاريخ الرفع': att.rasiedDate,
-      'رفع بواسطة': att.raisedBy,
-      'نوع الملف': att.fileType,
-      'حجم الملف': att.fileSize,
-    }));
-
-    console.log('Exporting attachments list:', dataToExport);
-    // Implement CSV export logic here
-  }
-
-  // Refresh data
-  refreshData(): void {
-    this.loadAttachments();
-  }
-
-  // Clear filters
-  clearFilter(): void {
-    this.attachmentsDataSource.filter = '';
-  }
-
-  // Bulk actions (optional)
-  downloadSelectedAttachments(): void {
-    console.log('Bulk download selected attachments');
-    // Implement bulk download logic
-  }
-
-  deleteSelectedAttachments(): void {
-    console.log('Bulk delete selected attachments');
-    // Implement bulk deletion logic
+    dialogRef
+      .afterClosed()
+      .subscribe((result: FormGroup<IAddAttachmetnForm>) => {        
+          this.loadAttachments();
+      });
   }
 }

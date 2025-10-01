@@ -21,18 +21,21 @@ import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { CaseService } from '../../services/case-service';
 import { enCaseStatus } from '../../../../../shared/enums/case-status';
+import { MatMenuModule } from '@angular/material/menu';
+import { ToasterService } from '../../../../../core/services/toaster-service';
+import { CaseStatus } from '../../cases list/directives/case-status/case-status';
 
 @Component({
   selector: 'app-draft-cases-page',
   imports: [
     MatTableModule,
-    PageHeaderComponent,
+    MatMenuModule,
     MatPaginatorModule,
     MatSortModule,
     FormsModule,
     EmptyTable,
     DatePipe,
-    RouterLink,
+    CaseStatus,
   ],
   providers: [
     {
@@ -67,64 +70,18 @@ export class DraftCasesPage implements OnInit, AfterViewInit {
     'details',
   ];
 
-  constructor(public helper: ClsHelpers, private caseService: CaseService) {
+  constructor(
+    public helper: ClsHelpers,
+    private caseService: CaseService,
+    private toasterService: ToasterService
+  ) {
     this.draftCasesDataSource.data = [
-      {
-        caseId: 'CR-001',
-        employeeName: 'أحمد الزهراني',
-        caseSubject: 'نزاع عقاري',
-        courtTypeName: 'محكمة عامة',
-        status: 'مفتوحة',
-        caseNumber: 'CN-1001',
-        fileNumber: 'FN-2001',
-        createdDate: new Date('2025-08-01'),
-      },
-      {
-        caseId: 'CR-002',
-        employeeName: 'سارة العتيبي',
-        caseSubject: 'سرقة',
-        courtTypeName: 'محكمة جزائية',
-        status: 'مغلقة',
-        caseNumber: 'CN-1002',
-        fileNumber: 'FN-2002',
-        createdDate: new Date('2025-07-15'),
-      },
-      {
-        caseId: 'CR-003',
-        employeeName: 'خالد الحربي',
-        caseSubject: 'طلاق',
-        courtTypeName: 'محكمة أحوال شخصية',
-        status: 'معلقة',
-        caseNumber: 'CN-1003',
-        fileNumber: 'FN-2003',
-        createdDate: new Date('2025-06-20'),
-      },
-      {
-        caseId: 'CR-004',
-        employeeName: 'نورة القحطاني',
-        caseSubject: 'تجاري',
-        courtTypeName: 'محكمة تجارية',
-        status: 'مفتوحة',
-        caseNumber: 'CN-1004',
-        fileNumber: 'FN-2004',
-        createdDate: new Date('2025-09-10'),
-      },
-      {
-        caseId: 'CR-005',
-        employeeName: 'فهد السبيعي',
-        caseSubject: 'إرث',
-        courtTypeName: 'محكمة عامة',
-        status: 'مغلقة',
-        caseNumber: 'CN-1005',
-        fileNumber: 'FN-2005',
-        createdDate: new Date('2025-05-30'),
-      },
     ];
     this.draftCases.items = this.draftCasesDataSource.data;
   }
 
   ngOnInit(): void {
-    this.loadDraftCases();
+    this.loadDraftCases(0, 100);
   }
 
   ngAfterViewInit(): void {
@@ -133,17 +90,11 @@ export class DraftCasesPage implements OnInit, AfterViewInit {
     this.draftCasesDataSource.sort = this.sort;
   }
 
-  private loadDraftCases(): void {
-    // Update the data source with draft cases data
-    // if (this.draftCases?.items && Array.isArray(this.draftCases.items)) {
-    //   this.draftCasesDataSource.data = this.draftCases.items;
-    // } else {
-    //   this.draftCasesDataSource.data = [];
-    // }
-    // // Reset to first page when data loads
-    // if (this.paginator) {
-    //   this.paginator.firstPage();
-    // }
+  private loadDraftCases(pageIndex: number, pageSize: number): void {
+    this.caseService.getDraftCasesList().subscribe((data) => {
+      this.draftCases = data;
+      this.draftCasesDataSource.data = this.draftCases.items;
+    });
   }
 
   // Filter function for search
@@ -159,8 +110,7 @@ export class DraftCasesPage implements OnInit, AfterViewInit {
 
   // Handle pagination changes
   handlePage(event: PageEvent): void {
-    this.currentPage = event.pageIndex;
-    console.log('Page changed:', event);
+    this.loadDraftCases(event.pageIndex, event.pageSize);
   }
 
   // Handle sort changes
@@ -174,14 +124,7 @@ export class DraftCasesPage implements OnInit, AfterViewInit {
       .updateCaseStatus(draftCase.caseId, enCaseStatus.UnderReview)
       .subscribe(() => {
         // Update the status
-        const index = this.draftCasesDataSource.data.findIndex(
-          (item) => item.caseId === draftCase.caseId
-        );
-        if (index !== -1) {
-          this.draftCasesDataSource.data[index].status = 'معتمدة';
-          // Trigger change detection
-          this.draftCasesDataSource._updateChangeSubscription();
-        }
+        this.loadDraftCases(1, 100);
       });
   }
 
@@ -224,11 +167,6 @@ export class DraftCasesPage implements OnInit, AfterViewInit {
     // Implement your export logic here
   }
 
-  // Refresh data
-  refreshData(): void {
-    this.loadDraftCases();
-  }
-
   // Clear filters
   clearFilter(): void {
     this.draftCasesDataSource.filter = '';
@@ -266,10 +204,6 @@ export class DraftCasesPage implements OnInit, AfterViewInit {
     console.log('Bulk approve selected cases');
   }
 
-  deleteSelectedCases(): void {
-    // Implement bulk deletion logic
-    console.log('Bulk delete selected cases');
-  }
 
   // Search and filter helpers
   searchByStatus(status: string): void {

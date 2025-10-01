@@ -9,7 +9,7 @@
                         pattern="^\d{10}$" placeholder="أدخل رقم الهوية للبحث" class="form-control" />
                 </div>
                 <div class="col-md-2">
-                    <input type="submit" value="بحث" class="btn bg-sub w-fill" />
+                    <input type="submit" value="بحث" class="btn bg-accent w-fill" />
                 </div>
             </div>
             @if (natIdModel.invalid && showNatBoxErrors) {
@@ -30,15 +30,27 @@
                 @for(client of addCaseForm.value.existingClients; track idx; let idx = $index) {
                 <div class="parties client-id  myrow col-12">
                     <p class="flex">رقم الهوية: {{client.natId}}</p>
-                    <button class="btn-del" (click)="deleteExistingClient(idx)"><i
-                            class="fa-solid fa-xmark"></i></button>
+                    <button [matMenuTriggerFor]="menu"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                    <mat-menu #menu="matMenu" class="bg-accent">
+                        <button mat-menu-item class="btn-del" (click)="deleteExistingClient(idx)"><i
+                                class="fa-solid fa-xmark"></i>
+                                حذف
+                            </button>
+                    </mat-menu>
                 </div>
                 }
 
-                @for(client of addCaseForm.value.newClients; track client.person?.natId; let i = $index) {
+                @for(client of addCaseForm.value.newClients; track client.person?.natId; let idx = $index) {
                 <div class="parties client-id  myrow col-12">
                     <p class="flex">رقم الهوية: {{client?.person?.natId}}</p>
-                    <button class="btn-del" (click)="deleteNewClient(i)"><i class="fa-solid fa-xmark"></i></button>
+                    
+                    <button [matMenuTriggerFor]="menu"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                    <mat-menu #menu="matMenu" class="bg-accent">
+                        <button mat-menu-item class="btn-del bg-main" (click)="deleteNewClient(idx)">
+                            <i class="fa-solid fa-xmark"></i>
+                            حذف
+                        </button>
+                    </mat-menu>
                 </div>
                 }
             </div>

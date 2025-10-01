@@ -52,36 +52,38 @@
 
                 <!-- Created Date Column -->
                 <ng-container [matColumnDef]="displayedColumns[5]">
-                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[6]">تاريخ الإنشاء</th>
+                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[5]">تاريخ الإنشاء</th>
                     <td mat-cell *matCellDef="let element">{{element.createdDate | date:'dd/MM/yyyy'}}</td>
                 </ng-container>
 
                 <!-- Employee Name Column -->
                 <ng-container [matColumnDef]="displayedColumns[6]">
-                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[7]">اسم الموظف</th>
+                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[6]">اسم الموظف</th>
                     <td mat-cell *matCellDef="let element">{{element.employeeName}}</td>
                 </ng-container>
 
                 <!-- Case Subject Column -->
                 <ng-container [matColumnDef]="displayedColumns[7]">
-                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[8]">موضوع القضية</th>
+                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[7]">موضوع القضية</th>
                     <td mat-cell *matCellDef="let element">{{element.caseSubject}}</td>
                 </ng-container>
 
 
                 <!-- Actions Column -->
+
                 <ng-container [matColumnDef]="displayedColumns[8]">
                     <th mat-header-cell *matHeaderCellDef>الاجراءات</th>
-                    <td mat-cell *matCellDef="let element" class="d-flex gap-3">
-                        <a class="btn btn-icon px-2 py-1" (click)="approveDraftCase(element)">
-                            <i class="fa-solid fa-check"></i>
-                        </a>
-                        <a class="btn btn-icon px-2 py-1" (click)="cancelDraftCase(element)">
-                            <i class="fa-solid fa-xmark"></i>
-                        </a>
-                        <a class="btn btn-icon px-2 py-1" (click)="cancelDraftCase(element)">
-                            <i class="fa-solid fa-eye"></i>
-                        </a>
+                    <td mat-cell *matCellDef="let element">
+                        <button [matMenuTriggerFor]="menu"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                        <mat-menu #menu="matMenu">
+                            <button class="btn" mat-menu-item (click)="approveDraftCase(element)"
+                                class="btn bg-accent">
+                                <i class="fa-solid fa-check"></i> قبول القضية</button>
+                            <button class="btn" (click)="cancelDraftCase(element)">
+                                <i class="fa-solid fa-xmark"></i>
+                                إلغاء القضية
+                            </button>
+                        </mat-menu>
                     </td>
                 </ng-container>
 

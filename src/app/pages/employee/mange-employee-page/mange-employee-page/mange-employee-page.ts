@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { PageHeaderComponent } from '../../../../../shared/components/page header/page-header-component/page-header-component';
 import { MatDialog } from '@angular/material/dialog';
 import { AddEmployeeComponent } from '../../dialogs/add-employee-component';
@@ -10,24 +10,39 @@ import {
   PageEvent,
 } from '@angular/material/paginator';
 import { Sort, MatSortModule, MatSort } from '@angular/material/sort';
-import { IEmployeeRow } from '../../../../../core/models/requests';
+import {
+  IemployeeName,
+  IEmployeeRow,
+  IListDTO,
+} from '../../../../../core/models/requests';
 import { ClsHelpers } from '../../../../../shared/util/helpers/cls-helpers';
 import { ClsTableUtil } from '../../../../../shared/util/table/cls-table-util';
 import { EmptyTable } from '../../../../../shared/components/empty-table/empty-table/empty-table';
 import { ScrollStrategyOptions } from '@angular/cdk/overlay';
 import { enDialogMode } from '../../../../../shared/enums/dialog-mode';
 import { ChangePasswordDialog } from '../../dialogs/change-password/change-password-dialog/change-password-dialog';
-import { SectionButton } from "../../../../../shared/components/section-button/section-button";
+import { SectionButton } from '../../../../../shared/components/section-button/section-button';
+import { RoleStyleDirective } from '../../directives/role-style/role-style';
+import { MatMenuModule } from '@angular/material/menu';
+import { EmployeeStatusPipe } from '../../pipes/IsActive/IsActive';
+import { EmployeeStatusStyleDirective } from '../../directives/employee-status/employee-status';
+import { EmployeeService } from '../../services/employee-service';
+import { CountryNamePipe } from '../../../../../shared/pipes/country-name-pipe';
+
 @Component({
   selector: 'app-mange-employee-page',
   imports: [
-    PageHeaderComponent,
+    RoleStyleDirective,
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
     EmptyTable,
-    SectionButton
-],
+    SectionButton,
+    MatMenuModule,
+    EmployeeStatusPipe,
+    EmployeeStatusStyleDirective,
+    CountryNamePipe
+  ],
   providers: [
     {
       provide: MatPaginatorIntl,
@@ -37,883 +52,20 @@ import { SectionButton } from "../../../../../shared/components/section-button/s
   templateUrl: './mange-employee-page.html',
   styleUrl: './mange-employee-page.css',
 })
-export class MangeEmployeePage {
+export class MangeEmployeePage implements OnInit {
   changePassword() {
     this.dialogof.open(ChangePasswordDialog, {
       height: '450px',
       minWidth: '400px',
     });
   }
+
+  employees: IListDTO<IEmployeeRow> = {} as IListDTO<IEmployeeRow>;
   sortedData: IEmployeeRow[] = [];
   currentPage: number = 0;
 
-  element: IEmployeeRow[] = [
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: '1',
-      name: 'عبدالعزيز حسن',
-      role: 'مدير عام',
-      natId: '2234048409',
-      countryCode: 'نيجيريا',
-      email: 'bdalzyzalbrnawy47@gmail.com',
-    },
-    {
-      id: 'e101',
-      name: 'سارة الزهراني',
-      role: 'محامية',
-      natId: '1029384756',
-      countryCode: 'السعودية',
-      email: 'sarah.zahrani@lawfirm.sa',
-    },
-    {
-      id: 'e102',
-      name: 'خالد العتيبي',
-      role: 'مساعد قانوني',
-      natId: '2093847561',
-      countryCode: 'الكويت',
-      email: 'khaled.otaibi@lawfirm.sa',
-    },
-    {
-      id: 'e103',
-      name: 'ليلى الحربي',
-      role: 'مديرة الموارد البشرية',
-      natId: '3847561029',
-      countryCode: 'الإمارات',
-      email: 'layla.hr@lawfirm.sa',
-    },
-    {
-      id: 'e104',
-      name: 'عبدالله القرني',
-      role: 'محاسب',
-      natId: '8475610293',
-      countryCode: 'السعودية',
-      email: 'abdullah.finance@lawfirm.sa',
-    },
-    {
-      id: 'e105',
-      name: 'نورة الشمري',
-      role: 'مديرة مكتب',
-      natId: '5610293847',
-      countryCode: 'قطر',
-      email: 'noura.office@lawfirm.sa',
-    },
-    {
-      id: 'e106',
-      name: 'فهد الدوسري',
-      role: 'مستشار قانوني',
-      natId: '9384756102',
-      countryCode: 'البحرين',
-      email: 'fahad.consult@lawfirm.sa',
-    },
-  ];
-  employees = new MatTableDataSource<IEmployeeRow>(this.element);
+  element: IEmployeeRow[] = [];
+  employeesDataSource = new MatTableDataSource<IEmployeeRow>(this.element);
 
   @ViewChild(MatPaginator) paginator: MatPaginator = {} as MatPaginator;
   @ViewChild(MatSort) sort: MatSort = {} as MatSort;
@@ -925,33 +77,46 @@ export class MangeEmployeePage {
     'email',
     'role',
     'countryCode',
+    'IsActive',
     'actions',
   ];
-  constructor(private dialogof: MatDialog, public helper: ClsHelpers) {}
+  constructor(
+    private dialogof: MatDialog,
+    public helper: ClsHelpers,
+    private employeeService: EmployeeService
+  ) {}
+  ngOnInit(): void {
+    this.loadData(1, 20);
+  }
 
   ngAfterViewInit() {
-    this.employees.paginator = this.paginator;
-    this.employees.sort = this.sort;
+    this.employeesDataSource.paginator = this.paginator;
+    this.employeesDataSource.sort = this.sort;
   }
 
   handelPage($event: PageEvent) {
-    console.log($event);
+    this.loadData($event.pageIndex, $event.pageSize);
+  }
+  loadData(pageIndex: number, pageSize: number) {
+    this.employeeService.getAll(pageIndex, pageSize).subscribe((data) => {
+      this.employeesDataSource.data = data;
+    });
   }
   filter($event: any) {
-    this.employees.filter = $event.target.value;
+    this.employeesDataSource.filter = $event.target.value;
   }
   addEmployee() {
     this.dialogof.open(AddEmployeeComponent, {
-      height: '450px',
-      minWidth: '400px',
+      // height: '500px',
+      minWidth: '900px',
       data: { mode: enDialogMode.add },
     });
   }
 
   update(employeeId: string) {
     this.dialogof.open(AddEmployeeComponent, {
-      height: '450px',
-      minWidth: '400px',
+      height: '500px',
+      minWidth: '900px',
       data: { mode: enDialogMode.update, employeeId: employeeId },
     });
   }

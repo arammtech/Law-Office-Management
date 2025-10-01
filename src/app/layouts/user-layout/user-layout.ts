@@ -1,4 +1,4 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { NgxSpinnerComponent } from 'ngx-spinner';
 import { AuthManagement } from '../../../core/services/auth/auth-management';
@@ -11,6 +11,9 @@ import {
 import { NgClass } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { PageHeaderComponent } from '../../../shared/components/page header/page-header-component/page-header-component';
+import { loggedUser } from '../../../core/services/session/models/cls-user';
+import { SessionManagement } from '../../../core/services/session/session-management';
+import { enRole } from '../../../shared/enums/roles';
 
 @Component({
   selector: 'app-user-layout',
@@ -28,44 +31,54 @@ import { PageHeaderComponent } from '../../../shared/components/page header/page
   styleUrl: './user-layout.css',
 })
 export class UserLayout {
+hasRole(navElements: INavBtn) {
+  return navElements.roles.some(role => this.user.role == role)
+}
   navElements: INavBtn[] = [
     {
       name: 'إضافة قضية جديدة',
       icon: 'fa-solid fa-plus',
-      title: 'إدارة الموظفين',
+      title: 'إضافة قضية',
       route: 'add-case',
+      roles: [enRole.GeneralManager, enRole.ExecutiveManager, enRole.Lawyer, enRole.Consultant]
     },
     {
       name: 'القضايا المستلمة',
       icon: 'fa-solid fa-sheet-plastic',
       title: 'القضايا المستلمة',
       route: 'cases-list',
+      roles: [enRole.GeneralManager, enRole.ExecutiveManager, enRole.Lawyer, enRole.Consultant]
     },
     {
       name: 'صكوك الاحكام',
       icon: 'fa-solid fa-gavel',
       title: 'صكوك الاحكام',
       route: 'judgments-list',
+      roles: [enRole.GeneralManager, enRole.ExecutiveManager, enRole.Lawyer, enRole.Consultant]
     },
     {
       name: 'القضايا المسودة',
       icon: 'fa-brands fa-firstdraft',
       title: 'القضايا المسودة',
       route: 'draft-cases',
+      roles: [enRole.GeneralManager, enRole.ExecutiveManager, enRole.Lawyer, enRole.Consultant]
     },
     {
       name: 'النماذج',
       icon: 'fa-solid fa-box',
       title: 'النماذج',
       route: 'templates',
+      roles: [enRole.GeneralManager, enRole.ExecutiveManager, enRole.Lawyer, enRole.Consultant]
     },
     {
       name: 'إدارة الموظفين',
       icon: 'fa-solid fa-users',
       title: 'إدارة الموظفين',
       route: 'employees',
+      roles: [enRole.GeneralManager, enRole.ExecutiveManager]
     },
   ];
+  user:loggedUser = inject(SessionManagement).getSession()!;
   activeRout:INavBtn = this.navElements[5]
   IsnavigatorsTextVisable = computed(() => !this.collapsed());
   collapsed = signal(false);
@@ -84,6 +97,8 @@ export class UserLayout {
     if (isActive) this.activeRout = element;
   }
 
+
+
 }
 
 export interface INavBtn {
@@ -91,4 +106,5 @@ export interface INavBtn {
   icon: string;
   title: string;
   route: string;
+  roles:enRole[]
 }

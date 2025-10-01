@@ -22,16 +22,33 @@ export class JudgmentService extends AppService {
   }
   
   getAllByCaseId(caseId: string) {
-     return this.http
-      .get<any>(`${this.baseURL}/cases/${caseId}/contracts/paged`)
-      .pipe(
-        map((res) => {
-          console.log(res);
-          return this.adapter.getListDTOAdapter<IJudgmentRow>(
-            res,
-            this.adapter.judgmentRowAdapter
-          );
-        })
-      );
+    return this.http
+    .get<any>(`${this.baseURL}/cases/${caseId}/judgments/paged`)
+    .pipe(
+      map((res) => {
+        console.log(res);
+        return this.adapter.getListDTOAdapter<IJudgmentRow>(
+          res,
+          this.adapter.judgmentRowAdapter
+        );
+      })
+    );
+  }
+
+  getAll() {
+    return this.http
+    .get<any>(`${this.baseURL}/judgments/paged`)
+    .pipe(
+      map((res) => {
+        return this.adapter.getListDTOAdapter<IJudgmentRow>(
+          res,
+          this.adapter.judgmentRowAdapter
+        );
+      })
+    );
+  }
+
+  download(caseId: string, judgmentId: string, filePath: string) {
+    return this.http.get(`${this.baseURL}/cases/${caseId}/judgments/${judgmentId}/files/download?relativePath=${filePath}`, {responseType: 'blob'})
   }
 }

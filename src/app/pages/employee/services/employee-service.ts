@@ -5,6 +5,8 @@ import { Observable, map } from 'rxjs';
 import {
   IEmployeeDetails,
   IemployeeName,
+  IEmployeeRow,
+  IListDTO,
   INewClientForm,
   INewEmployee,
 } from '../../../../core/models/requests';
@@ -25,7 +27,7 @@ export class EmployeeService extends AppService {
       this.adapter.createEmployeeAdapter(client)
     );
   }
-
+  
   update(
     employeeForm: FormGroup<INewEmployee>,
     employeeId: string
@@ -42,10 +44,16 @@ export class EmployeeService extends AppService {
       .pipe(
         map((data) => data.map((ele) => this.adapter.fromEmployeeNamesAPI(ele)))
       );
-  }
-  getById(employeeId: string): Observable<IEmployeeDetails> {
-    return this.http
+    }
+    getById(employeeId: string): Observable<IEmployeeDetails> {
+      return this.http
       .get(`${this.baseURL}/employees/${employeeId}`)
       .pipe(map((data) => this.adapter.employeeDetailsAdapter(data)));
-  }
+    }
+
+    getAll(pageIndex: number, pageSize: number) : Observable<IEmployeeRow[]> {
+          return this.http
+      .get(`${this.baseURL}/employees`)
+      .pipe(map((data) => this.adapter.getAllEmployees(data)));
+    }
 }
