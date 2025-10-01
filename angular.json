@@ -26,7 +26,6 @@
             ],
             "styles": [
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
-              "node_modules/intl-tel-input/build/css/intlTelInput.css",
               "node_modules/ngx-spinner/animations/square-jelly-box.css",
               "src/styles.scss"
             ],

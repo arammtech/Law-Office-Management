@@ -66,7 +66,7 @@ export class Adapter {
       issueDate: res.issuedOn,
       creatorName: res.employeeNameCreatedBy,
       createdDate: res.createdDate,
-      filePath: res.filePath,      
+      filePath: res.filePath,
     };
   }
   constructor(private fb: NonNullableFormBuilder) {}
@@ -155,7 +155,7 @@ export class Adapter {
       createdDate: res?.createdDate,
       employeeNameCreatedBy: res?.employeeNameCreatedBy ?? 'مافي اسم',
       expirationDate: res?.expiryDate ?? '0000-00-00',
-      issueDate: res?.issueDate  ??'0000-00-00',
+      issueDate: res?.issueDate ?? '0000-00-00',
       totalAmount: res?.totalAmount,
       contractType: res?.contractType,
     };
@@ -167,7 +167,7 @@ export class Adapter {
       creatorName: res.employeeNameCreatedBy,
       publisherName: res.issuingAuthority,
       issueDate: res.issueDate,
-      filePath: res.filePath
+      filePath: res.filePath,
     };
   }
   fromCaseDetailsAPI(data: any): ICseGeneralDetails {
@@ -348,19 +348,17 @@ export class Adapter {
 
   createEmployeeAdapter(data: FormGroup<INewEmployee>): any {
     return {
-      person: {
-        fullName: data.value?.person?.name,
-        nationalId: data.value?.person?.natId,
-        birthDate: data.value?.person?.birthDate,
-        phone: {
-          number: data.value?.person?.phone,
-          code: '+966',
-        },
-        address: data.value?.person?.address,
-        countryCode: data.value?.person?.countryCode,
+      fullName: data.value?.person?.name,
+      nationalId: data.value?.person?.natId,
+      birthDate: data.value?.person?.birthDate,
+      phone: {
+        number: data.value?.person?.phone,
+        code: '+966',
       },
+      address: data.value?.person?.address,
+      countryCode: data.value?.person?.countryCode,
       role: data.value?.role,
-      email: data.value?.email,
+      email: data.value?.email
     };
   }
   employeeDetailsAdapter(data: any): IEmployeeDetails {
@@ -400,19 +398,19 @@ export class Adapter {
     return form;
   }
 
-  templateRowAdapter(data:any) : ITemplateBox {
+  templateRowAdapter(data: any): ITemplateBox {
     return {
       id: data?.id,
       name: data?.templateName,
-      filePath: data?.filePath
-    }
+      filePath: data?.filePath,
+    };
   }
 
-  templatesList(data:any) : ITemplateBox[] {
-    return data.map((row:any) => this.templateRowAdapter(row));
+  templatesList(data: any): ITemplateBox[] {
+    return data.map((row: any) => this.templateRowAdapter(row));
   }
 
-  getAllEmployees(data:any) : IEmployeeRow[] {
-    return data.map((row:any) => this.employeeRowAdapter(row))
+  getAllEmployees(data: any): IEmployeeRow[] {
+    return data.map((row: any) => this.employeeRowAdapter(row));
   }
 }

@@ -1,3 +1,3 @@
 export const environmentDev = {
-  baseURL: 'https://test-leo.runasp.net'
+  baseURL: 'https://localhost:7114/api'
 };

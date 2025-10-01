@@ -13,7 +13,6 @@ import {
   MatDialogModule,
   MatDialogRef,
 } from '@angular/material/dialog';
-import Swal from 'sweetalert2';
 import { EmployeeService } from '../services/employee-service';
 import { clsFormsBuilder } from '../../../../core/services/formBuilder/clsforms-builder';
 import {
@@ -116,7 +115,7 @@ export class AddEmployeeComponent {
         case enDialogMode.update:
           {
             this.employeeService
-              .update(this.employeeForm, this.employeeId)
+              .update(this.employeeForm, this.employeeId, true)
               .subscribe({
                 next: (res) => {
                   this.toasterService.success('تمت تحديث بيانات الموظف بنجاح');

@@ -12,10 +12,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { JsonPipe, NgIf, NgFor } from '@angular/common';
-import {
-  NgxIntlTelInputModule,
-  NgxIntlTelInputComponent,
-} from 'ngx-intl-tel-input';
+
 import { Country, CountrySelectComponent } from '@wlucha/ng-country-select';
 import { ToasterService } from '../../../../../../core/services/toaster-service';
 import { ICounty, INewClientForm } from '../../../../../../core/models/requests';
@@ -33,7 +30,6 @@ import { ClientService } from '../../../../../../core/services/client/client-ser
     MatDialogModule,
     NgIf,
     JsonPipe,
-    NgxIntlTelInputModule,
     NgFor,
     CountrySelectComponent,
     DialogHeaderComponent,
