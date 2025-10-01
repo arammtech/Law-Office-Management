@@ -14,6 +14,9 @@ import { PageHeaderComponent } from '../../../shared/components/page header/page
 import { loggedUser } from '../../../core/services/session/models/cls-user';
 import { SessionManagement } from '../../../core/services/session/session-management';
 import { enRole } from '../../../shared/enums/roles';
+import { MatMenuModule } from '@angular/material/menu';
+import { ChangePasswordDialog } from '../../pages/employee/dialogs/change-password/change-password-dialog/change-password-dialog';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-user-layout',
@@ -26,6 +29,7 @@ import { enRole } from '../../../shared/enums/roles';
     NgClass,
     MatToolbarModule,
     PageHeaderComponent,
+    MatMenuModule
   ],
   templateUrl: './user-layout.html',
   styleUrl: './user-layout.css',
@@ -34,6 +38,8 @@ export class UserLayout {
 hasRole(navElements: INavBtn) {
   return navElements.roles.some(role => this.user.role == role)
 }
+
+    private dialogof: MatDialog = inject(MatDialog);
   navElements: INavBtn[] = [
     {
       name: 'إضافة قضية جديدة',
@@ -97,6 +103,12 @@ hasRole(navElements: INavBtn) {
     if (isActive) this.activeRout = element;
   }
 
+  changePassword() {
+    this.dialogof.open(ChangePasswordDialog, {
+      // height: '450px',
+      minWidth: '400px',
+    });
+  }
 
 
 }

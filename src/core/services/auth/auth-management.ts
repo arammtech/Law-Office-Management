@@ -63,7 +63,7 @@ export class AuthManagement {
     const body = this.adapter.frmChangePasswordAdapter(frmChangePassword);
     console.log('the change password body', body);
     return this.http
-      .post<any>(`${this.baseURL}/auth/change-password`, body, {
+      .patch<any>(`${this.baseURL}/auth/change-password`, body, {
         withCredentials: true,
       })
       .pipe(

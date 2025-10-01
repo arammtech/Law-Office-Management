@@ -53,12 +53,6 @@ import { CountryNamePipe } from '../../../../../shared/pipes/country-name-pipe';
   styleUrl: './mange-employee-page.css',
 })
 export class MangeEmployeePage implements OnInit {
-  changePassword() {
-    this.dialogof.open(ChangePasswordDialog, {
-      height: '450px',
-      minWidth: '400px',
-    });
-  }
 
   employees: IListDTO<IEmployeeRow> = {} as IListDTO<IEmployeeRow>;
   sortedData: IEmployeeRow[] = [];
