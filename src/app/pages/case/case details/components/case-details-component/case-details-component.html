@@ -45,6 +45,18 @@
       <p><span class="title">التاريخ المتوقع:</span> <span class="content">{{case?.estimatedDate || 2024-02-02 |
           date:'dd/MM/yyyy'}}</span></p>
     </div>
+
+    <div class="text">
+      <p><span class="title">تغير الحالة:</span> 
+            <select #selectedCase [(ngModel)]="status" class="form-select">
+              <option value="قيد نظر">قيد نظر</option>
+              <option value="قيد تنفيذ">قيد تنفيذ</option>
+              <option value="قيد منتهي">قيد منتهي</option>
+              <option value="ملغي">ملغي</option>
+          </select>
+          <button (click)="update(status)" class="btn bg-accent">تحديث</button>
+      </p>
+    </div>
   </section>
 
 </section>

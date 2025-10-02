@@ -1,5 +1,5 @@
 import { JsonPipe, NgIf } from '@angular/common';
-import { Component, Inject, OnInit, signal, Signal } from '@angular/core';
+import { Component, inject, Inject, OnInit, signal, Signal } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -26,6 +26,8 @@ import { ClsHelpers } from '../../../../shared/util/helpers/cls-helpers';
 import { ToasterService } from '../../../../core/services/toaster-service';
 import { enDialogMode } from '../../../../shared/enums/dialog-mode';
 import { enErrorCodes } from '../../../../shared/enums/errors';
+import { SessionManagement } from '../../../../core/services/session/session-management';
+import { enRole } from '../../../../shared/enums/roles';
 
 @Component({
   selector: 'app-add-employee-component',
@@ -51,6 +53,8 @@ export class AddEmployeeComponent {
   usedNatId!: string;
   usedPhone!: string;
   usedEmail!: string;
+  session = inject(SessionManagement)
+  mangerUpdate = signal((this.session.getSession() ? this.session.getSession()?.role == enRole.GeneralManager : false) && this.mode == enDialogMode.update)
 
   constructor(
     private employeeService: EmployeeService,
@@ -114,6 +118,7 @@ export class AddEmployeeComponent {
 
         case enDialogMode.update:
           {
+            debugger
             this.employeeService
               .update(this.employeeForm, this.employeeId, true)
               .subscribe({
@@ -147,6 +152,7 @@ export class AddEmployeeComponent {
           this.title = 'تعديل بيانات الموظف';
           this.employeeService.getById(this.employeeId).subscribe({
             next: (data) => {
+              console.log('employee details', data);
               this.employeeForm.controls.email.setValue(data.email);
               this.employeeForm.controls.role.setValue(data.role);
               this.employeeForm.controls.person.controls.name.setValue(

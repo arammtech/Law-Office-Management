@@ -19,25 +19,10 @@ export const childAuthGuardGuard: CanActivateChildFn = (
   const toaster = inject(ToasterService);
   const route = inject(Router);
   const session = inject(SessionManagement);
-  const authService = inject(AuthManagement);
   const loginPath = route.parseUrl('/login');
-  // // Access token is still valid
-  // if (!session.isAccessTokenExpired()) {
-  //   console.log('i am here for login');
-  //   return checkAuthorization(router, session, toaster, route);
-  // }
 
-  // Access token expired but refresh token exists
   if (session.isAuthenticated()) {
-    return authService.refreshToken().pipe(
-      map(() => {
-        return checkAuthorization(router, session, toaster, route);
-      }),
-      catchError(() => {
-        toaster.error('يرجى تسجيل الدخول');
-        return of(new RedirectCommand(loginPath));
-      })
-    );
+    return checkAuthorization(router, session, toaster, route);
   }
 
   // No valid tokens

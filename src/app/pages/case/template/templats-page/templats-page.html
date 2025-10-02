@@ -9,7 +9,7 @@
         @if (templates.length) {
             <div class="templates-container d-flex flex-wrap gap-3">
                 @for (box of templates; track box.id) {
-                <app-template-box-component [header]="box.name"></app-template-box-component>
+                <app-template-box-component (download)="download(box)" [header]="box.name"></app-template-box-component>
                 }
             </div>
         }@else {

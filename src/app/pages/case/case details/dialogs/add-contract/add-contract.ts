@@ -5,7 +5,7 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { DatePipe, JsonPipe, NgIf } from '@angular/common';
+import { CommonModule, DatePipe, JsonPipe, NgIf } from '@angular/common';
 import {
   MAT_DIALOG_DATA,
   MatDialogModule,
@@ -27,6 +27,7 @@ import { enContractType } from '../../../../../../shared/enums/contract-types';
     MatDialogModule,
     DialogHeaderComponent,
     DatePipe,
+    CommonModule
   ],
   templateUrl: './add-contract.html',
   styleUrl: './add-contract.css',

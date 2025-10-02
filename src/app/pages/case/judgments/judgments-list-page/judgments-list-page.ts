@@ -72,8 +72,8 @@ export class JudgmentsListPage implements AfterViewInit, OnInit {
   }
   download(row: IJudgmentRow) {
         this.judgmentService
-        .download(row.caseId, row.id, row.filePath)
-        .subscribe((blob) => this.helper.download('ملف صك', blob));
+        .download(row.caseId, row.id, row.file.filePath)
+        .subscribe((blob) => this.helper.download(row.file.fileName, blob));
   }
 
   ngAfterViewInit() {

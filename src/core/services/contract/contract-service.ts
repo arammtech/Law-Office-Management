@@ -36,7 +36,7 @@ export class ContractService {
   download(id: string, caseId: string, filePath: string) {
     return  this.http
       .get(
-        `${this.baseURL}/cases/${caseId}/contracts/${id}/files/download?filePath=${filePath}`, {responseType: 'blob'}
+        `${this.baseURL}/cases/${caseId}/contracts/${id}/files/download?relativePath=${filePath}`, {responseType: 'blob'}
       )
   }
 }

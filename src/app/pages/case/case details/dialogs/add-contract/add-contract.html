@@ -65,9 +65,13 @@
         }
         <div class="col-md-6">
             <label class="form-label">قيمة العقد</label>
-            <input type="number" formControlName="totalPrice"
+            <div>
+
+                <input type="number" formControlName="totalPrice"
                 [class.border-error]="contractForm.controls.totalPrice.invalid && contractForm.controls.totalPrice.touched"
                 class="form-control" />
+                <span>مع الضريبة المضافة: {{(contractForm.value.totalPrice! * 1.15) | number : '1.2-2'}}</span>
+            </div>
             @if (contractForm.controls.totalPrice.touched) {
             <div class="errors" animate.enter="error-animation">
                 @if (contractForm.controls?.totalPrice?.errors?.['min']) {

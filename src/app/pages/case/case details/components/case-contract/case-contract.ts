@@ -31,7 +31,7 @@ import { MatMenuItem, MatMenuModule } from '@angular/material/menu';
     MatSortModule,
     EmptyTable,
     DatePipe,
-    MatMenuModule
+    MatMenuModule,
   ],
   templateUrl: './case-contract.html',
   styleUrl: './case-contract.css',
@@ -47,7 +47,6 @@ export class CaseContract implements OnInit, AfterViewInit {
     'employeeNameCreatedIt',
     'createdDate',
     'actions',
-    
   ];
   contractsDataSource = new MatTableDataSource<IContractRow>();
   caseId: string = '';
@@ -61,22 +60,21 @@ export class CaseContract implements OnInit, AfterViewInit {
     private dialogof: MatDialog,
     private activatedRoute: ActivatedRoute,
     private contractService: ContractService,
-    public helper:ClsHelpers,
-    
+    public helper: ClsHelpers
   ) {}
-  
+
   ngOnInit(): void {
     this.activatedRoute.parent?.params.subscribe((params) => {
       this.caseId = params['caseId'] || '';
       this.loadContracts();
     });
   }
-  
+
   ngAfterViewInit(): void {
     this.contractsDataSource.paginator = this.paginator;
     this.contractsDataSource.sort = this.sort;
   }
-  
+
   loadContracts(): void {
     this.contractService.getContractsByCaseId(this.caseId).subscribe({
       next: (res) => {
@@ -84,9 +82,8 @@ export class CaseContract implements OnInit, AfterViewInit {
         this.contractsDataSource.data = this.contracts.items;
       },
     });
-    
   }
-  
+
   filterContracts(event: Event): void {
     const value = (event.target as HTMLInputElement).value.trim().toLowerCase();
     this.contractsDataSource.filter = value;
@@ -95,20 +92,38 @@ export class CaseContract implements OnInit, AfterViewInit {
   handlePage(event: any): void {
     this.currentPage = event.pageIndex;
   }
-  
+
   openAddContract() {
-    this.dialogof.open(AddContractDialog, {
-      height: '325x',
-      minWidth: '600px',
-      data: { caseId: this.caseId },
-    }).afterClosed().subscribe(() => {
-      this.loadContracts()
-    });
+    this.dialogof
+      .open(AddContractDialog, {
+        // height: '325x',
+        minWidth: '600px',
+        data: { caseId: this.caseId },
+      })
+      .afterClosed()
+      .subscribe(() => {
+        this.loadContracts();
+      });
   }
   download(contract: IContractRow) {
-    this.contractService.download(contract.id, this.caseId, contract.filePath).subscribe((blob) => {
-      debugger
-      this.helper.download('ملف', blob)
-    })
+    this.contractService
+      .download(contract.id, this.caseId, contract.file.filePath)
+      .subscribe((blob) => {
+        this.helper.download(contract.file.fileName, blob);
+      });
+  }
+
+  formatDates(date: Date) {
+    if (date) {
+      return date.toLocaleString('ar-EG', {
+        year: 'numeric', // السنة بأربعة أرقام
+        month: 'numeric', // الشهر كاملاً (مثل: أكتوبر)
+        day: 'numeric', // اليوم كرقم
+      });
+    }
+
+    else return '-------'
+
+
   }
 }

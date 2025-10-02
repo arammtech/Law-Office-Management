@@ -33,12 +33,10 @@ export class EmployeeService extends AppService {
     employeeId: string,
     isActive:boolean
   ): Observable<void> {
-    const body = this.adapter.createEmployeeAdapter(employeeForm);
-    body.id = employeeId;
+    const body = this.adapter.updateEmployeeAdapter(employeeForm);
     body.isActive = isActive
-    console.log('data', body);
     return this.http.put<any>(
-      `${this.baseURL}/employees`,
+      `${this.baseURL}/employees/${employeeId}`,
       body
     );
   }

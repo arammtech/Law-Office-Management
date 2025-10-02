@@ -157,8 +157,8 @@ export class AddCaseComponent implements OnInit {
       this.caseService.add(this.addCaseForm, isDraft).subscribe({
         next: (res) => {
           this.toasterService.success('تمت إضافة القضية بنجاح');
-          this.addCaseForm.controls.newClients.reset();
-          this.addCaseForm.controls.existingClients.reset();
+          this.addCaseForm.controls.newClients.clear();
+          this.addCaseForm.controls.existingClients.clear();
           this.addCaseForm.reset();
           this.addCaseForm.markAsUntouched();
         },

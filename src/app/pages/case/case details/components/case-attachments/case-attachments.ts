@@ -118,11 +118,11 @@ export class CaseAttachments implements OnInit, AfterViewInit {
   downloadAttachment(attachment: IAttachmentRow): void {
     this.attachmentService.download(
       attachment.id,
-      attachment?.filePath,
+      attachment?.file.filePath,
       this.caseId
     ).subscribe((blob) => {
     
-      this.helper.download('ملف', blob);
+      this.helper.download(attachment?.file.fileName, blob);
     });
   }
 

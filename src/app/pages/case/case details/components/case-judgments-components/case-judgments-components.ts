@@ -108,7 +108,7 @@ export class CaseJudgmentsComponents implements OnInit, AfterViewInit {
 
   download(element: IJudgmentRow) {
     this.judgmentService
-      .download(this.caseId, element.id, element.filePath)
-      .subscribe((blob) => this.helper.download('ملف صك', blob));
+      .download(this.caseId, element.id, element.file.filePath)
+      .subscribe((blob) => this.helper.download(element.file.fileName, blob));
   }
 }

@@ -23,6 +23,7 @@ import { contractDateValidator } from '../../../shared/validators/Date/contract-
 import { FileValidator } from '../../../shared/validators/files/file-validator';
 import { enJudgmentSubType, enJudgmentType } from '../../../shared/enums/enums';
 import { passwordPolicyValidator } from '../../../shared/validators/password/password-validator';
+import { enRole } from '../../../shared/enums/roles';
 
 @Injectable({
   providedIn: 'root',
@@ -105,7 +106,7 @@ export class clsFormsBuilder {
       email: this.fb.control('', {
         validators: [Validators.email, Validators.required],
       }),
-      role: this.fb.control('', { validators: [Validators.required] }),
+      role: this.fb.control(enRole.ExecutiveManager, { validators: [Validators.required] }),
     });
   }
 
@@ -141,7 +142,7 @@ export class clsFormsBuilder {
         }
       ),
       phone: this.fb.control<string>(obj?.phone || '', {
-        validators: [Validators.required, Validators.pattern(/^05\d{8}$/)],
+        validators: [Validators.required, Validators.pattern(/^5\d{8}$/)],
       }),
       address: this.fb.control(obj?.address || '', {
         validators: [Validators.required, Validators.minLength(10)],

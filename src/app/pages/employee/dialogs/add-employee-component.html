@@ -81,7 +81,7 @@
                     <p>هاذا الحقل مطلوب</p>
                     }
                     @if (employeeForm.controls.person.controls.phone?.errors?.['pattern']) {
-                    <p>ادخل رقم هاتف صحيح</p>
+                    <p> ادخل رقم هاتف صحيح يبدأ ب 5</p>
                     }
                     @if (IsPhoneDuplicated() && employeeForm.value.person?.phone === usedPhone){
                     <p>رقم الهاتف مستخدم</p>
@@ -126,24 +126,26 @@
                 </div>
                 }
             </div>
-            <div class="col-md-6 mb-2">
-                <label class="form-label">الدور</label>
-                <select formControlName="role"
-                    [class.border-error]="(employeeForm.controls.role.touched && employeeForm.controls.role.invalid)"
-                    class="form-select">
-                    <option value="المدير العام">مدير عام</option>
-                    <option value="المدير التنفيذي">مدير تنفيذي</option>
-                    <option value="المستشار">مستشار</option>
-                    <option value="المحامي">محامي</option>
-                </select>
-                @if (employeeForm.controls.role?.touched) {
-                <div class="errors" animate.enter="error-animation">
-                    @if (employeeForm.controls.role?.errors?.['required']) {
-                    <p>هاذا الحقل مطلوب</p>
+            @if (!mangerUpdate()) {
+                <div class="col-md-6 mb-2">
+                    <label class="form-label">الدور</label>
+                    <select formControlName="role"
+                        [class.border-error]="(employeeForm.controls.role.touched && employeeForm.controls.role.invalid)"
+                        class="form-select">
+                        <option value="مدير تنفيذي">مدير تنفيذي</option>
+                        <option value="مستشار">مستشار</option>
+                        <option value="محامي">محامي</option>
+                    </select>
+                    @if (employeeForm.controls.role?.touched) {
+                    <div class="errors" animate.enter="error-animation">
+                        @if (employeeForm.controls.role?.errors?.['required']) {
+                        <p>هاذا الحقل مطلوب</p>
+                        }
+                    </div>
                     }
                 </div>
-                }
-            </div>
+
+            }
         </div>
 
 

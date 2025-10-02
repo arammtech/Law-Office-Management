@@ -84,7 +84,7 @@ export class CasePoa implements AfterViewInit, OnInit {
   
   openAddPOA(): void {
     this.dialogof.open(AddPoaDialog, {
-      height: '325x',
+      // height: '325x',
       minWidth: '600px',
       data: { caseId: this.caseId },
     }).afterClosed().subscribe((res:FormGroup<IAddPOAForm>) => {
@@ -94,6 +94,7 @@ export class CasePoa implements AfterViewInit, OnInit {
     });
   }
   download(poa: IPOARow) {
-    // this.poaService.download(poa.)
+    console.log('dwoloaindg the poa', poa);
+    this.poaService.download(poa.id, poa.caseId, poa.file.filePath).subscribe((blob) => this.helper.download(poa.file.fileName, blob))
   }
 }

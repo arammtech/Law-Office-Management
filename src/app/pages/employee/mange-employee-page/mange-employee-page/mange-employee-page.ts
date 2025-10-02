@@ -104,6 +104,8 @@ export class MangeEmployeePage implements OnInit {
       // height: '500px',
       minWidth: '900px',
       data: { mode: enDialogMode.add },
+    }).afterClosed().subscribe(() => {
+      this.loadData(1, 100);
     });
   }
 
@@ -112,6 +114,8 @@ export class MangeEmployeePage implements OnInit {
       height: '500px',
       minWidth: '900px',
       data: { mode: enDialogMode.update, employeeId: employeeId },
-    });
+    }).afterClosed().subscribe(() => {
+      this.loadData(1, 100);
+    });;
   }
 }

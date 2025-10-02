@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { SectionButton } from '../../../../../shared/components/section-button/section-button';
 import { TemplateService } from '../../../../../core/services/template/template-service';
 import { EmptyTable } from "../../../../../shared/components/empty-table/empty-table/empty-table";
+import { ClsHelpers } from '../../../../../shared/util/helpers/cls-helpers';
 
 @Component({
   selector: 'app-templats-page',
@@ -17,15 +18,24 @@ import { EmptyTable } from "../../../../../shared/components/empty-table/empty-t
 })
 export class TemplatesPage implements OnInit {
   templates: ITemplateBox[] = {} as ITemplateBox[];
-
+  
   /**
    *
    */
   constructor(
     private dilogRef: MatDialog,
-    private templateService: TemplateService
+    private templateService: TemplateService,
+    private helper:ClsHelpers
   ) {}
-
+  
+  download(tem: ITemplateBox) {
+    console.log('template downlading', tem);
+        this.templateService
+      .download(tem.id, tem.file.filePath)
+      .subscribe((blob) => {
+        this.helper.download(tem.file.fileName, blob);
+      });
+  }
   ngOnInit(): void {
     this.templateService.getAll().subscribe((data) => {
       this.templates = data;

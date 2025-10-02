@@ -72,7 +72,7 @@ export interface IPersonDetails extends INewPersonForm {
 export interface INewEmployee {
   person: FormGroup<INewPersonForm>;
   email: FormControl<string>;
-  role: FormControl<string>;
+  role: FormControl<enRole>;
 }
 
 export interface frmAddContract {
@@ -150,15 +150,15 @@ export interface IEmployeeRow {
 
 export interface IContractRow {
   id: string;
-  caseId:string;
+  caseId: string;
   contractNumber: string;
   contractType: string;
   issueDate: Date;
   expirationDate: string;
   totalAmount: string;
-  filePath: string;
-  employeeNameCreatedBy:string;
-  createdDate:Date;
+  employeeNameCreatedBy: string;
+  createdDate: Date;
+  file: IFile;
 }
 
 export interface ICommonRow {
@@ -179,12 +179,14 @@ export interface IAddAttachmetnForm {
 }
 
 export interface IPOARow {
+  id: string;
+  caseId: string;
   number: string;
   issueDate: Date;
   publisherName: string;
   creatorName: string;
   createdDate: Date;
-  filePath:string;
+  file: IFile;
 }
 
 export interface sessionDetails {
@@ -204,7 +206,7 @@ export interface ICounty {
 
 export interface IEmployeeDetails extends PersonDetails {
   id: string;
-  role: string;
+  role: enRole;
   email: string;
 }
 
@@ -234,13 +236,13 @@ export interface IJudgmentRow {
   issueDate: Date;
   creatorName: string;
   createdDate: string;
-  filePath: string;
+  file: IFile;
 }
 
 export interface ITemplateBox {
   id: string;
   name: string;
-  filePath: string;
+  file: IFile;
 }
 
 export interface frmAddTemplate {
@@ -254,11 +256,16 @@ export interface frmChangePassword {
   current: FormControl<string>;
 }
 
-
 export interface IAttachmentRow {
   id: string;
   name: string;
   createdDate: Date;
   CreatedBy: string;
+  file: IFile;
+}
+
+export interface IFile {
   filePath: string;
+  fileName: string;
+  fileType: string;
 }

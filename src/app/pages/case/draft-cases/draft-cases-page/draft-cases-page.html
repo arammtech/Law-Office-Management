@@ -32,13 +32,13 @@
 
                 <!-- Case Number Column with Sort -->
                 <ng-container [matColumnDef]="displayedColumns[2]">
-                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[3]">رقم القضية</th>
+                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[2]">رقم القضية</th>
                     <td mat-cell *matCellDef="let element">{{element.caseNumber}}</td>
                 </ng-container>
 
                 <!-- Case Status Column with Sort -->
                 <ng-container [matColumnDef]="displayedColumns[3]">
-                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[4]">حالة القضية</th>
+                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[3]">حالة القضية</th>
                     <td mat-cell *matCellDef="let element">
                         <span appCaseStatus>{{element.status}}</span>
                     </td>
@@ -46,7 +46,7 @@
 
                 <!-- Court Type Column -->
                 <ng-container [matColumnDef]="displayedColumns[4]">
-                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[5]">اسم المحكمة</th>
+                    <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[4]">اسم المحكمة</th>
                     <td mat-cell *matCellDef="let element">{{element.courtTypeName}}</td>
                 </ng-container>
 

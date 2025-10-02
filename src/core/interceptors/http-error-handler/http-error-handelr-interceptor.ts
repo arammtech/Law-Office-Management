@@ -29,10 +29,12 @@ export const httpErrorHandelrInterceptor: HttpInterceptorFn = (req, next) => {
               return next(newReq);
             }),
             catchError((refreshErr) => {
+              counter++;
               // لو فشل الريفرش نطرد المستخدم
               toastService.error(
                 'انتهت صلاحية الجلسة، يرجى تسجيل الدخول مرة أخرى'
               );
+              authMangment.logout();
               router.navigate(['/login']);
               return throwError(() => refreshErr);
             })

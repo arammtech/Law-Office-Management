@@ -24,4 +24,11 @@ export class TemplateService extends AppService {
   getAll(): Observable<ITemplateBox[]> {
     return this.http.get(`${this.baseURL}/templates`).pipe(map(data => this.adapter.templatesList(data)))
   }
+
+  download(id: string, filePath: string) {
+    return  this.http
+      .get(
+        `${this.baseURL}/templates/${id}/files/download?filePath=${filePath}`, {responseType: 'blob'}
+      )
+  }
 }

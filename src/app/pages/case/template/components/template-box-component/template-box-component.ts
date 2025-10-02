@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { IFile, ITemplateBox } from '../../../../../../core/models/requests';
 
 @Component({
   selector: 'app-template-box-component',
@@ -8,4 +9,6 @@ import { Component, Input } from '@angular/core';
 })
 export class TemplateBoxComponent {
   @Input({required:true}) header:string = '';
+  @Output() download:EventEmitter<void> = new EventEmitter<void>;
+
 }

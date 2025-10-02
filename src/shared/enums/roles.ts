@@ -1,6 +1,6 @@
 export enum enRole {
-  GeneralManager = 'GeneralManager',
-  ExecutiveManager = 'ExecutiveManager',
-  Consultant = 'Consultant',
-  Lawyer = 'Lawyer',
+  GeneralManager = 'مدير عام',
+  ExecutiveManager = 'مدير تنفيذي',
+  Consultant = 'مستشار',
+  Lawyer = 'محامي',
 }

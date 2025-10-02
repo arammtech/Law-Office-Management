@@ -43,4 +43,10 @@ export class POAService extends AppService {
       })
     );
   }
+  download(id: string, caseId: string, filePath: string) {
+    return  this.http
+      .get(
+        `${this.baseURL}/cases/${caseId}/poas/${id}/files/download?relativePath=${filePath}`, {responseType: 'blob'}
+      )
+  }
 }

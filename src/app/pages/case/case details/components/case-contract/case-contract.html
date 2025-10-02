@@ -43,13 +43,13 @@
       <!-- Issue Date -->
       <ng-container [matColumnDef]="displayedColumns[4]">
         <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[4]">تاريخ الإصدار</th>
-        <td mat-cell *matCellDef="let element">{{ element.issueDate | date:'dd/MM/yyyy' }}</td>
+        <td mat-cell *matCellDef="let element">{{ formatDates(element.issueDate) }}</td>
       </ng-container>
 
       <!-- Expiration Date -->
       <ng-container [matColumnDef]="displayedColumns[5]">
         <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[5]">تاريخ الانتهاء</th>
-        <td mat-cell *matCellDef="let element">{{ element.expirationDate | date:'dd/MM/yyyy' }}</td>
+        <td mat-cell *matCellDef="let element">{{ formatDates(element.expirationDate) }}</td>
       </ng-container>
 
       <!-- Created By -->
@@ -61,7 +61,7 @@
       <!-- Created Date -->
       <ng-container [matColumnDef]="displayedColumns[7]">
         <th mat-header-cell *matHeaderCellDef [mat-sort-header]="displayedColumns[7]">تاريخ الإنشاء</th>
-        <td mat-cell *matCellDef="let element">{{ (element.createdDate  | date:'dd/MM/yyyy') }}</td>
+        <td mat-cell *matCellDef="let element">{{ element.createdDate | date:'dd/MM/yyyy' }}</td>
       </ng-container>
 
       <!-- Remaining Amount -->

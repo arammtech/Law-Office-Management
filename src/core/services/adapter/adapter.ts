@@ -66,7 +66,11 @@ export class Adapter {
       issueDate: res.issuedOn,
       creatorName: res.employeeNameCreatedBy,
       createdDate: res.createdDate,
-      filePath: res.filePath,
+      file: {
+        filePath: res?.file.filePath ?? 'is not working',
+        fileName: res?.file.fileName,
+        fileType: res?.file.fileType,
+      },
     };
   }
   constructor(private fb: NonNullableFormBuilder) {}
@@ -77,7 +81,11 @@ export class Adapter {
       name: row?.attachmentName ?? '',
       createdDate: row?.createdDate ?? '',
       CreatedBy: row?.createdByEmployeeName ?? '',
-      filePath: row?.filePath ?? '',
+      file: {
+        filePath: row?.file.filePath ?? 'is not working',
+        fileName: row?.file.fileName,
+        fileType: row?.file.fileType,
+      },
     };
   }
 
@@ -150,7 +158,6 @@ export class Adapter {
     return {
       id: res?.contractId,
       caseId: res.caseId,
-      filePath: res.filePath,
       contractNumber: res?.contractNumber,
       createdDate: res?.createdDate,
       employeeNameCreatedBy: res?.employeeNameCreatedBy ?? 'مافي اسم',
@@ -158,16 +165,27 @@ export class Adapter {
       issueDate: res?.issueDate ?? '0000-00-00',
       totalAmount: res?.totalAmount,
       contractType: res?.contractType,
+      file: {
+        filePath: res?.file.filePath ?? 'is not working',
+        fileName: res?.file.fileName,
+        fileType: res?.file.fileType,
+      },
     };
   }
   getCasePOARowAdapter(res: any): IPOARow {
     return {
+      id: res.poaId,
+      caseId: res.caseId,
       number: res.poaNumber,
       createdDate: res.createdDate,
       creatorName: res.employeeNameCreatedBy,
       publisherName: res.issuingAuthority,
       issueDate: res.issueDate,
-      filePath: res.filePath,
+      file: {
+        filePath: res?.file.filePath ?? 'is not working',
+        fileName: res?.file.fileName,
+        fileType: res?.file.fileType,
+      },
     };
   }
   fromCaseDetailsAPI(data: any): ICseGeneralDetails {
@@ -312,9 +330,9 @@ export class Adapter {
   getSessionsByCaseIdAdapter(row: any): ISessionsRow {
     return {
       courtSessionId: row.courtSessionId,
-      createdDate: new Date(row.scheduledAt),
+      createdDate: new Date(row.createdDate),
       assignedEmployeeName: String(row.assignedEmployeeName),
-      createdByEmployeeName: String(row.assignedEmployeeName),
+      createdByEmployeeName: String(row.createdByEmployeeName),
       scheduledAt: new Date(row.scheduledAt),
     };
   }
@@ -346,7 +364,8 @@ export class Adapter {
     };
   }
 
-  createEmployeeAdapter(data: FormGroup<INewEmployee>): any {
+  updateEmployeeAdapter(data: FormGroup<INewEmployee>): any {
+    console.log('employee before update', data);
     return {
       fullName: data.value?.person?.name,
       nationalId: data.value?.person?.natId,
@@ -358,7 +377,25 @@ export class Adapter {
       address: data.value?.person?.address,
       countryCode: data.value?.person?.countryCode,
       role: data.value?.role,
-      email: data.value?.email
+      email: data.value?.email,
+    };
+  }
+
+  createEmployeeAdapter(data: FormGroup<INewEmployee>): any {
+    return {
+      person: {
+        fullName: data.value?.person?.name,
+        nationalId: data.value?.person?.natId,
+        birthDate: data.value?.person?.birthDate,
+        phone: {
+          number: data.value?.person?.phone,
+          code: '+966',
+        },
+        address: data.value?.person?.address,
+        countryCode: data.value?.person?.countryCode,
+      },
+      role: data.value?.role,
+      email: data.value?.email,
     };
   }
   employeeDetailsAdapter(data: any): IEmployeeDetails {
@@ -400,9 +437,13 @@ export class Adapter {
 
   templateRowAdapter(data: any): ITemplateBox {
     return {
-      id: data?.id,
+      id: data?.templateId,
       name: data?.templateName,
-      filePath: data?.filePath,
+      file: {
+        filePath: data?.file.filePath ?? 'is not working',
+        fileName: data?.file.fileName,
+        fileType: data?.file.fileType,
+      },
     };
   }
 

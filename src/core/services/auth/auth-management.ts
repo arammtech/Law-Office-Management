@@ -81,7 +81,6 @@ export class AuthManagement {
       })
       .pipe(
         catchError((error) => {
-          console.log(error);
           return throwError(() => error);
         })
       );
@@ -107,6 +106,7 @@ export class AuthManagement {
         map(() => {}),
         catchError((error) => {
           console.log(`error while refreshing the token ${error}`);
+          this.logout();
           return throwError(() => error);
         })
       );
