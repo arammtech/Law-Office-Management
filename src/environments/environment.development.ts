@@ -1,3 +1,3 @@
 export const environmentDev = {
-  baseURL: 'https://test-leo.runasp.net/api'
+  baseURL: 'https://lao-dev.runasp.net/api'
 };
